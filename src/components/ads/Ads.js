@@ -39,12 +39,25 @@ export const Ads = (props) => {
     //     }
     // });
     if (variantQuery.error) return <p>Error :(</p>;
-    if (!variantQuery.data || variantQuery.loading) return <p>Loading...</p>;
+    if (!variantQuery.data || variantQuery.loading)
+        return(
+            <Card
+                {...props}
+            >
+                <CardMedia sx={{ height: 240, backgroundColor: "#EEE"}}
+                    component="div"
+                />
+                <CardContent>
+                    <Typography variant="h5" color="#CCC">
+                        <span>Your ads here</span>
+                    </Typography>
+                    <Typography className="w-75" variant="body2" color="#CCC">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias iste ipsa excepturi nostrum sequi molestias?
+                    </Typography>
+                </CardContent>
+            </Card>
+        );
 
-    // const handleClick = () =>{
-    //     console.log("click ads !");
-    //     // window.location.href=""
-    // }
     const variant = variantQuery.data?.jcr?.nodeById?.jExperience?.resolve?.variant
     const {image,teaser,linkTarget} = variant;
     const href = resolveLinkToURL({
@@ -86,5 +99,5 @@ export const Ads = (props) => {
 }
 
 Ads.propTypes = {
-    adsid: PropTypes.string.isRequired
+    adsid: PropTypes.string
 };

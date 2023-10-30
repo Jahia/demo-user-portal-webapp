@@ -16,6 +16,7 @@ import {Orders} from "./e-shop";
 import {userProfile,products as mocksProducts} from "../__mocks__";
 import {queryUserPortal} from "../graphql-app"
 import {useQuery} from "@apollo/client";
+import {MultiChart} from "./misc/MultiChart";
 
 
 
@@ -73,6 +74,7 @@ const App = () => {
   const customChartData = portalData?.chart?.value || portalData?.mocks?.refNode?.chart?.value;
   const customLeadsData = portalData?.leads?.value || portalData?.mocks?.refNode?.leads?.value;
   const customOrdersData = portalData?.orders?.value || portalData?.mocks?.refNode?.orders?.value;
+  const customMultiChartData = portalData?.salesChart?.value || portalData?.mocks?.refNode?.salesChart?.value;
   const show = customLeadsData ? "leads" : customOrdersData ? "orders" : "leads" ;
   return (
     <ThemeProvider theme={mergedTheme(userTheme)}>
@@ -99,65 +101,66 @@ const App = () => {
                 <VisitFirst />
               </Grid>
 
-              <Grid item xs={12} sm={4} md={3} >
+              <Grid item xs={12}>
                 <Grid container spacing={3}>
-                  <Grid item xs={12}>
-                    <AccountProfile portalData={portalData}/>
+
+                  <Grid item xs={12} sm={4} md={3} >
+                    <Grid container spacing={3}>
+                      <Grid item xs={12}>
+                        <AccountProfile portalData={portalData}/>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Chart customChartData={customChartData} />
+                      </Grid>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12}>
-                    <Chart customChartData={customChartData} />
+
+                  <Grid item xs={12} sm={8} md={9} >
+                    <Grid container spacing={3}>
+                      <Grid item xs={12}>
+                        {show ==="leads" &&
+                          <Leads customLeadsData={customLeadsData}/>
+                        }
+                        {show ==="orders" &&
+                          <Orders customOrdersData={customOrdersData}/>
+                        }
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Box >
+                          <Grid
+                              container
+                              spacing={3}
+                          >
+                              <Grid
+                                  item
+                                  key={products[0].id}
+                                  md={6}
+                                  xs={12}
+                              >
+                                <ProductCard product={products[0]} />
+                              </Grid>
+
+
+                              <Grid
+                                  item
+                                  key={portalData?.personalizedAds?.uuid}
+                                  md={6}
+                                  xs={12}
+                              >
+                                <Ads adsid={portalData?.personalizedAds?.refNode?.uuid}/>
+                              </Grid>
+                          </Grid>
+                        </Box>
+                      </Grid>
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
 
-              <Grid item xs={12} sm={8} md={9} >
+              <Grid item xs={12} >
                 <Grid container spacing={3}>
                   <Grid item xs={12}>
-                    {show ==="leads" &&
-                      <Leads customLeadsData={customLeadsData}/>
-                    }
-                    {show ==="orders" &&
-                      <Orders customOrdersData={customOrdersData}/>
-                    }
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Box >
-                      <Grid
-                          container
-                          spacing={3}
-                      >
-                        {/*{products.map((product) => (*/}
-                        {/*    <Grid*/}
-                        {/*        item*/}
-                        {/*        key={product.id}*/}
-                        {/*        md={6}*/}
-                        {/*        xs={12}*/}
-                        {/*    >*/}
-                        {/*      <ProductCard product={product} />*/}
-                        {/*    </Grid>*/}
-                        {/*))}*/}
-
-                            <Grid
-                                item
-                                key={products[0].id}
-                                md={6}
-                                xs={12}
-                            >
-                              <ProductCard product={products[0]} />
-                            </Grid>
-
-
-                            <Grid
-                                item
-                                key={portalData?.personalizedAds?.uuid}
-                                md={6}
-                                xs={12}
-                            >
-                              <Ads adsid={portalData?.personalizedAds?.refNode?.uuid}/>
-                            </Grid>
-
-                      </Grid>
-                    </Box>
+                    <MultiChart customMultiChartData={customMultiChartData}/>
                   </Grid>
                 </Grid>
               </Grid>
