@@ -9,12 +9,14 @@ import {VisitFirst, VisitLast, AccountProfile, VisitNumber, ProductCard} from ".
 import {Leads} from "./sfdc";
 import {mergedTheme} from "../theme";
 import {Chart} from "./misc";
-
+import {Ads} from "./ads";
+import {Orders} from "./e-shop";
 // import {QuizOverview} from "./quiz";
 
 import {userProfile,products as mocksProducts} from "../__mocks__";
-import {queryUserPortal} from "../graphql"
+import {queryUserPortal} from "../graphql-app"
 import {useQuery} from "@apollo/client";
+
 
 
 
@@ -59,7 +61,7 @@ const App = () => {
   const userTheme = portalData?.userTheme?.value || {};
 
   let products = mocksProducts;
-  const customProducts = portalData?.products?.value;
+  const customProducts = portalData?.products?.value || portalData?.mocks?.refNode?.products?.value;
   if(typeof customProducts === 'string'){
     try{
       products = JSON.parse(customProducts);
@@ -68,6 +70,10 @@ const App = () => {
     }
   };
 
+  const customChartData = portalData?.chart?.value || portalData?.mocks?.refNode?.chart?.value;
+  const customLeadsData = portalData?.leads?.value || portalData?.mocks?.refNode?.leads?.value;
+  const customOrdersData = portalData?.orders?.value || portalData?.mocks?.refNode?.orders?.value;
+  const show = customLeadsData ? "leads" : customOrdersData ? "orders" : "leads" ;
   return (
     <ThemeProvider theme={mergedTheme(userTheme)}>
       <PortalLayoutRoot>
@@ -99,7 +105,7 @@ const App = () => {
                     <AccountProfile portalData={portalData}/>
                   </Grid>
                   <Grid item xs={12}>
-                    <Chart customChartData={portalData?.chart?.value} />
+                    <Chart customChartData={customChartData} />
                   </Grid>
                 </Grid>
               </Grid>
@@ -107,7 +113,12 @@ const App = () => {
               <Grid item xs={12} sm={8} md={9} >
                 <Grid container spacing={3}>
                   <Grid item xs={12}>
-                    <Leads />
+                    {show ==="leads" &&
+                      <Leads customLeadsData={customLeadsData}/>
+                    }
+                    {show ==="orders" &&
+                      <Orders customOrdersData={customOrdersData}/>
+                    }
                   </Grid>
                   <Grid item xs={12}>
                     <Box >
@@ -115,21 +126,49 @@ const App = () => {
                           container
                           spacing={3}
                       >
-                        {products.map((product) => (
+                        {/*{products.map((product) => (*/}
+                        {/*    <Grid*/}
+                        {/*        item*/}
+                        {/*        key={product.id}*/}
+                        {/*        md={6}*/}
+                        {/*        xs={12}*/}
+                        {/*    >*/}
+                        {/*      <ProductCard product={product} />*/}
+                        {/*    </Grid>*/}
+                        {/*))}*/}
+
                             <Grid
                                 item
-                                key={product.id}
+                                key={products[0].id}
                                 md={6}
                                 xs={12}
                             >
-                              <ProductCard product={product} />
+                              <ProductCard product={products[0]} />
                             </Grid>
-                        ))}
+
+
+                            <Grid
+                                item
+                                key={portalData?.personalizedAds?.uuid}
+                                md={6}
+                                xs={12}
+                            >
+                              <Ads adsid={portalData?.personalizedAds?.refNode?.uuid}/>
+                            </Grid>
+
                       </Grid>
                     </Box>
                   </Grid>
                 </Grid>
               </Grid>
+
+              {/*<Grid item xs={12} >*/}
+              {/*  <Grid container spacing={3}>*/}
+              {/*    <Grid item xs={12} sm={6}>*/}
+              {/*      <Ads adsid={portalData?.personalizedAds?.refNode?.uuid}/>*/}
+              {/*    </Grid>*/}
+              {/*  </Grid>*/}
+              {/*</Grid>*/}
             </Grid>
           </Container>
         </Box>

@@ -1,115 +1,25 @@
-# Function score mutations
-type ASAdminFunctionScoreMutations {
-  # Remove function score specification
-  removeFunction(
-    # Function score id to be removed
-    id: String!
-  ): Boolean
+# GraphQL representation of a Jahia ACL role
+type AclRole {
+  # List of dependencies for a given role
+  dependencies: [AclRole]
 
-  # Upload function score specification
-  uploadFunction(
-    # Function score id, will be used as reference at query time.
-    id: String!
-
-    # Describes what this function score does.
-    description: String
-
-    # Function score file
-    file: String!
-  ): Boolean
-}
-
-# Function score admin entry point
-type ASAdminFunctionScoreQueries {
-  # List available function score functions
-  functions(
-    # fetching only nodes before this node (exclusive)
-    before: String
-
-    # fetching only nodes after this node (exclusive)
-    after: String
-
-    # fetching only the first certain number of nodes
-    first: Int
-
-    # fetching only the last certain number of nodes
-    last: Int
-
-    # fetching only nodes after this node (inclusive)
-    offset: Int
-
-    # fetching only the first certain number of nodes
-    limit: Int
-  ): FunctionScoreConnection
-}
-
-# Generic object with admin mutation results
-type ASAdminMutations {
-  # Add site to the list of indexed sites
-  addSite(
-    # Site key
-    siteKey: String!
+  # Role description for a given locale
+  description(
+    # locale
+    locale: String
   ): String
 
-  # Clear the database connection to use with Augmented Search (indexation and querying)
-  clearDbConnection: String
-
-  # Function score mutations
-  functionScore: ASAdminFunctionScoreMutations
-
-  # Remove site from the list of indexed sites
-  removeSite(
-    # Site key
-    siteKey: String!
+  # Role label for a given locale
+  label(
+    # locale
+    locale: String
   ): String
 
-  # Set the database connection to use with Augmented Search (indexation and querying)
-  setDbConnection(
-    # DB connection id
-    connectionId: String!
-  ): String
+  # Role name
+  name: String
 
-  # Given a list of sites, trigger bulk indexing. If no sites are provided, triggers a full reindex.
-  startIndex(
-    # List of siteKeys to index
-    siteKeys: [String]
-
-    # Can be LIVE or EDIT or null for both
-    workspace: Workspace
-
-    # Force start indexation for when job has already been started
-    force: Boolean = false
-  ): indexMutationResult
-}
-
-# List of indexed sites entry point
-type ASAdminQueries {
-  # Current database connection ID used by Augmented Search
-  currentConnection: String
-
-  # Get current shard configuration
-  currentShardConfiguration: GqlShardConfiguration
-
-  # List of available database connections
-  dbConnections: [GqlAvailableConnection]
-
-  # Function score queries
-  functionScore: ASAdminFunctionScoreQueries
-
-  # Get index sizes
-  indexSizes: [GqlIndexSize]
-
-  # List sites configured for Augmented Search
-  listSites: siteList
-
-  # Get optimal shard configurations
-  optimalShardConfigurations(
-    # Maximum average shard size allowed, in Gb
-    maxShardSizeInGb: Float
-
-    # Minimum amount of heap memory for each shard, in Mb
-    minHeapPerShardInMb: Float
-  ): [GqlShardConfiguration]
+  # Role group
+  roleGroup: String
 }
 
 # Admin mutations
@@ -117,20 +27,23 @@ type AdminMutation {
   # Get Jahia admin mutation
   jahia: JahiaAdminMutation!
 
-  # Augmented Search administrative mutations
-  search: ASAdminMutations
-
   # Personal API tokens mutations
   personalApiTokens: PersonalApiTokensMutation
 }
 
 # Admin queries root
 type AdminQuery {
+  # Details about the Jahia cluster
+  cluster: Cluster
+
   # Current datetime
   datetime: String
 
   # Get Jahia admin query
   jahia: JahiaAdminQuery!
+
+  # Get available ACL roles; does not include any hidden or privileged roles
+  roles: [AclRole]
 
   # Version of the running Jahia instance
   version: String! @deprecated(reason: "Deprecated")
@@ -138,14 +51,11 @@ type AdminQuery {
   # Get user group endpoint
   userGroup: UserGroupQuery
 
-  # Get user administration endpoint
-  userAdmin: UserAdminQuery
-
-  # Augmented Search administrative queries
-  search: ASAdminQueries
-
   # Personal API tokens queries
   personalApiTokens: PersonalApiTokensQuery
+
+  # Get user administration endpoint
+  userAdmin: UserAdminQuery
 }
 
 # Asset type for files
@@ -170,6 +80,12 @@ type Category {
 
   # Title
   title: String
+}
+
+# Details about the Jahia Cluster
+type Cluster {
+  # Is the cluster mode activated on this Jahia instance
+  isActivated: Boolean
 }
 
 # Mutation for configuration value object
@@ -320,11 +236,6 @@ type Current_32_user {
 # Date type
 scalar Date
 
-type DateRangeValue {
-  count: Int
-  range: Range
-}
-
 type EditorForm {
   # Retrieve a description text for the form, might contain explanations on how to use the form
   description: String
@@ -427,6 +338,9 @@ type EditorFormFieldValueConstraint {
   # The value as it is intended to be displayed in UIs
   displayValue: String
 
+  # The key of the value to get the translated value from the client side
+  displayValueKey: String
+
   # The properties for the value
   properties: [EditorFormProperty]
 
@@ -440,6 +354,9 @@ type EditorFormProperty {
 
   # Property value
   value: String
+
+  # Property values
+  values: [String]
 }
 
 type EditorFormSection {
@@ -485,44 +402,11 @@ enum FieldEvaluation {
   AMONG
 }
 
-# Functions score representation
-type FunctionScore {
-  # Function score description
-  description: String
-
-  # Function score id
-  id: String
-
-  # JSON string
-  json: String
-}
-
-# A connection to a list of items.
-type FunctionScoreConnection {
-  # a list of nodes
-  nodes: [FunctionScore]
-
-  # a list of edges
-  edges: [FunctionScoreEdge]
-
-  # details about this specific page
-  pageInfo: PageInfo!
-}
-
-# An edge in a connection
-type FunctionScoreEdge {
-  # The item at the end of the edge
-  node: FunctionScore
-
-  # cursor marks a unique position or index into the connection
-  cursor: String!
-
-  # index in the connection
-  index: Int
-}
-
 # GraphQL representation of a generic JCR node
 type GenericJCRNode implements JCRNode {
+  # Get ACL info for this node
+  acl: GqlAcl
+
   # Get the last modified date of this node and its descendants. The recursion in descendants can be controlled by recursionTypesFilter. If no filter is passed, recursion will stop by default on sub pages.
   aggregatedLastModifiedDate(
     # The language
@@ -680,6 +564,9 @@ type GenericJCRNode implements JCRNode {
 
     # Filter by graphQL fields values
     fieldFilter: InputFieldFiltersInput
+
+    # When set to true, returns the node in the default language if there is no translation for the requested language. Returns null if the option "Replace untranslated content with the default language content" is not activated for the site of the requested node. Will also return null if there is no translation for the default language.
+    useFallbackLanguage: Boolean = false
   ): [JCRProperty]!
 
   # The GraphQL representation of the property in the requested language; null if the property does not exist
@@ -689,6 +576,9 @@ type GenericJCRNode implements JCRNode {
 
     # The language to obtain the property in; must be a valid language code for internationalized properties, does not matter for non-internationalized ones
     language: String
+
+    # When set to true, returns the node in the default language if there is no translation for the requested language. Returns null if the option "Replace untranslated content with the default language content" is not activated for the site of the requested node. Will also return null if there is no translation for the default language.
+    useFallbackLanguage: Boolean = false
   ): JCRProperty
 
   # GraphQL representations of the reference properties that target the current JCR Node
@@ -715,6 +605,12 @@ type GenericJCRNode implements JCRNode {
     fieldFilter: InputFieldFiltersInput
   ): JCRPropertyConnection!
 
+  # Returns languages of available translations for this node
+  translationLanguages(
+    # Optional: Return languages only if it is active for the site
+    isActiveOnly: Boolean
+  ): [String]
+
   # The UUID of the JCR node this object represents
   uuid: String!
 
@@ -727,23 +623,15 @@ type GenericJCRNode implements JCRNode {
     permissionName: String!
   ): Boolean
 
-  # Read default Work in progress information. Set by "wip.checkbox.checked" system proprety
-  defaultWipInfo: wipInfo
+  # Give access to the experience fields for the current node
+  asExperience: GqlExperience
+  jExperience(
+    # Unomi profile id
+    profileId: String
 
-  # Read work in progress information for a given node
-  wipInfo: wipInfo
-
-  # Get vanity URLs from the current node filtered by the parameters
-  vanityUrls(
-    # Languages
-    languages: [String]
-
-    # Filter results based on graphql field values
-    fieldFilter: InputFieldFiltersInput
-  ): [VanityUrl]
-
-  # Retrieve lock info of the current node
-  lockInfo: LockInfo
+    # Unomi session id
+    sessionId: String
+  ): PersonalizedResult @deprecated(reason: "Use asExperience instead")
 
   # Aggregated publication info about the JCR node
   aggregatedPublicationInfo(
@@ -757,15 +645,50 @@ type GenericJCRNode implements JCRNode {
     references: Boolean = false
   ): GqlPublicationInfo!
 
-  # Give access to the experience fields for the current node
-  asExperience: GqlExperience
-  jExperience(
-    # Unomi profile id
-    profileId: String
+  # Get vanity URLs from the current node filtered by the parameters
+  vanityUrls(
+    # Languages
+    languages: [String]
 
-    # Unomi session id
-    sessionId: String
-  ): PersonalizedResult
+    # Filter results based on graphql field values
+    fieldFilter: InputFieldFiltersInput
+  ): [VanityUrl]
+
+  # Returns a list of types allowed under the provided node
+  allowedChildNodeTypes(
+    # Whether all sub-types of allowed child node types should be included
+    includeSubTypes: Boolean = true
+
+    # Filter by GraphQL fields values
+    fieldFilter: InputFieldFiltersInput
+  ): [JCRNodeType]
+
+  # Returns the node definition that applies to this node.
+  definition: JCRNodeDefinition
+
+  # Returns an array of <code>NodeType</code> objects representing the mixin node types in effect for this node.
+  mixinTypes(
+    # Filter by GraphQL fields values
+    fieldFilter: InputFieldFiltersInput
+  ): [JCRNodeType]!
+
+  # Get the primary node type of this node
+  primaryNodeType: JCRNodeType!
+
+  # Reports if the current node matches the nodetype(s) passed in parameter
+  isNodeType(
+    # Node type name
+    type: InputNodeTypesInput!
+  ): Boolean!
+
+  # Read default Work in progress information. Set by "wip.checkbox.checked" system proprety
+  defaultWipInfo: wipInfo
+
+  # Read work in progress information for a given node
+  wipInfo: wipInfo
+
+  # Retrieve lock info of the current node
+  lockInfo: LockInfo
 
   # Render URL in ajax mode
   ajaxRenderUrl: String
@@ -808,44 +731,48 @@ type GenericJCRNode implements JCRNode {
 
   # Returns edit lock status of the current node object
   lockedAndCannotBeEdited: Boolean
-
-  # Returns a list of types allowed under the provided node
-  allowedChildNodeTypes(
-    # Whether all sub-types of allowed child node types should be included
-    includeSubTypes: Boolean = true
-
-    # Filter by GraphQL fields values
-    fieldFilter: InputFieldFiltersInput
-  ): [JCRNodeType]
-
-  # Returns the node definition that applies to this node.
-  definition: JCRNodeDefinition
-
-  # Returns an array of <code>NodeType</code> objects representing the mixin node types in effect for this node.
-  mixinTypes(
-    # Filter by GraphQL fields values
-    fieldFilter: InputFieldFiltersInput
-  ): [JCRNodeType]!
-
-  # Get the primary node type of this node
-  primaryNodeType: JCRNodeType!
-
-  # Reports if the current node matches the nodetype(s) passed in parameter
-  isNodeType(
-    # Node type name
-    type: InputNodeTypesInput!
-  ): Boolean!
 }
 
-# Elasticsearch connection model
-type GqlAvailableConnection {
-  # Id of the connection
-  connectionId: String
+# ACL properties and list of access control entry
+type GqlAcl {
+  # Get list of access control entries for this ACL
+  aclEntries(
+    # Fetch ACL entry only for this principal
+    principalFilter: InputPrincipalInput
 
-  # List of plugins if any
-  plugins: [GqlPlugin]
+    # The languages to check
+    inclInherited: Boolean
+  ): [GqlAclEntry]
+
+  # Get inheritance break attribute for this node
+  inheritanceBreak: Boolean
+
+  # Get parent node for this ACL
+  parentNode: JCRNode
 }
 
+# ACL entry
+type GqlAclEntry {
+  # Type of access for this ACL entry - one of GRANT, DENY or EXTERNAL
+  aclEntryType: String
+
+  # External permissions name
+  externalPermissionsName: String
+
+  # Get node where this ACL entry originated from
+  inheritedFrom: JCRNode
+
+  # Get principal for this entry
+  principal: Principal
+
+  # Get role for this entry
+  role: AclRole
+
+  # Return true if this ACL entry did not originate from this ACL's parent node
+  inherited: Boolean
+}
+
+# Background job
 type GqlBackgroundJob {
   # The amount of time the job ran for (in milliseconds). The returned value will be -1 until the job has actually completed
   duration: Long
@@ -854,13 +781,22 @@ type GqlBackgroundJob {
   group: String
 
   # The job (Boolean) property that correspond to the given name. The returned value will be null in case the job doesn't have the property
-  jobBooleanProperty(name: String): Boolean
+  jobBooleanProperty(
+    # The job name
+    name: String
+  ): Boolean
 
   # The job (Int) property that correspond to the given name. The returned value will be null in case the job doesn't have the property
-  jobIntegerProperty(name: String): Int
+  jobIntegerProperty(
+    # The job name
+    name: String
+  ): Int
 
   # The job (Long) property that correspond to the given name. The returned value will be null in case the job doesn't have the property
-  jobLongProperty(name: String): Long
+  jobLongProperty(
+    # The job name
+    name: String
+  ): Long
 
   # The job state is different from the status, it reflect the last action done on the job instance (Started, Vetoed, Finished)
   jobState: GqlBackgroundJobState
@@ -869,7 +805,10 @@ type GqlBackgroundJob {
   jobStatus: GqlBackgroundJobStatus
 
   # The job (String) property that correspond to the given name. The returned value will be null in case the job doesn't have the property
-  jobStringProperty(name: String): String
+  jobStringProperty(
+    # The job name
+    name: String
+  ): String
 
   # The job name
   name: String
@@ -988,74 +927,6 @@ type GqlDashboard {
 
   # Whether the tools are accessible on the installation
   toolsAccess: Boolean
-}
-
-type GqlDistributedSessionsMutation {
-  # Delete a session
-  removeSession(
-    # Session id
-    id: String!
-  ): Boolean
-}
-
-type GqlDistributedSessionsQuery {
-  localSessions(
-    # fetching only nodes before this node (exclusive)
-    before: String
-
-    # fetching only nodes after this node (exclusive)
-    after: String
-
-    # fetching only the first certain number of nodes
-    first: Int
-
-    # fetching only the last certain number of nodes
-    last: Int
-
-    # fetching only nodes after this node (inclusive)
-    offset: Int
-
-    # fetching only the first certain number of nodes
-    limit: Int
-
-    # Filter by graphQL fields values
-    fieldFilter: InputFieldFiltersInput
-
-    # sort by GraphQL field values
-    fieldSorter: InputFieldSorterInput
-
-    # Group fields by criteria
-    fieldGrouping: InputFieldGroupingInput
-  ): GqlSessionConnection
-  sessions(
-    # fetching only nodes before this node (exclusive)
-    before: String
-
-    # fetching only nodes after this node (exclusive)
-    after: String
-
-    # fetching only the first certain number of nodes
-    first: Int
-
-    # fetching only the last certain number of nodes
-    last: Int
-
-    # fetching only nodes after this node (inclusive)
-    offset: Int
-
-    # fetching only the first certain number of nodes
-    limit: Int
-
-    # Filter by graphQL fields values
-    fieldFilter: InputFieldFiltersInput
-
-    # sort by GraphQL field values
-    fieldSorter: InputFieldSorterInput
-
-    # Group fields by criteria
-    fieldGrouping: InputFieldGroupingInput
-  ): GqlSessionConnection
-  sessionsCount: Int
 }
 
 type GqlEditorFormMutations {
@@ -1185,6 +1056,15 @@ type GqlExperience {
 
   # Check if this experience is active
   active: Boolean
+
+  # get a resolved experience
+  resolve(
+    # Unomi profile id
+    profileId: String
+
+    # Unomi session id
+    sessionId: String
+  ): PersonalizedResult
 }
 
 type GqlExperienceType {
@@ -1199,28 +1079,6 @@ type GqlExperienceType {
 
   # Get the experience main type
   type: Type
-}
-
-# Server healthCheck
-type GqlHealthCheck {
-  probes: [GqlProbe]
-
-  # Highest reported status across all probes
-  status: GqlProbeStatus
-}
-
-type GqlHzPartition {
-  id: Int
-  owner: String
-}
-
-# Index size
-type GqlIndexSize {
-  # Index name
-  name: String
-
-  # Index size in bytes
-  size: Long
 }
 
 type GqlJcrImageTransformMutation {
@@ -1270,17 +1128,6 @@ type GqlLockDetail {
   type: String
 }
 
-type GqlMetricsFacetResult {
-  # The field that was used to run the aggregation
-  field: String
-
-  # Maximum value within the filtered dataset
-  max: Float
-
-  # Minimum value within the filtered dataset
-  min: Float
-}
-
 type GqlModule {
   # User facing description for the module
   description: String
@@ -1313,66 +1160,6 @@ type GqlOperationsSupport {
   publication: Boolean!
 }
 
-# Model of a plugin information (name,description,version)
-type GqlPlugin {
-  # Full description of the plugin
-  description: String
-
-  # Full name of the plugin
-  name: String
-
-  # version of the plugin
-  version: String
-}
-
-type GqlProbe {
-  # Description specified by the developer of the probe
-  description: String
-
-  # Name of the probe
-  name: String
-
-  # Severity of the probe (LOW to CRITICAL)
-  severity: GqlProbeSeverity
-
-  # Status reported by the probe (GREEN to RED)
-  status: GqlProbeStatus
-}
-
-enum GqlProbeHealth {
-  # GREEN
-  GREEN
-
-  # YELLOW
-  YELLOW
-
-  # RED
-  RED
-}
-
-enum GqlProbeSeverity {
-  # LOW
-  LOW
-
-  # MEDIUM
-  MEDIUM
-
-  # HIGH
-  HIGH
-
-  # CRITICAL
-  CRITICAL
-}
-
-# Probe status
-type GqlProbeStatus {
-  # Health of the probe
-  health: GqlProbeHealth
-
-  # Message explaining probe status
-  message: String
-}
-
 # Publication status information for a JCR node
 type GqlPublicationInfo {
   # Whether node exists in live workspace
@@ -1391,22 +1178,10 @@ type GqlPublicationInfo {
   workInProgress: Boolean
 }
 
-# Representation of range facet aggregation buckets
-type GqlRangeFacetData {
-  # Number of documents matching the range
-  count: Int
-
-  # Name provided for the range
-  name: String
-}
-
-# Result of aggregation based on field and ranges
-type GqlRangeFacetResult {
-  # Data based on facets specified in the search
-  data: [GqlRangeFacetData]
-
-  # The field that was used to run the aggregation
-  field: String
+# Scheduler object which allows to access to background jobs
+type GqlScheduler {
+  # List of active jobs
+  jobs: [GqlBackgroundJob]
 }
 
 # API Scope
@@ -1418,140 +1193,21 @@ type GqlScope {
   name: String
 }
 
-union GqlSearchFacetValue = DateRangeValue | NumberRangeValue | TermValue
+type GqlWorkflowEvent {
+  # Number of tasks for current user
+  activeWorkflowTaskCountForUser: Int
 
-# Container for search operations
-type GqlSearchQueryExtension {
-  # Retrieves nodes matching a search
-  search(
-    # Search query
-    q: String!
+  # Task that has just been created
+  createdTask: Task
 
-    # Where to search, can be CONTENT or FILES
-    searchIn: [SearchIn]
+  # Task that has just been ended
+  endedTask: Task
 
-    # Limit of pages displayed
-    limit: Int
+  # Workflow that has just been ended
+  endedWorkflow: Workflow
 
-    # Offset, total offset is calculated by multiplying offset number by limit
-    offset: Int
-
-    # Facets specification
-    facets: Inputfacets
-
-    # Sorting specification
-    sortBy: InputSort
-
-    # Filtering specification
-    filter: Inputfilter
-  ): searchResults
-    @deprecated(reason: "This will be removed in future versions")
-}
-
-type GqlSession {
-  cost: Long
-  creationTime: String
-  id: String
-  lastAccessedTime: String
-  maxInactiveIntervalInSeconds: Int
-  partition: GqlHzPartition
-  user: User
-}
-
-# A connection to a list of items.
-type GqlSessionConnection {
-  # a list of nodes
-  nodes: [GqlSession]
-
-  # a list of edges
-  edges: [GqlSessionEdge]
-
-  # details about this specific page
-  pageInfo: PageInfo!
-}
-
-# An edge in a connection
-type GqlSessionEdge {
-  # The item at the end of the edge
-  node: GqlSession
-
-  # cursor marks a unique position or index into the connection
-  cursor: String!
-
-  # index in the connection
-  index: Int
-}
-
-# Sharding configuration details
-type GqlShardConfiguration {
-  # Average shard size, based on the current index size
-  averageShardSize: Long
-
-  # Available heap memory per shard
-  heapPerShard: Long
-
-  # Number of primary shards
-  primaryCount: Int
-
-  # Number of replicas
-  replicas: Int
-
-  # Is the number of shards evenly divisible by number of data nodes
-  divisible: Boolean
-}
-
-# Aggregation bucket representation
-type GqlTermFacetData {
-  # The aggregation bucket value
-  count: Int
-
-  # The aggregation bucket value
-  value: String
-}
-
-# Result of aggregation based on field
-type GqlTermFacetResult {
-  # Data based on facets specified in the search
-  data: [GqlTermFacetData]
-
-  # The field that was used to run the aggregation
-  field: String
-}
-
-# Children data of tree facet root value
-type GqlTreeFacetData {
-  # Number of documents
-  count: Int
-
-  # Filter expression to find matching results for this path
-  filter: String
-
-  # Human Readable path
-  humanPath: String
-
-  # key of this facet
-  key: String
-
-  # System path to be used in root path for tree facets
-  rootPath: String
-
-  # The aggregation bucket value
-  value: String
-
-  # Indicate whether the tree element has any children
-  hasChildren: Boolean
-}
-
-# Result of hierarchical facet aggregation
-type GqlTreeFacetResult {
-  # Data based on facets specified in the search
-  data: [GqlTreeFacetData]
-
-  # The field that was used to run the aggregation
-  field: String
-
-  # rootPath passed as a parameter
-  rootPath: String
+  # Workflow that has just been started
+  startedWorkflow: Workflow
 }
 
 type GqljExperience {
@@ -1649,6 +1305,9 @@ type Group implements Principal {
 
   # Get the corresponding JCR node
   node: JCRNode
+
+  # Return GROUP principal type
+  principalType: PrincipalType
 
   # Group property
   property(
@@ -1865,15 +1524,6 @@ input InputGqlOrdering {
   property: String
 }
 
-# Tree facet input object
-input InputGqlTreeFacet {
-  # value of the root of hierarchical tree
-  rootValue: String
-
-  # Term facet
-  termFacet: InputTermFacet
-}
-
 # GraphQL representation of a JCR node to be created
 input InputJCRNode {
   # The collection of sub nodes to create
@@ -1940,18 +1590,6 @@ input InputJCRProperty {
   values: [String]
 }
 
-# Metrics facet to filter by specific field
-input InputMetricsFacet {
-  # Field the facet is applied on.
-  field: String!
-
-  # Maximum number of facet groups returned. Default is 10.
-  max: Int
-
-  # Whether the facet filter will be OR (set to true) or AND (set to false). Default is false.
-  disjunctive: Boolean
-}
-
 # Node properties selection
 input InputNodePropertiesInput {
   # The way to combine multiple individual property filters; null indicates default (ALL)
@@ -2012,70 +1650,13 @@ input InputNodeTypesListInput {
   siteKey: String
 }
 
-# Number Range Input Object
-input InputNumberRange {
-  # Greater than a number
-  gt: Float
+# Describes input using name and with principal type (user/group)
+input InputPrincipalInput {
+  # Get principal name
+  name: String
 
-  # Greate than or equal to a number
-  gte: Float
-
-  # Less than a number
-  lt: Float
-
-  # Less than or equal to a number
-  lte: Float
-
-  # Name to describe the facet
-  name: String!
-}
-
-# Number Range facet to filter on specified ranges
-input InputNumberRangeFacet {
-  # Field the facet is applied on.
-  field: String!
-
-  # Maximum number of facet groups returned. Default is 10.
-  max: Int
-
-  # List of available ranges to be used
-  ranges: [InputNumberRange]!
-
-  # Selected groups. Default is [].
-  selections: [InputNumberRange]
-
-  # Whether the facet filter will be OR (set to true) or AND (set to false). Default is false.
-  disjunctive: Boolean
-}
-
-# Number Range Input Object
-input InputRange {
-  # From value [used in Range facet]
-  from: String
-
-  # Name to describe the facet
-  name: String!
-
-  # To value [used in Range facet]
-  to: String
-}
-
-# Range facet to filter on specified ranges
-input InputRangeFacet {
-  # Field the facet is applied on.
-  field: String!
-
-  # Maximum number of facet groups returned. Default is 10.
-  max: Int
-
-  # List of available ranges to be used
-  ranges: [InputRange]!
-
-  # Selected groups. Default is [].
-  selections: [InputRange]
-
-  # Whether the facet filter will be OR (set to true) or AND (set to false). Default is false.
-  disjunctive: Boolean
+  # Get principal type (user/group)
+  type: PrincipalType
 }
 
 # Request attribute that can be use by rendering API
@@ -2085,36 +1666,6 @@ input InputRenderRequestAttributeInput {
 
   # The value of the request attribute
   value: String!
-}
-
-# Sort object for ordering or results
-input InputSort {
-  # ASC or DESC order
-  orderType: SortOrder!
-
-  # The property to order by
-  property: String!
-}
-
-# Term facet to filter on specific selections
-input InputTermFacet {
-  # Field the facet is applied on.
-  field: String!
-
-  # Maximum number of facet groups returned. Default is 10.
-  max: Int
-
-  # Minimum number of documents for a value to return as a facet. Default is 5.
-  minDocCount: Int
-
-  # Label to be used for missing values on this field. If not specified, missing fields will not be counted
-  missingValue: String
-
-  # Selected groups. Default is [].
-  selections: [String]
-
-  # Whether the facet filter will be OR (set to true) or AND (set to false). Default is false.
-  disjunctive: Boolean
 }
 
 input InputVanityUrl {
@@ -2129,207 +1680,6 @@ input InputVanityUrl {
 
   # true whether this URL mapping is the default one for the language
   defaultMapping: Boolean!
-}
-
-# Boost fields for document matching
-input Inputboost {
-  # Boost configuration for fields and subfields. Overrides content, main and metadata boosts if present. Unspecified fields receive a default value as specified in .cfg file.
-  boosts: InputboostConfig
-
-  # Boost document based on their content(rich text, simple text) matching
-  content: Float
-
-  # Boost document based on their main field (displayableName, title) matching
-  main: Float
-
-  # Boost document based on their metadata field (tags, keywords, categories) matching
-  metadata: Float
-}
-
-# Boost configuration for fields and their subfields
-input InputboostConfig {
-  # Boost for jgql:content field multimatch query
-  content: InputboostSpec
-
-  # Boost for jgql:file_content field multimatch query. Note that stem and ngram field boosts are not taken into account.
-  file: InputboostSpec
-
-  # Boost for jgql:main field multimatch query
-  main: InputboostSpec
-
-  # Boost for jgql:metadata field multimatch query
-  metadata: InputboostSpec
-}
-
-# Boost specification for multimatch query against a field
-input InputboostSpec {
-  # Boost for default field
-  defaultField: Float
-
-  # Boost for ngram field
-  ngram: Float
-
-  # Boost for phrase field
-  phrase: Float
-
-  # Overall boost for multimatch query (default field and subfields as a group)
-  query: Float
-
-  # Boost for stem field
-  stem: Float
-}
-
-# A set of applicable facets
-input Inputfacets {
-  # Date range facet to be used during search
-  dateRange: [InputRangeFacet]
-
-  # Metrics facet to be used during search
-  metrics: [InputMetricsFacet]
-
-  # Range facet to be used during search
-  numberRange: [InputNumberRangeFacet]
-
-  # Term facet to be used during search
-  term: [InputTermFacet]
-
-  # Metrics facet to be used during search
-  tree: [InputGqlTreeFacet]
-}
-
-# Search filter
-input Inputfilter {
-  # Author filter
-  author: String
-
-  # Created filter
-  created: InputfilterRange
-
-  # Custom filters
-  custom: InputfilterGroups
-
-  # Modified filter
-  modified: InputfilterRange
-
-  # Node type filter
-  nodeType: InputnodeTypeFilter
-
-  # Node path filter
-  path: String
-
-  # Published filter
-  published: InputfilterRange
-}
-
-# Custom term input object
-input InputfilterCustomTerm {
-  # Mapped field to filter on
-  field: String!
-
-  # Value to filter
-  value: String!
-}
-
-# Custom date range group
-input InputfilterDateRangeGroup {
-  # AND or OR filter operation
-  operation: Operation
-
-  # Ranges used for filtering
-  ranges: [InputfilterExtendedDateRange]!
-}
-
-# Custom extended date range input object
-input InputfilterExtendedDateRange {
-  # To display hits after specified date
-  after: String
-
-  # To display hits before specified date
-  before: String
-
-  # Filter for strict equality to the date
-  equal: String
-
-  # Field to filter by
-  field: String!
-}
-
-# Custom filter groups
-input InputfilterGroups {
-  # Groups of date range filters
-  dateRange: [InputfilterDateRangeGroup]
-
-  # Groups of number range filters
-  numberRange: [InputfilterNumberRangeGroup]
-
-  # Groups of term filters
-  term: [InputfilterTermGroup]
-}
-
-# Number range input object
-input InputfilterNumberRange {
-  # Numeric field to filter by
-  field: String!
-
-  # Greater than a number
-  gt: Float
-
-  # Greater than or equal to number
-  gte: Float
-
-  # Less than a number
-  lt: Float
-
-  # Less than or equal to number
-  lte: Float
-}
-
-# Custom number range group
-input InputfilterNumberRangeGroup {
-  # Filter operation
-  operation: Operation
-
-  # Ranges
-  ranges: [InputfilterNumberRange]!
-}
-
-# Range input object
-input InputfilterRange {
-  # To display hits after specified date
-  after: String
-
-  # To display hits before specified date
-  before: String
-
-  # Filter for strict equality to the date
-  equal: String
-}
-
-# Custom filter term group
-input InputfilterTermGroup {
-  # Filter operation
-  operation: Operation
-
-  # Terms to filter by
-  terms: [InputfilterCustomTerm]!
-}
-
-# Filter for filtering on node type
-input InputnodeTypeFilter {
-  # Node type
-  type: String
-
-  # Flag to determine if sub node types should be included in filter
-  includeSubNodes: Boolean
-}
-
-# Sort object for ordering or results
-input InputsortV2 {
-  # Direction in which ordering occurs
-  dir: OrderDirection!
-
-  # The field to order by
-  field: String!
 }
 
 # Work in progress information
@@ -2522,6 +1872,9 @@ type JCRMutation {
 
 # GraphQL representation of a JCR node
 interface JCRNode {
+  # Get ACL info for this node
+  acl: GqlAcl
+
   # Get the last modified date of this node and its descendants. The recursion in descendants can be controlled by recursionTypesFilter. If no filter is passed, recursion will stop by default on sub pages.
   aggregatedLastModifiedDate(
     # The language to use to get the last modified date, if not specified, returns last modification date in any language
@@ -2679,6 +2032,9 @@ interface JCRNode {
 
     # Filter by graphQL fields values
     fieldFilter: InputFieldFiltersInput
+
+    # When set to true, returns the node in the default language if there is no translation for the requested language. Returns null if the option "Replace untranslated content with the default language content" is not activated for the site of the requested node. Will also return null if there is no translation for the default language.
+    useFallbackLanguage: Boolean = false
   ): [JCRProperty]!
 
   # The GraphQL representation of the property in the requested language; null if the property does not exist
@@ -2688,6 +2044,9 @@ interface JCRNode {
 
     # The language to obtain the property in; must be a valid language code for internationalized properties, does not matter for non-internationalized ones
     language: String
+
+    # When set to true, returns the node in the default language if there is no translation for the requested language. Returns null if the option "Replace untranslated content with the default language content" is not activated for the site of the requested node. Will also return null if there is no translation for the default language.
+    useFallbackLanguage: Boolean = false
   ): JCRProperty
 
   # GraphQL representations of the reference properties that target the current JCR Node
@@ -2714,6 +2073,12 @@ interface JCRNode {
     fieldFilter: InputFieldFiltersInput
   ): JCRPropertyConnection!
 
+  # Returns languages of available translations for this node
+  translationLanguages(
+    # Optional: Return languages only if it is active for the site
+    isActiveOnly: Boolean
+  ): [String]
+
   # The UUID of the JCR node this object represents
   uuid: String!
 
@@ -2726,23 +2091,15 @@ interface JCRNode {
     permissionName: String!
   ): Boolean
 
-  # Read default Work in progress information. Set by "wip.checkbox.checked" system proprety
-  defaultWipInfo: wipInfo
+  # Give access to the experience fields for the current node
+  asExperience: GqlExperience
+  jExperience(
+    # Unomi profile id
+    profileId: String
 
-  # Read work in progress information for a given node
-  wipInfo: wipInfo
-
-  # Get vanity URLs from the current node filtered by the parameters
-  vanityUrls(
-    # Languages
-    languages: [String]
-
-    # Filter results based on graphql field values
-    fieldFilter: InputFieldFiltersInput
-  ): [VanityUrl]
-
-  # Retrieve lock info of the current node
-  lockInfo: LockInfo
+    # Unomi session id
+    sessionId: String
+  ): PersonalizedResult @deprecated(reason: "Use asExperience instead")
 
   # Aggregated publication info about the JCR node
   aggregatedPublicationInfo(
@@ -2756,15 +2113,50 @@ interface JCRNode {
     references: Boolean = false
   ): GqlPublicationInfo!
 
-  # Give access to the experience fields for the current node
-  asExperience: GqlExperience
-  jExperience(
-    # Unomi profile id
-    profileId: String
+  # Get vanity URLs from the current node filtered by the parameters
+  vanityUrls(
+    # Languages
+    languages: [String]
 
-    # Unomi session id
-    sessionId: String
-  ): PersonalizedResult
+    # Filter results based on graphql field values
+    fieldFilter: InputFieldFiltersInput
+  ): [VanityUrl]
+
+  # Returns a list of types allowed under the provided node
+  allowedChildNodeTypes(
+    # Whether all sub-types of allowed child node types should be included
+    includeSubTypes: Boolean = true
+
+    # Filter by GraphQL fields values
+    fieldFilter: InputFieldFiltersInput
+  ): [JCRNodeType]
+
+  # Returns the node definition that applies to this node.
+  definition: JCRNodeDefinition
+
+  # Returns an array of <code>NodeType</code> objects representing the mixin node types in effect for this node.
+  mixinTypes(
+    # Filter by GraphQL fields values
+    fieldFilter: InputFieldFiltersInput
+  ): [JCRNodeType]!
+
+  # Get the primary node type of this node
+  primaryNodeType: JCRNodeType!
+
+  # Reports if the current node matches the nodetype(s) passed in parameter
+  isNodeType(
+    # Node type name
+    type: InputNodeTypesInput!
+  ): Boolean!
+
+  # Read default Work in progress information. Set by "wip.checkbox.checked" system proprety
+  defaultWipInfo: wipInfo
+
+  # Read work in progress information for a given node
+  wipInfo: wipInfo
+
+  # Retrieve lock info of the current node
+  lockInfo: LockInfo
 
   # Render URL in ajax mode
   ajaxRenderUrl: String
@@ -2807,33 +2199,6 @@ interface JCRNode {
 
   # Returns edit lock status of the current node object
   lockedAndCannotBeEdited: Boolean
-
-  # Returns a list of types allowed under the provided node
-  allowedChildNodeTypes(
-    # Whether all sub-types of allowed child node types should be included
-    includeSubTypes: Boolean = true
-
-    # Filter by GraphQL fields values
-    fieldFilter: InputFieldFiltersInput
-  ): [JCRNodeType]
-
-  # Returns the node definition that applies to this node.
-  definition: JCRNodeDefinition
-
-  # Returns an array of <code>NodeType</code> objects representing the mixin node types in effect for this node.
-  mixinTypes(
-    # Filter by GraphQL fields values
-    fieldFilter: InputFieldFiltersInput
-  ): [JCRNodeType]!
-
-  # Get the primary node type of this node
-  primaryNodeType: JCRNodeType!
-
-  # Reports if the current node matches the nodetype(s) passed in parameter
-  isNodeType(
-    # Node type name
-    type: InputNodeTypesInput!
-  ): Boolean!
 }
 
 # Aggregations on JCR Nodes
@@ -2951,6 +2316,18 @@ type JCRNodeMutation {
   # Get the identifier of the node currently being mutated
   uuid: String
 
+  # Grant role permissions to specified principal user/group for the given node
+  grantRoles(
+    # Roles to grant user/group for this node
+    roleNames: [String]!
+
+    # Type of principal (user/group) specified
+    principalType: PrincipalType!
+
+    # Name of principal (user/group)
+    principalName: String!
+  ): Boolean
+
   # Import a file under the current node
   importContent(
     # Name of the request part that contains desired import file body
@@ -3038,6 +2415,18 @@ type JCRNodeMutation {
     position: ReorderedChildrenPosition = INPLACE
   ): Boolean
 
+  # Remove/deny roles to specified principal user/group for the given node
+  revokeRoles(
+    # Roles to grant user/group for this node
+    roleNames: [String]!
+
+    # Type of principal (user/group) specified
+    principalType: PrincipalType!
+
+    # Name of principal (user/group)
+    principalName: String!
+  ): Boolean
+
   # Mutates or creates a set of properties on the current node
   setPropertiesBatch(
     # The collection of JCR properties to set
@@ -3059,21 +2448,6 @@ type JCRNodeMutation {
   # Return zip mutation
   zip: ZipFileMutation
 
-  # Unlock all nodes under the specified node
-  clearAllLocks: Boolean
-
-  # Lock the node
-  lock(
-    # Type of lock, defaults to user
-    type: String = "user"
-  ): Boolean
-
-  # Unlock the node
-  unlock(
-    # Type of lock, defaults to user
-    type: String = "user"
-  ): Boolean
-
   # Add vanity URL
   addVanityUrl(
     # The list of vanity url to create
@@ -3091,19 +2465,6 @@ type JCRNodeMutation {
     # Filter by languages
     languages: [String]
   ): [VanityUrlMappingMutation]
-  startWorkflow(definition: String, language: String): Boolean
-
-  # Add wip information
-  createWipInfo(
-    # Work in progress information to save
-    wipInfo: InputwipInfo!
-  ): Boolean
-
-  # Mutate wip information
-  mutateWipInfo(
-    # Work in progress information to save
-    wipInfo: InputwipInfo!
-  ): Boolean
 
   # Publish the node in certain languages
   publish(
@@ -3122,6 +2483,34 @@ type JCRNodeMutation {
     # Languages to publish the node in
     languages: [String]
   ): Boolean
+
+  # Add wip information
+  createWipInfo(
+    # Work in progress information to save
+    wipInfo: InputwipInfo!
+  ): Boolean
+
+  # Mutate wip information
+  mutateWipInfo(
+    # Work in progress information to save
+    wipInfo: InputwipInfo!
+  ): Boolean
+
+  # Unlock all nodes under the specified node
+  clearAllLocks: Boolean
+
+  # Lock the node
+  lock(
+    # Type of lock, defaults to user
+    type: String = "user"
+  ): Boolean
+
+  # Unlock the node
+  unlock(
+    # Type of lock, defaults to user
+    type: String = "user"
+  ): Boolean
+  startWorkflow(definition: String, language: String): Boolean
 }
 
 # GraphQL representation of a JCR node type
@@ -3233,6 +2622,24 @@ type JCRProperty {
 
   # The values of the JCR property as Booleans in case the property is multiple-valued, null otherwise
   booleanValues: [Boolean]
+
+  # The value of the JCR property rendered by the specified choicelist renderer in case the property is single-valued, null otherwise
+  choicelistValue(
+    # The choicelist renderer name to be used
+    renderer: String
+
+    # The language
+    language: String
+  ): String
+
+  # The value of the JCR property rendered by the specified choicelist renderer in case the property is multiple-valued, null otherwise
+  choicelistValues(
+    # The choicelist renderer name to be used
+    renderer: String
+
+    # The language
+    language: String
+  ): [String]
 
   # The decrypted value of the JCR encrypted property as a String in case the property is single-valued, null otherwise
   decryptedValue: String
@@ -3608,22 +3015,6 @@ type JCRQuery {
   # Get the workspace of the query
   workspace: Workspace!
 
-  # Execute one or more search queries
-  searches(
-    # Unique site identifier
-    siteKey: String
-
-    # Language to search in
-    language: String!
-
-    # Can be LIVE or EDIT
-    workspace: Workspace!
-  ): GqlSearchQueryExtension
-    @deprecated(reason: "This will be removed in future versions")
-
-  # Retrieves the number of active workflow tasks for the current user
-  activeWorkflowTaskCountForUser: Int
-
   # Get a node type by its name
   nodeTypeByName(
     # Node type name
@@ -3662,10 +3053,17 @@ type JCRQuery {
     # Node type names
     names: [String]!
   ): [JCRNodeType]
+
+  # Retrieves the number of active workflow tasks for the current user
+  activeWorkflowTaskCountForUser: Int
+    @deprecated(reason: "Use /workflow/activeWorkflowTaskCountForUser instead")
 }
 
 # GraphQL representation of a site node
 type JCRSite implements JCRNode {
+  # Get ACL info for this node
+  acl: GqlAcl
+
   # Get the last modified date of this node and its descendants. The recursion in descendants can be controlled by recursionTypesFilter. If no filter is passed, recursion will stop by default on sub pages.
   aggregatedLastModifiedDate(
     # The language
@@ -3841,6 +3239,9 @@ type JCRSite implements JCRNode {
 
     # Filter by graphQL fields values
     fieldFilter: InputFieldFiltersInput
+
+    # When set to true, returns the node in the default language if there is no translation for the requested language. Returns null if the option "Replace untranslated content with the default language content" is not activated for the site of the requested node. Will also return null if there is no translation for the default language.
+    useFallbackLanguage: Boolean = false
   ): [JCRProperty]!
 
   # The GraphQL representation of the property in the requested language; null if the property does not exist
@@ -3850,6 +3251,9 @@ type JCRSite implements JCRNode {
 
     # The language to obtain the property in; must be a valid language code for internationalized properties, does not matter for non-internationalized ones
     language: String
+
+    # When set to true, returns the node in the default language if there is no translation for the requested language. Returns null if the option "Replace untranslated content with the default language content" is not activated for the site of the requested node. Will also return null if there is no translation for the default language.
+    useFallbackLanguage: Boolean = false
   ): JCRProperty
 
   # GraphQL representations of the reference properties that target the current JCR Node
@@ -3882,6 +3286,12 @@ type JCRSite implements JCRNode {
   # Site key
   sitekey: String
 
+  # Returns languages of available translations for this node
+  translationLanguages(
+    # Optional: Return languages only if it is active for the site
+    isActiveOnly: Boolean
+  ): [String]
+
   # The UUID of the JCR node this object represents
   uuid: String!
 
@@ -3894,23 +3304,15 @@ type JCRSite implements JCRNode {
     permissionName: String!
   ): Boolean
 
-  # Read default Work in progress information. Set by "wip.checkbox.checked" system proprety
-  defaultWipInfo: wipInfo
+  # Give access to the experience fields for the current node
+  asExperience: GqlExperience
+  jExperience(
+    # Unomi profile id
+    profileId: String
 
-  # Read work in progress information for a given node
-  wipInfo: wipInfo
-
-  # Get vanity URLs from the current node filtered by the parameters
-  vanityUrls(
-    # Languages
-    languages: [String]
-
-    # Filter results based on graphql field values
-    fieldFilter: InputFieldFiltersInput
-  ): [VanityUrl]
-
-  # Retrieve lock info of the current node
-  lockInfo: LockInfo
+    # Unomi session id
+    sessionId: String
+  ): PersonalizedResult @deprecated(reason: "Use asExperience instead")
 
   # Aggregated publication info about the JCR node
   aggregatedPublicationInfo(
@@ -3924,15 +3326,50 @@ type JCRSite implements JCRNode {
     references: Boolean = false
   ): GqlPublicationInfo!
 
-  # Give access to the experience fields for the current node
-  asExperience: GqlExperience
-  jExperience(
-    # Unomi profile id
-    profileId: String
+  # Get vanity URLs from the current node filtered by the parameters
+  vanityUrls(
+    # Languages
+    languages: [String]
 
-    # Unomi session id
-    sessionId: String
-  ): PersonalizedResult
+    # Filter results based on graphql field values
+    fieldFilter: InputFieldFiltersInput
+  ): [VanityUrl]
+
+  # Returns a list of types allowed under the provided node
+  allowedChildNodeTypes(
+    # Whether all sub-types of allowed child node types should be included
+    includeSubTypes: Boolean = true
+
+    # Filter by GraphQL fields values
+    fieldFilter: InputFieldFiltersInput
+  ): [JCRNodeType]
+
+  # Returns the node definition that applies to this node.
+  definition: JCRNodeDefinition
+
+  # Returns an array of <code>NodeType</code> objects representing the mixin node types in effect for this node.
+  mixinTypes(
+    # Filter by GraphQL fields values
+    fieldFilter: InputFieldFiltersInput
+  ): [JCRNodeType]!
+
+  # Get the primary node type of this node
+  primaryNodeType: JCRNodeType!
+
+  # Reports if the current node matches the nodetype(s) passed in parameter
+  isNodeType(
+    # Node type name
+    type: InputNodeTypesInput!
+  ): Boolean!
+
+  # Read default Work in progress information. Set by "wip.checkbox.checked" system proprety
+  defaultWipInfo: wipInfo
+
+  # Read work in progress information for a given node
+  wipInfo: wipInfo
+
+  # Retrieve lock info of the current node
+  lockInfo: LockInfo
 
   # Render URL in ajax mode
   ajaxRenderUrl: String
@@ -3975,33 +3412,6 @@ type JCRSite implements JCRNode {
 
   # Returns edit lock status of the current node object
   lockedAndCannotBeEdited: Boolean
-
-  # Returns a list of types allowed under the provided node
-  allowedChildNodeTypes(
-    # Whether all sub-types of allowed child node types should be included
-    includeSubTypes: Boolean = true
-
-    # Filter by GraphQL fields values
-    fieldFilter: InputFieldFiltersInput
-  ): [JCRNodeType]
-
-  # Returns the node definition that applies to this node.
-  definition: JCRNodeDefinition
-
-  # Returns an array of <code>NodeType</code> objects representing the mixin node types in effect for this node.
-  mixinTypes(
-    # Filter by GraphQL fields values
-    fieldFilter: InputFieldFiltersInput
-  ): [JCRNodeType]!
-
-  # Get the primary node type of this node
-  primaryNodeType: JCRNodeType!
-
-  # Reports if the current node matches the nodetype(s) passed in parameter
-  isNodeType(
-    # Node type name
-    type: InputNodeTypesInput!
-  ): Boolean!
 }
 
 # Site language representation
@@ -4074,39 +3484,6 @@ type JahiaAdminMutation {
     # If factory pid, configiration identifier (filename suffix)
     identifier: String
   ): GqlConfigurationMutation
-
-  # Create a task
-  createTask(
-    # Service name
-    service: String!
-
-    # Task name
-    name: String!
-  ): Boolean
-
-  # Delete a task
-  deleteTask(
-    # Service name
-    service: String!
-
-    # Task name
-    name: String!
-  ): Boolean
-
-  # Shutdown the server
-  shutdown(
-    # In seconds, maximum time to wait for server to be ready to shutdown
-    timeout: Int
-
-    # Force immediate shutdown even if server is busy
-    force: Boolean
-
-    # Do not send the shutdown event
-    dryRun: Boolean
-  ): Boolean
-
-  # Distributed sessions admin
-  distributedSessions: GqlDistributedSessionsMutation
 }
 
 # Jahia admin queries root
@@ -4116,24 +3493,75 @@ type JahiaAdminQuery {
     # Configuration pid ot factory pid
     pid: String!
 
-    # If factory pid, configiration identifier (filename suffix)
+    # If factory pid, configuration identifier (filename suffix)
     identifier: String
   ): GqlConfigurationQuery
 
+  # Details about the database Jahia is connected to
+  database: JahiaDatabase
+
+  # Get jobs scheduler
+  scheduler: GqlScheduler
+
+  # Details about the system hosting Jahia
+  system: JahiaSystem
+
   # Version of the running Jahia instance
   version: JahiaVersion
+}
 
-  # Distributed sessions admin
-  distributedSessions: GqlDistributedSessionsQuery
+# Details about the database Jahia is connected to
+type JahiaDatabase {
+  # Name of the driver used to connect to the database
+  driverName: String
 
-  # HealthCheck node
-  healthCheck(severity: GqlProbeSeverity): GqlHealthCheck
+  # Version of the driver used to connect to the database
+  driverVersion: String
 
-  # Lists tasks running on the Jahia server. A server should not be stopped/restarted when any of these tasks are present. These tasks are specific to the server being queried and are not shared accorss a cluster
-  tasks: [task]
+  # Name of the database vendor
+  name: String
 
-  # Get server load
-  load: Load
+  # Type of database specified in Jahia configuration
+  type: String
+
+  # Version of the database
+  version: String
+}
+
+# Details about the system used to run Jahia
+type JahiaSystem {
+  # Details about the operating system
+  java: JahiaSystemJava
+
+  # Details about the operating system
+  os: JahiaSystemOs
+}
+
+# Details about the system OS used to run Jahia
+type JahiaSystemJava {
+  # Java Runtime name
+  runtimeName: String
+
+  # Java Runtime version
+  runtimeVersion: String
+
+  # Java vendor
+  vendor: String
+
+  # Java vendor version
+  vendorVersion: String
+}
+
+# Details about the system OS used to run Jahia
+type JahiaSystemOs {
+  # Operating System Architecture (amd64, arm64, ...)
+  architecture: String
+
+  # Operating System Name
+  name: String
+
+  # Operating System Version
+  version: String
 }
 
 # Version of the running Jahia instance
@@ -4149,35 +3577,6 @@ type JahiaVersion {
 
   # Flag returning if running Jahia instance is a SNAPSHOT
   isSnapshot: Boolean
-}
-
-# Server load
-type Load {
-  # Get requests load
-  requests: LoadValue
-
-  # Get JCR Sessions load
-  sessions: LoadValue
-}
-
-enum LoadInterval {
-  # ONE
-  ONE
-
-  # FIVE
-  FIVE
-
-  # FIFTEEN
-  FIFTEEN
-}
-
-# Load value
-type LoadValue {
-  # Exponential moving average
-  average(interval: LoadInterval): Float
-
-  # Instantaneous count
-  count: Int
 }
 
 # Information on node lock
@@ -4235,11 +3634,10 @@ enum MulticriteriaEvaluation {
 
 # Root mutation type
 type Mutation {
-  # Admin Mutation
-  admin: AdminMutation!
+  mutateWorkflows(definition: String): [WorkflowMutation]
 
-  # jExperience Mutations
-  jExperience: GqljExperienceMutation!
+  # Main access field to the DX GraphQL Form mutation API
+  forms: GqlEditorFormMutations
 
   # JCR Mutation
   jcr(
@@ -4250,12 +3648,14 @@ type Mutation {
     save: Boolean = true
   ): JCRMutation
 
+  # Admin Mutation
+  admin: AdminMutation!
+
   # Generate a new JWT token
   jwtToken(scopes: [String]!, referer: [String], ips: [String]): JWTToken
 
-  # Main access field to the DX GraphQL Form mutation API
-  forms: GqlEditorFormMutations
-  mutateWorkflows(definition: String): [WorkflowMutation]
+  # jExperience Mutations
+  jExperience: GqljExperienceMutation!
 }
 
 enum NodeNamingConflictResolutionStrategy {
@@ -4291,46 +3691,6 @@ type NodeTypeTreeEntry {
 
   # Return the parent tree entry (if any)
   parent: NodeTypeTreeEntry
-}
-
-# Number Range Input Object
-type NumberRange {
-  # Greater than a number
-  gt: Float
-
-  # Greate than or equal to a number
-  gte: Float
-
-  # Less than a number
-  lt: Float
-
-  # Less than or equal to a number
-  lte: Float
-
-  # Name to describe the facet
-  name: String!
-}
-
-type NumberRangeValue {
-  count: Int
-  range: NumberRange
-}
-
-enum Operation {
-  # AND
-  AND
-
-  # OR
-  OR
-}
-
-# Direction of sort
-enum OrderDirection {
-  # Ascendant order
-  ASC
-
-  # Descendant order
-  DESC
 }
 
 enum OrderType {
@@ -4535,11 +3895,25 @@ type PersonalApiTokensQuery {
 }
 
 type PersonalizedResult {
-  optimizationTestVariant: JCRNode
-  personalizedVariant: JCRNode
+  optimizationTestVariant: JCRNode @deprecated(reason: "Deprecated")
+  personalizedVariant: JCRNode @deprecated(reason: "Use variant field instead")
   personalizedVariants: [JCRNode]
+    @deprecated(reason: "Use variants field instead")
+
+  # get the profile id if present
   profileId: String
+
+  # get the session id if present
   sessionId: String
+
+  # get the resolved variant
+  variant: JCRNode
+
+  # get the resolved variants for node with multiple variants as personalized list
+  variants(
+    # Maximal number of variant to return
+    limit: Int
+  ): [JCRNode]
 }
 
 # GraphQL representation of a principal
@@ -4586,6 +3960,9 @@ interface Principal {
   # Get the corresponding JCR node
   node: JCRNode
 
+  # Get principal type for this principal
+  principalType: PrincipalType
+
   # Site where the principal is defined
   site: JCRSite
 
@@ -4621,6 +3998,15 @@ type PrincipalEdge {
 
   # index in the connection
   index: Int
+}
+
+# Principal type
+enum PrincipalType {
+  # User principal type
+  USER
+
+  # Group principal type
+  GROUP
 }
 
 enum PropertyEvaluation {
@@ -4674,36 +4060,11 @@ enum PublicationStatus {
 
 # Root query type
 type Query {
-  # Search in Jahia using Augmented Search
-  search(
-    # Search query
-    q: String!
+  # Main access field to the DX GraphQL Dashboard API
+  dashboard: GqlDashboard
 
-    # List of unique site identifiers. Search across all sites if not provided
-    siteKeys: [String]
-
-    # Language to search in
-    language: String = "en"
-
-    # Can be LIVE or EDIT
-    workspace: Workspace = LIVE
-
-    # Where to search, can be CONTENT or FILES
-    searchIn: [SearchIn]
-
-    # Filtering specification
-    filters: Inputfilter
-
-    # Boost specification
-    boosts: Inputboost
-
-    # Function score id
-    functionScoreId: String
-  ): augmentedSearchResult
-
-  # Get the current user
-  currentUser: Current_32_user
-  jExperience: GqljExperience
+  # Admin Queries
+  admin: AdminQuery!
 
   # JCR Queries
   jcr(
@@ -4711,17 +4072,18 @@ type Query {
     workspace: Workspace
   ): JCRQuery!
 
-  # Main access field to the DX GraphQL Form API
-  forms: GqlEditorForms
+  # Get the current user
+  currentUser: Current_32_user
 
   # Tag Queries
   tag: JCRTags
+  jExperience: GqljExperience
 
-  # Admin Queries
-  admin: AdminQuery!
+  # Main access field to the DX GraphQL Form API
+  forms: GqlEditorForms
 
-  # Main access field to the DX GraphQL Dashboard API
-  dashboard: GqlDashboard
+  # Retrieves the number of active workflow tasks for the current user
+  workflow: WorkflowService
 
   # default finder for categoryById
   categoryById(
@@ -4767,18 +4129,6 @@ enum QueryLanguage {
   XPATH
 }
 
-# Number Range Input Object
-type Range {
-  # From value [used in Range facet]
-  from: String
-
-  # Name to describe the facet
-  name: String!
-
-  # To value [used in Range facet]
-  to: String
-}
-
 # Rendering result for a node
 type RenderedNode {
   # Contraints on this node
@@ -4804,24 +4154,6 @@ enum ReorderedChildrenPosition {
 
   # Specified children are sorted in a requested order and placed at the top, before all remaining children
   FIRST
-}
-
-# Index in which search should be performed
-enum SearchIn {
-  # files index
-  FILES
-
-  # content index
-  CONTENT
-}
-
-# Order of sort
-enum SortOrder {
-  # Ascendant order
-  ASC
-
-  # Descendant order
-  DESC
 }
 
 enum SortType {
@@ -4876,15 +4208,6 @@ type StaticAsset {
 
 # Root subscription type
 type Subscription {
-  # Lock the node for edition and subscribe to hold the lock. The node is automatically unlocked when the client disconnect or close the connection
-  subscribeToEditorLock(
-    # Uuid of the node to be locked.
-    nodeId: String!
-
-    # An ID generated client side used to identify the lock
-    editorID: String!
-  ): String
-
   # Subscription on background jobs
   backgroundJobSubscription(
     # The target scheduler for listening jobs
@@ -4902,6 +4225,18 @@ type Subscription {
     # Subscribe only to job with matching job states
     filterByJobStates: [GqlBackgroundJobState]
   ): GqlBackgroundJob
+
+  # Subscription on workflows
+  workflowEvent: GqlWorkflowEvent
+
+  # Lock the node for edition and subscribe to hold the lock. The node is automatically unlocked when the client disconnect or close the connection
+  subscribeToEditorLock(
+    # Uuid of the node to be locked.
+    nodeId: String!
+
+    # An ID generated client side used to identify the lock
+    editorID: String!
+  ): String
 }
 
 enum Target {
@@ -4927,11 +4262,49 @@ enum TargetScheduler {
   BOTH
 }
 
-type TermValue {
-  count: Int
+# Workflow task
+type Task {
+  # Task assignee
+  assignee: User
 
-  # Value of term
-  value: String
+  # Creation time
+  creationTime: String
+
+  # Due date
+  dueDate: String
+
+  # Task id
+  id: String
+
+  # Task name
+  name: String
+
+  # Parent workflow
+  workflow: Workflow
+}
+
+# A connection to a list of items.
+type TaskConnection {
+  # a list of nodes
+  nodes: [Task]
+
+  # a list of edges
+  edges: [TaskEdge]
+
+  # details about this specific page
+  pageInfo: PageInfo!
+}
+
+# An edge in a connection
+type TaskEdge {
+  # The item at the end of the edge
+  node: Task
+
+  # cursor marks a unique position or index into the connection
+  cursor: String!
+
+  # index in the connection
+  index: Int
 }
 
 enum TokenState {
@@ -5011,6 +4384,9 @@ type User implements Principal {
 
   # User organization
   organization: String
+
+  # Return USER principal type
+  principalType: PrincipalType
 
   # User property
   property(
@@ -5114,6 +4490,9 @@ type UserGroupQuery {
 
 # GraphQL representation of a vanity URL
 type VanityUrl implements JCRNode {
+  # Get ACL info for this node
+  acl: GqlAcl
+
   # Get the last modified date of this node and its descendants. The recursion in descendants can be controlled by recursionTypesFilter. If no filter is passed, recursion will stop by default on sub pages.
   aggregatedLastModifiedDate(
     # The language
@@ -5274,6 +4653,9 @@ type VanityUrl implements JCRNode {
 
     # Filter by graphQL fields values
     fieldFilter: InputFieldFiltersInput
+
+    # When set to true, returns the node in the default language if there is no translation for the requested language. Returns null if the option "Replace untranslated content with the default language content" is not activated for the site of the requested node. Will also return null if there is no translation for the default language.
+    useFallbackLanguage: Boolean = false
   ): [JCRProperty]!
 
   # The GraphQL representation of the property in the requested language; null if the property does not exist
@@ -5283,6 +4665,9 @@ type VanityUrl implements JCRNode {
 
     # The language to obtain the property in; must be a valid language code for internationalized properties, does not matter for non-internationalized ones
     language: String
+
+    # When set to true, returns the node in the default language if there is no translation for the requested language. Returns null if the option "Replace untranslated content with the default language content" is not activated for the site of the requested node. Will also return null if there is no translation for the default language.
+    useFallbackLanguage: Boolean = false
   ): JCRProperty
 
   # GraphQL representations of the reference properties that target the current JCR Node
@@ -5312,6 +4697,12 @@ type VanityUrl implements JCRNode {
   # The node targeted by this vanity URL
   targetNode: JCRNode
 
+  # Returns languages of available translations for this node
+  translationLanguages(
+    # Optional: Return languages only if it is active for the site
+    isActiveOnly: Boolean
+  ): [String]
+
   # The vanity URL
   url: String
 
@@ -5333,23 +4724,15 @@ type VanityUrl implements JCRNode {
   # true whether this URL mapping is the default one for the language
   default: Boolean
 
-  # Read default Work in progress information. Set by "wip.checkbox.checked" system proprety
-  defaultWipInfo: wipInfo
+  # Give access to the experience fields for the current node
+  asExperience: GqlExperience
+  jExperience(
+    # Unomi profile id
+    profileId: String
 
-  # Read work in progress information for a given node
-  wipInfo: wipInfo
-
-  # Get vanity URLs from the current node filtered by the parameters
-  vanityUrls(
-    # Languages
-    languages: [String]
-
-    # Filter results based on graphql field values
-    fieldFilter: InputFieldFiltersInput
-  ): [VanityUrl]
-
-  # Retrieve lock info of the current node
-  lockInfo: LockInfo
+    # Unomi session id
+    sessionId: String
+  ): PersonalizedResult @deprecated(reason: "Use asExperience instead")
 
   # Aggregated publication info about the JCR node
   aggregatedPublicationInfo(
@@ -5363,15 +4746,50 @@ type VanityUrl implements JCRNode {
     references: Boolean = false
   ): GqlPublicationInfo!
 
-  # Give access to the experience fields for the current node
-  asExperience: GqlExperience
-  jExperience(
-    # Unomi profile id
-    profileId: String
+  # Get vanity URLs from the current node filtered by the parameters
+  vanityUrls(
+    # Languages
+    languages: [String]
 
-    # Unomi session id
-    sessionId: String
-  ): PersonalizedResult
+    # Filter results based on graphql field values
+    fieldFilter: InputFieldFiltersInput
+  ): [VanityUrl]
+
+  # Returns a list of types allowed under the provided node
+  allowedChildNodeTypes(
+    # Whether all sub-types of allowed child node types should be included
+    includeSubTypes: Boolean = true
+
+    # Filter by GraphQL fields values
+    fieldFilter: InputFieldFiltersInput
+  ): [JCRNodeType]
+
+  # Returns the node definition that applies to this node.
+  definition: JCRNodeDefinition
+
+  # Returns an array of <code>NodeType</code> objects representing the mixin node types in effect for this node.
+  mixinTypes(
+    # Filter by GraphQL fields values
+    fieldFilter: InputFieldFiltersInput
+  ): [JCRNodeType]!
+
+  # Get the primary node type of this node
+  primaryNodeType: JCRNodeType!
+
+  # Reports if the current node matches the nodetype(s) passed in parameter
+  isNodeType(
+    # Node type name
+    type: InputNodeTypesInput!
+  ): Boolean!
+
+  # Read default Work in progress information. Set by "wip.checkbox.checked" system proprety
+  defaultWipInfo: wipInfo
+
+  # Read work in progress information for a given node
+  wipInfo: wipInfo
+
+  # Retrieve lock info of the current node
+  lockInfo: LockInfo
 
   # Render URL in ajax mode
   ajaxRenderUrl: String
@@ -5414,33 +4832,6 @@ type VanityUrl implements JCRNode {
 
   # Returns edit lock status of the current node object
   lockedAndCannotBeEdited: Boolean
-
-  # Returns a list of types allowed under the provided node
-  allowedChildNodeTypes(
-    # Whether all sub-types of allowed child node types should be included
-    includeSubTypes: Boolean = true
-
-    # Filter by GraphQL fields values
-    fieldFilter: InputFieldFiltersInput
-  ): [JCRNodeType]
-
-  # Returns the node definition that applies to this node.
-  definition: JCRNodeDefinition
-
-  # Returns an array of <code>NodeType</code> objects representing the mixin node types in effect for this node.
-  mixinTypes(
-    # Filter by GraphQL fields values
-    fieldFilter: InputFieldFiltersInput
-  ): [JCRNodeType]!
-
-  # Get the primary node type of this node
-  primaryNodeType: JCRNodeType!
-
-  # Reports if the current node matches the nodetype(s) passed in parameter
-  isNodeType(
-    # Node type name
-    type: InputNodeTypesInput!
-  ): Boolean!
 }
 
 type VanityUrlMappingMutation {
@@ -5486,13 +4877,48 @@ enum WipStatus {
   LANGUAGES
 }
 
+# Workflow process
 type Workflow {
+  # Workflow creation time
+  creationTime: String
+
+  # Workflow due date
+  dueDate: String
+
+  # Username who started the workflow
   startUser: String
 }
 
 type WorkflowMutation {
   abortWorkflow: Boolean
   workflow: Workflow
+}
+
+# Workflow service
+type WorkflowService {
+  # Retrieves the number of active workflow tasks for the current user
+  activeWorkflowTaskCountForUser: Int
+
+  # Retrieves the active workflow tasks for the current user
+  activeWorkflowTasksForUser(
+    # fetching only nodes before this node (exclusive)
+    before: String
+
+    # fetching only nodes after this node (exclusive)
+    after: String
+
+    # fetching only the first certain number of nodes
+    first: Int
+
+    # fetching only the last certain number of nodes
+    last: Int
+
+    # fetching only nodes after this node (inclusive)
+    offset: Int
+
+    # fetching only the first certain number of nodes
+    limit: Int
+  ): TaskConnection
 }
 
 # JCR workspace to use for the operations
@@ -5516,324 +4942,6 @@ type ZipFileMutation {
     # destination path to unzip
     path: String!
   ): Boolean
-}
-
-# Generic object with search results which contains facets and results
-type augmentedSearchResult {
-  # Provides access to min and max values for a specific field across the selected dataset
-  numberRange(
-    # Defines the field to operate on, this field is required.
-    field: String!
-  ): GqlMetricsFacetResult
-
-  # Retrieves aggregations for range facet
-  rangeFacet(
-    # Defines the field to aggregate on, this field is required.
-    field: String!
-
-    # List of available ranges to be used
-    ranges: [InputRange]
-  ): GqlRangeFacetResult
-
-  # Retrieves nodes matching a search
-  results(
-    # Page count to offset the results window
-    page: Int
-
-    # Number of documents in the results window
-    size: Int = 25
-
-    # Sort object, by default, doesn’t do any sorting and return the results by weight.
-    sortBy: [InputsortV2]
-  ): searchResultsV2
-
-  # Retrieves aggregations for term facet
-  termFacet(
-    # Defines the field to aggregate on, this field is required.
-    field: String!
-
-    # Maximum number of facet groups returned.
-    max: Int = 10
-
-    # Minimum number of documents for a value to return as a facet.
-    minDocCount: Int = 1
-
-    # Label to be used for missing values on this field. If not specified, missing fields will not be counted
-    missingValue: String
-
-    # Defines whether the facet aggregation should be executed on the exact search filter (disjunctive: false) or on a modified version of the filter without the current facet field.
-    disjunctive: Boolean = false
-  ): GqlTermFacetResult
-
-  # Retrieves aggregations for tree facet
-  treeFacet(
-    # Defines the field to aggregate on, this field is required.
-    field: String!
-
-    # The root path to fetch children from
-    rootPath: String!
-
-    # Maximum number of facet groups returned.
-    max: Int = 10
-
-    # Minimum number of documents for a value to return as a facet.
-    minDocCount: Int = 1
-
-    # Label to be used for missing values on this field. If not specified, missing fields will not be counted
-    missingValue: String
-
-    # Defines whether the facet aggregation should be executed on the exact search filter (disjunctive: false) or on a modified version of the filter without the current facet field.
-    disjunctive: Boolean = false
-  ): GqlTreeFacetResult
-}
-
-# Information related to specific indexing job
-type indexJob {
-  # The ID of the job that was just started
-  id: String
-
-  # Relation to a Jahia project object
-  project: project
-
-  # Indexing job status
-  status: jobStatus
-}
-
-# Information about indexing jobs
-type indexMutationResult {
-  # Information about indexing jobs, one per site indexed
-  jobs: [indexJob]
-}
-
-# Status of indexation
-enum indexationStatus {
-  # Indexation has been scheduled
-  SCHEDULED
-
-  # Indexation has started
-  STARTED
-
-  # Indexation has completed
-  COMPLETED
-}
-
-# Representation of indexed site
-type indexedSite {
-  # End time of most recent indexation as ISO string
-  indexationEnd: String
-
-  # Scheduled time of most recent indexation as ISO string
-  indexationScheduled: String
-
-  # Start time of most recent indexation as ISO string
-  indexationStart: String
-
-  # Status of indexation
-  indexationStatus: indexationStatus
-
-  # Site key
-  siteKey: String
-}
-
-# Status of job
-enum jobStatus {
-  # Job has started
-  STARTED
-
-  # Job has completed
-  COMPLETED
-}
-
-# Site specific information
-type project {
-  # Unique site identifier
-  siteKey: String
-}
-
-# Search facet
-type searchFacet {
-  # Data based on facets specified in the search
-  data: [GqlSearchFacetValue]
-
-  # JCR name of the field to filter by
-  field: String
-
-  # Type of the facet
-  type: String
-}
-
-# Detailed information about search hit
-type searchHit {
-  # Date when node was created
-  created: String
-
-  # User who created the node
-  createdBy: String
-
-  # Prettified displayable name of the node
-  displayableName: String
-
-  # Short extract from the hit
-  excerpt: String
-
-  # ID of the node
-  id: String
-
-  # Keywords associated with this hit
-  keywords: [String]
-
-  # Date and time of last modification
-  lastModified: String
-
-  # User who modified the node last
-  lastModifiedBy: String
-
-  # Date and time of last publication
-  lastPublished: String
-
-  # User who published the node last
-  lastPublishedBy: String
-
-  # Formatted link to the node
-  link: String
-
-  # Mime type of the node
-  mimeType: String
-
-  # Information about JCR node, lookup JCRNode in API docs for deeper insight
-  node: JCRNode
-
-  # Main type of the node, e.g jnt:page
-  nodeType: String
-
-  # Path of the node
-  path: String
-
-  # Determines how relevant a match is to the query
-  score: Float
-
-  # Tags associated with this hit
-  tags: [String]
-}
-
-# Detailed information about search hit
-type searchHitV2 {
-  # Date when node was created
-  created: String
-
-  # User who created the node
-  createdBy: String
-
-  # Prettified displayable name of the node
-  displayableName: String
-
-  # Short extract from the hit
-  excerpt: String
-
-  # ID of the node
-  id: String
-
-  # Keywords associated with this hit
-  keywords: [String]
-
-  # Date and time of last modification
-  lastModified: String
-
-  # User who modified the node last
-  lastModifiedBy: String
-
-  # Date and time of last publication
-  lastPublished: String
-
-  # User who published the node last
-  lastPublishedBy: String
-
-  # Formatted link to the node
-  link: String
-
-  # Mime type of the node
-  mimeType: String
-
-  # Main type of the node, e.g jnt:page
-  nodeType: String
-
-  # Path of the node
-  path: String
-
-  # Fetch the value of the requested property, property name can be pass as an alias or as an argument
-  property(
-    # Name of the property to return
-    name: String
-  ): String
-
-  # Determines how relevant a match is to the query
-  score: Float
-
-  # Tags associated with this hit
-  tags: [String]
-}
-
-# Object with search results
-type searchResults {
-  # Array of facets to narrow down the search
-  facets: [searchFacet]
-
-  # This flag indicates that more data is available by using different filters
-  hasMore: Boolean
-
-  # Array of hits based on the search query
-  hits: [searchHit]
-
-  # Number of hits on page
-  hitsOnPage: Long
-
-  # Time taken by query
-  took: String
-
-  # Total number of hits
-  totalHits: Long
-}
-
-# Object with search results
-type searchResultsV2 {
-  # This flag indicates that more data is available by using different filters
-  hasMore: Boolean
-
-  # Array of hits based on the search query
-  hits: [searchHitV2]
-
-  # Number of hits on page
-  hitsOnPage: Long
-
-  # Time taken by query
-  took: String
-
-  # Total number of hits
-  totalHits: Long
-}
-
-# List of indexed sites
-type siteList {
-  # Database connection id
-  connectionId: String
-
-  # Indexed sites
-  sites: [indexedSite]
-
-  # Total number of indexed sites
-  totalCount: Int
-}
-
-# Task that prevents server from shutdown
-type task {
-  # The name of the task associated with the service
-  name: String
-
-  # Service attached to the task being monitored
-  service: String
-
-  # Datetime at which the task was started or registered
-  started: String
 }
 
 # Work in progress information

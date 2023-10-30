@@ -28,7 +28,8 @@ const headers = {
 
 
 export const getUserContext = (cxs,dispatch) => {
-    console.log("[getUserContext] cxs :",cxs);
+    // console.log("[getUserContext] cxs :",cxs);
+    const contextServerPublicUrl = window.digitalData.contextServerPublicUrl || window.digitalData.wemInitConfig.contextServerUrl;
     const data = {
         requiredProfileProperties: ["*"],
         requiredSessionProperties: ["*"],
@@ -43,7 +44,7 @@ export const getUserContext = (cxs,dispatch) => {
     }
     axios({
         method: 'post',
-        url: `${window.digitalData.contextServerPublicUrl}/context.json`,
+        url: `${contextServerPublicUrl}/context.json`,
         headers,
         data
     }).then(response => {

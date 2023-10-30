@@ -11,7 +11,7 @@ import {/*gql,*/ useQuery} from "@apollo/client";
 // import {CORE_NODE_FIELDS} from "../../graphql";
 import {getUserContext} from "../../data/context";
 import {CxsCtx} from "../../unomi/cxs";
-import {queryEnergyPreferences} from "../../graphql";
+import {queryEnergyPreferences} from "../../graphql-app";
 
 // const __mocks__categories = ['combustion', 'electric', 'hybrid', 'hydrogen'];
 
@@ -134,5 +134,7 @@ export const SimpleDialog = (props) => {
 }
 
 SimpleDialog.propTypes = {
-    // usercategories: PropTypes.array.isRequired
+    onClose:PropTypes.func.isRequired,
+    open:PropTypes.bool.isRequired,
+    nodepath:PropTypes.string.isRequired
 };

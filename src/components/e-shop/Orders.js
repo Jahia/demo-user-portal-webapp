@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React/*, {useContext}*/ from "react";
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {SeverityPill} from "../severity-pill";
 import {
@@ -15,65 +15,64 @@ import {
     Tooltip, Typography
 } from '@mui/material';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import {pastLeads} from "../../__mocks__";
-import {StoreCtx} from "../../context";
+import {pastOrders} from "../../__mocks__";
+// import {StoreCtx} from "../../context";
 
 
-export const Leads = ({customLeadsData,...props}) => {
-    const { state } = useContext(StoreCtx);
-    const {userData} = state;
-    let mocksLeads = pastLeads;
-    if(typeof customLeadsData === 'string'){
+export const Orders = ({customOrdersData,...props}) => {
+    // const { state } = useContext(StoreCtx);
+    // const {userData} = state;
+    let mocksOrders = pastOrders;
+    if(typeof customOrdersData === 'string'){
         try{
-            const customLeadsDataJson = JSON.parse(customLeadsData);
-            if(customLeadsDataJson && Array.isArray(customLeadsDataJson))
-                mocksLeads = customLeadsDataJson;
+            const customOrdersDataJson = JSON.parse(customOrdersData);
+            if(customOrdersDataJson && Array.isArray(customOrdersDataJson))
+                mocksOrders = customOrdersDataJson;
         }catch(e){
-            console.error("leads property => \n"+customLeadsData+"\n => is not a json object : ",e);
+            console.error("leads property => \n"+customOrdersData+"\n => is not a json object : ",e);
         }
     };
 
+    // const currentOrder = [];
+    // if(userData && userData.profileProperties?.sfdc__leadID){
+    //     const {profileProperties : user} = userData;
+    //     const leadID = user?.sfdc__leadID || "-";
+    //     const leadSource = user?.sfdc__leadSource || "-";
+    //     const leadStatus = user?.sfdc__leadStatus || "-";
+    //     //sfdc__leadQuality,
+    //     const assignedToEmail = user?.sfdc__assignedToEmail || "-";
+    //     const assignedToPhone = user?.sfdc__assignedToPhone || "-";
+    //     const leadAssignedTo = user?.sfdc__leadAssignedTo || "Not yet assigned";
+    //     //sfdc__leadComments,
+    //     //sfdc__leadPreferences,
+    //     currentOrder.push(
+    //         {
+    //             id:leadID,
+    //             src:leadSource,
+    //             status:leadStatus,
+    //             contact:{
+    //                 fullname : leadAssignedTo,
+    //                 email : assignedToEmail,
+    //                 phone : assignedToPhone
+    //             }
+    //         }
+    //     )
+    // }
 
-    const currentLead = [];
-    if(userData && userData.profileProperties?.sfdc__leadID){
-        const {profileProperties : user} = userData;
-        const leadID = user?.sfdc__leadID || "-";
-        const leadSource = user?.sfdc__leadSource || "-";
-        const leadStatus = user?.sfdc__leadStatus || "-";
-        //sfdc__leadQuality,
-        const assignedToEmail = user?.sfdc__assignedToEmail || "-";
-        const assignedToPhone = user?.sfdc__assignedToPhone || "-";
-        const leadAssignedTo = user?.sfdc__leadAssignedTo || "Not yet assigned";
-        //sfdc__leadComments,
-        //sfdc__leadPreferences,
-        currentLead.push(
-            {
-                id:leadID,
-                src:leadSource,
-                status:leadStatus,
-                contact:{
-                    fullname : leadAssignedTo,
-                    email : assignedToEmail,
-                    phone : assignedToPhone
-                }
-            }
-        )
-    }
-
-    const leads=[...currentLead,...mocksLeads]
+    const orders=[/*...currentOrder,*/...mocksOrders]
     return (
         <Card {...props}>
-            <CardHeader title="My leads" />
+            <CardHeader title="My Orders" />
             <PerfectScrollbar>
                 <Box sx={{ minWidth: 500 }}>
                     <Table>
                         <TableHead>
                             <TableRow>
                                 <TableCell>
-                                    Lead ID
+                                    Order ID
                                 </TableCell>
                                 <TableCell>
-                                    Lead Source
+                                    Order Source
                                 </TableCell>
                                 <TableCell sortDirection="desc">
                                     <Tooltip
@@ -84,35 +83,56 @@ export const Leads = ({customLeadsData,...props}) => {
                                             active
                                             direction="desc"
                                         >
-                                            Lead Status
+                                            Status
+                                        </TableSortLabel>
+                                    </Tooltip>
+                                </TableCell>
+                                <TableCell sortDirection="desc">
+                                    <Tooltip
+                                        enterDelay={300}
+                                        title="Sort"
+                                    >
+                                        <TableSortLabel
+                                            direction="desc"
+                                        >
+                                            Total
                                         </TableSortLabel>
                                     </Tooltip>
                                 </TableCell>
                                 <TableCell>
-                                    Your contact
+                                    Cur.
+                                </TableCell>
+                                <TableCell>
+                                    Ordered for
                                 </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {leads.map((lead) => (
+                            {orders.map((order) => (
                                 <TableRow
                                     hover
-                                    key={lead.id}
+                                    key={order.id}
                                 >
                                     <TableCell>
-                                        {lead.id}
+                                        {order.id}
                                     </TableCell>
                                     <TableCell>
-                                        {lead.src}
+                                        {order.src}
                                     </TableCell>
                                     <TableCell>
                                         <SeverityPill
-                                            color={(lead.status === 'Closed' && 'success')
-                                            || (lead.status === 'Contacted' && 'warning')
+                                            color={(order.status === 'Closed' && 'success')
+                                            || (order.status === 'In progress' && 'warning')
                                             || 'error'}
                                         >
-                                            {lead.status}
+                                            {order.status}
                                         </SeverityPill>
+                                    </TableCell>
+                                    <TableCell>
+                                        {order.total}
+                                    </TableCell>
+                                    <TableCell>
+                                        {order.currency.symbol}
                                     </TableCell>
                                     <TableCell>
                                         <Typography
@@ -120,19 +140,19 @@ export const Leads = ({customLeadsData,...props}) => {
                                             gutterBottom
                                             variant="h6"
                                         >
-                                            {lead.contact.fullname}
+                                            {order.contact.fullname}
                                         </Typography>
                                         <Typography
                                             color="textSecondary"
                                             variant="body2"
                                         >
-                                            email: {lead.contact.email}
+                                            email: {order.contact.email}
                                         </Typography>
                                         <Typography
                                             color="textSecondary"
                                             variant="body2"
                                         >
-                                            phone: {lead.contact.phone}
+                                            phone: {order.contact.phone}
                                         </Typography>
                                     </TableCell>
                                 </TableRow>
