@@ -19,7 +19,6 @@ export const AccountProfile = ({portalData,...props}) => {
     const lastName = user?.lastName || "-";
     const email = user?.email || "-";
     const avatar = user?.profilePictureUrl;
-    const categoryNodePath = portalData?.category?.refNode?.path
 
     // const theme = useTheme();
     // const imgURL = `${devHost}/modules/drive-motor-user-portal/images/profile.jpg`;
@@ -102,7 +101,7 @@ export const AccountProfile = ({portalData,...props}) => {
                 </CardActions>
             </Card>
             <SimpleDialog
-                nodepath={categoryNodePath}
+                portalData={portalData}
                 open={open}
                 onClose={handleClose}
             />
