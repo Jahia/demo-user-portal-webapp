@@ -7,6 +7,7 @@ export const queryUserPortal = gql`query($workspace: Workspace!, $id: String!,$l
         nodeById(uuid:$id) {
             ...CoreNodeFields
             category: property(name:"dash4:category"){ refNode { ...CoreNodeFields } }
+            jExpUserPropsToSync: property(name:"seu:jExpProperty"){ value }
             personalizedAds: property(name:"dash4:personalizedAds"){ refNode { ...CoreNodeFields } }
             userTheme: property(name:"dash4:webappTheme"){ value }
             ...MocksProperty

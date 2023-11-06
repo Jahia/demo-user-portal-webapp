@@ -1,7 +1,7 @@
 import {gql} from "@apollo/client";
 import {CORE_NODE_FIELDS} from "./fragments"
 
-export const queryEnergyPreferences = gql`query($workspace: Workspace!, $path: String!,$language:String!){
+export const queryJcontentUserCategoryPreferences = gql`query($workspace: Workspace!, $path: String!,$language:String!){
     jcr(workspace: $workspace) {
         workspace
         nodeByPath(path:$path) {

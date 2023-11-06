@@ -3,16 +3,20 @@ import PropTypes from "prop-types";
 import {useLazyQuery} from "@apollo/client";
 import {queryPersonalizedAdsVariant} from "../../graphql-app";
 import {CxsCtx} from "../../unomi/cxs";
-import {JahiaCtx} from "../../context";
+import {JahiaCtx, StoreCtx} from "../../context";
 import {EmbeddedPathInHtmlResolver} from "../jahia";
 import {Card, CardActionArea, CardMedia, CardContent, Typography} from '@mui/material';
 import {Media} from "../media";
 import {getTypes, resolveLinkToURL} from 'misc/utils'
 
 export const Ads = (props) => {
-    const {adsid} = props;
+    const {adsid,jExpUserPropsToSync} = props;
     const cxs = useContext(CxsCtx);
     const {workspace, locale, host, isPreview, isEdit} = useContext(JahiaCtx);
+    const { state } = useContext(StoreCtx);
+    const {userData} = state;
+    const jExpUserPropsValues = userData?.profileProperties?.[jExpUserPropsToSync] || [];
+
     const [loadVariant, variantQuery] = useLazyQuery(queryPersonalizedAdsVariant);
 
     React.useEffect(() => {
@@ -27,7 +31,7 @@ export const Ads = (props) => {
                 }
             })
         }
-    },[loadVariant,workspace,locale, adsid, cxs])
+    },[loadVariant,workspace,locale, adsid, cxs, jExpUserPropsValues])
 
     // const {data, error, loading} = useQuery(queryPersonalizedAdsVariant, {
     //     variables: {
@@ -99,5 +103,6 @@ export const Ads = (props) => {
 }
 
 Ads.propTypes = {
-    adsid: PropTypes.string
+    adsid: PropTypes.string,
+    jExpUserPropsToSync: PropTypes.string
 };
