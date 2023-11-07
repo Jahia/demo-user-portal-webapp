@@ -9,41 +9,38 @@ import {Card, CardActionArea, CardMedia, CardContent, Typography} from '@mui/mat
 import {Media} from "../media";
 import {getTypes, resolveLinkToURL} from 'misc/utils'
 
-export const Ads = (props) => {
-    const {adsid,jExpUserPropsToSync} = props;
+export const Ads = ({adsId,jExpUserPropsToSync,...props}) => {
     const cxs = useContext(CxsCtx);
     const {workspace, locale, host, isPreview, isEdit} = useContext(JahiaCtx);
     const { state } = useContext(StoreCtx);
     const {userData} = state;
-    const jExpUserPropsValues = userData?.profileProperties?.[jExpUserPropsToSync] || [];
+    const jExpUserPropsValues = React.useMemo(()=>userData?.profileProperties?.[jExpUserPropsToSync],[userData,jExpUserPropsToSync]);
 
-    const [loadVariant, variantQuery] = useLazyQuery(queryPersonalizedAdsVariant);
+    const [loadVariant, {data,loading,error,refetch}] = useLazyQuery(queryPersonalizedAdsVariant);
 
     React.useEffect(() => {
-        if (adsid && cxs) {
+        if (adsId && cxs) {
+            console.log("do the call")
             loadVariant({
                 variables: {
                     workspace,
-                    id:adsid,
+                    id:adsId,
                     language: locale,
                     profileId: cxs.profileId,
                     sessionId: cxs.sessionId,
                 }
             })
         }
-    },[loadVariant,workspace,locale, adsid, cxs, jExpUserPropsValues])
+    },[loadVariant,workspace,locale, adsId,cxs])
 
-    // const {data, error, loading} = useQuery(queryPersonalizedAdsVariant, {
-    //     variables: {
-    //         workspace,
-    //         id:adsid,
-    //         language: locale,
-    //         profileId: cxs.profileId,
-    //         sessionId: cxs.sessionId,
-    //     }
-    // });
-    if (variantQuery.error) return <p>Error :(</p>;
-    if (!variantQuery.data || variantQuery.loading)
+    React.useEffect(() => {
+        if (data) {
+            refetch().then(()=>console.log("refetch done with jExpUserPropsValues : ",jExpUserPropsValues));
+        }
+    },[jExpUserPropsValues])
+
+    if (error) return <p>Error :(</p>;
+    if (!data || loading)
         return(
             <Card
                 {...props}
@@ -62,7 +59,7 @@ export const Ads = (props) => {
             </Card>
         );
 
-    const variant = variantQuery.data?.jcr?.nodeById?.jExperience?.resolve?.variant
+    const variant = data?.jcr?.nodeById?.jExperience?.resolve?.variant
     const {image,teaser,linkTarget} = variant;
     const href = resolveLinkToURL({
         host,
@@ -103,6 +100,6 @@ export const Ads = (props) => {
 }
 
 Ads.propTypes = {
-    adsid: PropTypes.string,
+    adsId: PropTypes.string,
     jExpUserPropsToSync: PropTypes.string
 };
