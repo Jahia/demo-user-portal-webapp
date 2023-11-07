@@ -147,7 +147,7 @@ const App = () => {
                                   md={6}
                                   xs={12}
                               >
-                                <Ads adsid={portalData?.personalizedAds?.refNode?.uuid} jExpUserPropsToSync={portalData?.jExpUserPropsToSync?.value}/>
+                                <Ads adsId={portalData?.personalizedAds?.refNode?.uuid} jExpUserPropsToSync={portalData?.jExpUserPropsToSync?.value}/>
                               </Grid>
                           </Grid>
                         </Box>
