@@ -22,9 +22,14 @@ export const SimpleDialog = ({ onClose, open, portalData, ...props}) => {
     const { workspace } = useContext(JahiaCtx);
     const { state, dispatch } = useContext(StoreCtx);
     const { userData, locale } = state;
-    const [jExpUserPropsValues,setJExpUserPropsValues] = React.useState(userData?.profileProperties?.[jExpUserPropsToSync] || [])
-    // const jExpUserPropsValues = userData?.profileProperties?.[jExpUserPropsToSync] || [];
-    // const form = React.useRef(null);
+    const [jExpUserPropsValues,setJExpUserPropsValues] = React.useState([])
+    const profileProperties = React.useMemo(()=>userData?.profileProperties,[userData]);
+
+    React.useEffect(() => {
+        if (profileProperties && profileProperties[jExpUserPropsToSync] ) {
+            setJExpUserPropsValues(profileProperties[jExpUserPropsToSync])
+        }
+    },[profileProperties,jExpUserPropsToSync])
 
     const {data, error, loading} = useQuery(queryJcontentUserCategoryPreferences, {
         variables: {
