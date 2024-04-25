@@ -18,6 +18,7 @@ export const MOCKS_PROPERTY = gql`
         chart: property(name:"dash4:chart"){ value }
         leads: property(name:"dash4:leads"){ value }
         orders: property(name:"dash4:orders"){ value }
+        contracts: property(name:"dash4:contracts"){ value }
         salesChart: property(name:"dash4:salesChart"){ value }
     }`;
 

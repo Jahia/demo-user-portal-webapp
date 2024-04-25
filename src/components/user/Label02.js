@@ -1,14 +1,15 @@
 import { Avatar, Card, CardContent, Grid, Typography } from '@mui/material';
-import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
-import Moment from "react-moment";
+import PriceCheckIcon from '@mui/icons-material/PriceCheck';
 import React, {useContext} from "react";
 import {StoreCtx} from "../../context";
 
-export const VisitFirst = (props) => {
+export const Label02 = ({portalData,props}) => {
     const { state } = useContext(StoreCtx);
     const {userData} = state;
-    const firstVisit = userData?.profileProperties?.firstVisit || "-";
+    const label02ValueCDP = userData?.profileProperties?._up_labe02Value || "-";
 
+    const label02Text = portalData?.label02Text?.value  || "-";
+    const label02Value = portalData?.label02Value?.value || "-";
     return(
 
         <Card
@@ -27,26 +28,30 @@ export const VisitFirst = (props) => {
                             gutterBottom
                             variant="overline"
                         >
-                            Member since
+                            {label02Text!=="-" &&
+                            label02Text
+                            }
                         </Typography>
                         <Typography
                             color="textPrimary"
                             variant="h4"
                         >
-                            {firstVisit!=="-" &&
-                                <Moment format="ll" date={firstVisit}/>
-                            }
+                            {label02ValueCDP !== "-" ? (
+                                <span>{label02ValueCDP}</span>
+                            ) : (
+                                label02Value !== "-" && <span>{label02Value}</span>
+                            )}
                         </Typography>
                     </Grid>
                     <Grid item>
                         <Avatar
                             sx={{
-                                backgroundColor: 'error.main',
+                                backgroundColor: 'warning.main',
                                 height: 56,
                                 width: 56
                             }}
                         >
-                            <PermContactCalendarIcon />
+                            <PriceCheckIcon />
                         </Avatar>
                     </Grid>
                 </Grid>

@@ -18,6 +18,7 @@ export const AccountProfile = ({portalData,...props}) => {
     const firstName = user?.firstName || "-";
     const lastName = user?.lastName || "-";
     const email = user?.email || "-";
+    const company = user?.company || "-";
     const avatar = user?.profilePictureUrl;
 
     // const theme = useTheme();
@@ -79,6 +80,12 @@ export const AccountProfile = ({portalData,...props}) => {
                             variant="body2"
                         >
                             {email}
+                        </Typography>
+                        <Typography
+                            color="textSecondary"
+                            variant="h6"
+                        >
+                            {company}
                         </Typography>
                         {/*<Typography*/}
                         {/*    color="textSecondary"*/}

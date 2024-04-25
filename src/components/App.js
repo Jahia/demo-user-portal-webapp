@@ -5,12 +5,14 @@ import {getUserContext} from "../data/context";
 
 import {Box, Grid, Container, ThemeProvider,styled} from "@mui/material"
 
-import {VisitFirst, VisitLast, AccountProfile, VisitNumber, ProductCard} from "./user";
+import {VisitFirst, VisitLast, AccountProfile, VisitNumber, ProductCard, Label01, Label02, Label03} from "./user";
 import {Leads} from "./sfdc";
 import {mergedTheme} from "../theme";
 import {Chart} from "./misc";
 import {Ads} from "./ads";
 import {Orders} from "./e-shop";
+import {Contracts} from "./contract";
+
 // import {QuizOverview} from "./quiz";
 
 import {userProfile,products as mocksProducts} from "../__mocks__";
@@ -60,7 +62,7 @@ const App = () => {
   if (error) return <p>Error :(</p>;
   const portalData = data?.jcr?.nodeById;
   const userTheme = portalData?.userTheme?.value || {};
-
+  console.info("displayMultiChart property => \n"+portalData?.multichart?.value);
   let products = mocksProducts;
   const customProducts = portalData?.products?.value || portalData?.mocks?.refNode?.products?.value;
   if(typeof customProducts === 'string'){
@@ -74,8 +76,10 @@ const App = () => {
   const customChartData = portalData?.chart?.value || portalData?.mocks?.refNode?.chart?.value;
   const customLeadsData = portalData?.leads?.value || portalData?.mocks?.refNode?.leads?.value;
   const customOrdersData = portalData?.orders?.value || portalData?.mocks?.refNode?.orders?.value;
+  const customContractsData = portalData?.contracts?.value || portalData?.mocks?.refNode?.contracts?.value;
   const customMultiChartData = portalData?.salesChart?.value || portalData?.mocks?.refNode?.salesChart?.value;
-  const show = customLeadsData ? "leads" : customOrdersData ? "orders" : "leads" ;
+  const show = customLeadsData ? "leads" : customOrdersData ? "orders" : customContractsData ? "contracts" : "leads" ;
+
   return (
     <ThemeProvider theme={mergedTheme(userTheme)}>
       <PortalLayoutRoot>
@@ -92,13 +96,13 @@ const App = () => {
             <Grid container spacing={3}>
 
               <Grid item xs={12} md={4}>
-                <VisitLast />
+                {portalData?.label01Text?.value !== null ? <Label01 portalData={portalData}/> :  <VisitLast />}
               </Grid>
               <Grid item xs={12} md={4}>
-                <VisitNumber />
+                {portalData?.label02Text?.value !== null ? <Label02 portalData={portalData}/> :  <VisitNumber />}
               </Grid>
               <Grid item xs={12}  md={4}>
-                <VisitFirst />
+                {portalData?.label02Text?.value !== null ? <Label03 portalData={portalData}/> :  <VisitFirst />}
               </Grid>
 
               <Grid item xs={12}>
@@ -123,6 +127,9 @@ const App = () => {
                         }
                         {show ==="orders" &&
                           <Orders customOrdersData={customOrdersData}/>
+                        }
+                        {show ==="contracts" &&
+                          <Contracts customContractsData={customContractsData}/>
                         }
                       </Grid>
                       <Grid item xs={12}>
@@ -156,7 +163,7 @@ const App = () => {
                   </Grid>
                 </Grid>
               </Grid>
-
+              {portalData?.multichart?.value === "true" && 
               <Grid item xs={12} >
                 <Grid container spacing={3}>
                   <Grid item xs={12}>
@@ -164,7 +171,7 @@ const App = () => {
                   </Grid>
                 </Grid>
               </Grid>
-
+              }
               {/*<Grid item xs={12} >*/}
               {/*  <Grid container spacing={3}>*/}
               {/*    <Grid item xs={12} sm={6}>*/}

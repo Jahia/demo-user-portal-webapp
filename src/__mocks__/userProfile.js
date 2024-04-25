@@ -36,5 +36,7 @@ export const userProfile = {
             "combustion",
             "hydrogen"
         ],
+        "portal_marging": "22%",
+        "portal_sales_target": "79%"
     }
 }
