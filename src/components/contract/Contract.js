@@ -34,23 +34,23 @@ export const Contracts = ({customContractsData,...props}) => {
     const contracts=[/*...currentContract,*/...mocksContracts]
     return (
         <Card {...props}>
-            <CardHeader title="My Contracts" />
+            <CardHeader title="Mes Contrats" />
             <PerfectScrollbar>
                 <Box sx={{ minWidth: 500 }}>
                     <Table>
                         <TableHead>
                             <TableRow>
                                 <TableCell>
-                                    Contract ID
+                                    Contrat ID
                                 </TableCell>
                                 <TableCell>
-                                    Contract Desc.
+                                    Contrat Desc.
                                 </TableCell>
                                 <TableCell>
-                                    Annual Cost
+                                    Coût
                                 </TableCell>
                                 <TableCell>
-                                   Expired at
+                                   Expire le
                                 </TableCell>
                             </TableRow>
                         </TableHead>
