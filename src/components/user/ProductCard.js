@@ -74,7 +74,7 @@ export const ProductCard = ({ product, ...rest }) => {
                             sx={{ pl: 1 }}
                             variant="body2"
                         >
-                            Expires <Moment fromNow date={product.expiredAt}/>
+                            Expire <Moment fromNow date={product.expiredAt}/>
                         </Typography>
                     </Grid>
                     <Grid
@@ -93,7 +93,7 @@ export const ProductCard = ({ product, ...rest }) => {
                             variant="outlined"
                             startIcon={<AutorenewIcon/>}
                         >
-                            Renew my contract
+                            Renouveller
                         </Button>
                         {/*<AutorenewIcon color="action" />*/}
                         {/*<DownloadIcon color="action" />*/}

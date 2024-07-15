@@ -7,6 +7,8 @@ export const VisitNumber = (props) => {
     const { state } = useContext(StoreCtx);
     const {userData} = state;
     const nbOfVisits = userData?.profileProperties?.nbOfVisits || "-";
+    const subsAmount = userData?.profileProperties?._ins_subscription_amount || "-";
+
 
     return(
         <Card
@@ -25,13 +27,13 @@ export const VisitNumber = (props) => {
                             gutterBottom
                             variant="overline"
                         >
-                            Number of visit
+                            next premium due
                         </Typography>
                         <Typography
                             color="textPrimary"
                             variant="h4"
                         >
-                            {nbOfVisits}
+                            {subsAmount}
                         </Typography>
                     </Grid>
                     <Grid item>

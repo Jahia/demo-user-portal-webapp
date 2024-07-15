@@ -24,7 +24,7 @@ export const Chart = ({customChartData,...props}) => {
         legend: {
             display: false
         },
-        maintainAspectRatio: false,
+        maintainAspectRatio: true,
         responsive: true,
         tooltips: {
             backgroundColor: theme.palette.background.paper,
@@ -59,7 +59,7 @@ export const Chart = ({customChartData,...props}) => {
                     sx={{
                         display: 'flex',
                         justifyContent: 'center',
-                        pt: 2
+                        pt: 1
                     }}
                 >
                     {contents.data.map(({
@@ -86,7 +86,7 @@ export const Chart = ({customChartData,...props}) => {
                                 </Typography>
                                 <Typography
                                     style={{ color }}
-                                    variant="h4"
+                                    variant="h6"
                                 >
                                     {value}
                                     %

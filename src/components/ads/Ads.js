@@ -52,7 +52,7 @@ export const Ads = ({adsId,jExpUserPropsToSync,...props}) => {
                     <Typography variant="h5" color="#CCC">
                         <span>Your ads here</span>
                     </Typography>
-                    <Typography className="w-75" variant="body2" color="#CCC">
+                    <Typography className="w-100" variant="body2" color="#CCC">
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias iste ipsa excepturi nostrum sequi molestias?
                     </Typography>
                 </CardContent>

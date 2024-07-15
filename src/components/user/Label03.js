@@ -1,14 +1,15 @@
 import { Avatar, Card, CardContent, Grid, Typography } from '@mui/material';
-import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
-import Moment from "react-moment";
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import React, {useContext} from "react";
 import {StoreCtx} from "../../context";
 
-export const VisitFirst = (props) => {
+export const Label03 = ({portalData,props}) => {
     const { state } = useContext(StoreCtx);
     const {userData} = state;
-    const firstVisit = userData?.profileProperties?.firstVisit || "-";
+    const label03ValueCDP = userData?.profileProperties?._up_labe03Value || "-";
 
+    const label03Text = portalData?.label03Text?.value  || "-";
+    const label03Value = portalData?.label03Value?.value || "-";
     return(
 
         <Card
@@ -27,15 +28,19 @@ export const VisitFirst = (props) => {
                             gutterBottom
                             variant="overline"
                         >
-                            Member since
+                            {label03Text!=="-" &&
+                            label03Text
+                            }
                         </Typography>
                         <Typography
                             color="textPrimary"
                             variant="h4"
                         >
-                            {firstVisit!=="-" &&
-                                <Moment format="ll" date={firstVisit}/>
-                            }
+                            {label03ValueCDP !== "-" ? (
+                                <span>{label03ValueCDP}</span>
+                            ) : (
+                                label03Value !== "-" && <span>{label03Value}</span>
+                            )}
                         </Typography>
                     </Grid>
                     <Grid item>
@@ -46,7 +51,7 @@ export const VisitFirst = (props) => {
                                 width: 56
                             }}
                         >
-                            <PermContactCalendarIcon />
+                            <TrendingUpIcon />
                         </Avatar>
                     </Grid>
                 </Grid>
