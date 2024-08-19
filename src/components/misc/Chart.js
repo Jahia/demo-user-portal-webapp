@@ -66,7 +66,8 @@ export const Chart = ({customChartData,...props}) => {
                                       color,
                                       icon,
                                       title,
-                                      value
+                                      value,
+                                      variant
                                   }) => {
                         const Icon = Muicon[icon];
                         return(
@@ -86,7 +87,7 @@ export const Chart = ({customChartData,...props}) => {
                                 </Typography>
                                 <Typography
                                     style={{ color }}
-                                    variant="h4"
+                                    variant={variant || "h4"}
                                 >
                                     {value}
                                     %
