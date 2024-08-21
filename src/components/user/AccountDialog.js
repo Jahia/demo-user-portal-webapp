@@ -73,12 +73,12 @@ export const SimpleDialog = ({ onClose, open, portalData, ...props}) => {
         // const checked = Array.from(_form.querySelectorAll('input[name="jcontentUserCategoryPreferences"]:checked'))
         // console.log("checked.map(check => check.value) : ",checked.map(check => check.value))
         if (window.wem && cxs) {
-            const syncUserPreferencesEvent = window.wem.buildEvent('updateUserPortalProperties',
+            const syncUserPreferencesEvent = window.wem.buildEvent('updateUserPortalData',
                 window.wem.buildTarget(jExpUserPropsToSync,"user-property"),
                 window.wem.buildSource(portalData.uuid,portalData.primaryNodeType.name));
             syncUserPreferencesEvent.properties =  {
-                targetId: cxs.profileId,
-                targetType: "profile",
+                // targetId: cxs.profileId,
+                // targetType: "profile",
                 update : {
                     [`properties.${jExpUserPropsToSync}`]: checked.map(check => check.value)
                 }
