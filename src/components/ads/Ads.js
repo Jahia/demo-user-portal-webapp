@@ -92,7 +92,7 @@ export const Ads = ({adsId,jExpUserPropsToSync,...props}) => {
                 {/*/>*/}
                 <CardContent>
                     <Typography component="div"
-                        children={<EmbeddedPathInHtmlResolver htmlAsString={teaser.value} />}/>
+                        children={<EmbeddedPathInHtmlResolver htmlAsString={teaser?.value || ''} />}/>
                 </CardContent>
             </CardActionArea>
         </Card>
