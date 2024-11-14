@@ -11,9 +11,11 @@ import Moment from 'react-moment';
 import {Store} from "./store";
 import {JahiaCtxProvider} from "./context";
 import {syncTracker} from './unomi/trackerWem';
-
-import { registerChartJs } from './utils/register-chart-js';
 import {getClient} from "./graphql-app";
+import {DndProvider} from "react-dnd";
+import {HTML5Backend} from "react-dnd-html5-backend";
+
+import { registerChartJs } from './misc/register-chart-js';
 registerChartJs();
 
 export const cndTypes = {
@@ -109,7 +111,9 @@ const render = (target,context) =>{
                 {/*<StyledEngineProvider injectFirst>*/}
                 <ApolloProvider client={getClient(gqlEndpoint)}>
                     <CxsCtxProvider>
-                        <App />
+                        <DndProvider backend={HTML5Backend}>
+                            <App />
+                        </DndProvider>
                     </CxsCtxProvider>
                 </ApolloProvider>
                 {/*</StyledEngineProvider>*/}

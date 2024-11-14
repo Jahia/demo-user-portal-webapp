@@ -12,7 +12,7 @@ export const VisitLast = (props) => {
     return(
 
         <Card
-            sx={{ height: '100%' }}
+            sx={{ height: '100%', backgroundColor: 'transparent' }}
             {...props}
         >
             <CardContent>
@@ -50,30 +50,6 @@ export const VisitLast = (props) => {
                         </Avatar>
                     </Grid>
                 </Grid>
-                {/*<Box*/}
-                {/*    sx={{*/}
-                {/*        pt: 2,*/}
-                {/*        display: 'flex',*/}
-                {/*        alignItems: 'center'*/}
-                {/*    }}*/}
-                {/*>*/}
-                {/*    <ArrowDownwardIcon color="error" />*/}
-                {/*    <Typography*/}
-                {/*        color="error"*/}
-                {/*        sx={{*/}
-                {/*            mr: 1*/}
-                {/*        }}*/}
-                {/*        variant="body2"*/}
-                {/*    >*/}
-                {/*        12%*/}
-                {/*    </Typography>*/}
-                {/*    <Typography*/}
-                {/*        color="textSecondary"*/}
-                {/*        variant="caption"*/}
-                {/*    >*/}
-                {/*        Since last month*/}
-                {/*    </Typography>*/}
-                {/*</Box>*/}
             </CardContent>
         </Card>
     );

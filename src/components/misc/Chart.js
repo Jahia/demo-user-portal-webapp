@@ -14,7 +14,7 @@ export const Chart = ({customChartData,...props}) => {
         }catch(e){
             console.error("chart property => \n"+customChartData+"\n => is not a json object : ",e);
         }
-    };
+    }
 
     const {contents,data} = chartData;
     const options = {
