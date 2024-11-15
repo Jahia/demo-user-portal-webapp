@@ -2,9 +2,12 @@ import React from "react";
 import {StoreCtxProvider} from "../context";
 
 const init = context => {
-    const {locale} = context
+    const {locale,currentUserId,portalData,userPreferences} = context
     return {
         locale,
+        currentUserId,
+        portalData,
+        userPreferences: !!userPreferences || {},
         userData:{}
     }
 }

@@ -37,7 +37,7 @@ export const Ads = ({adsId,jExpUserPropsToSync,...props}) => {
         if (data) {
             refetch().then(()=>console.log("refetch done with jExpUserPropsValues : ",jExpUserPropsValues));
         }
-    },[jExpUserPropsValues])
+    },[data, jExpUserPropsValues, refetch])
 
     if (error) return <p>Error :(</p>;
     if (!data || loading)

@@ -1,20 +1,20 @@
 import {gql} from "@apollo/client";
-import {CORE_NODE_FIELDS,MOCKS_PROPERTY} from "./fragments"
+import {CORE_NODE_FIELDS, MOCKS_PROPERTY, SIMPLE_CORE_NODE_FIELDS} from "./fragments"
 
 export const queryUserPortal = gql`query($workspace: Workspace!, $id: String!,$language:String!){
     jcr(workspace: $workspace) {
         workspace
         nodeById(uuid:$id) {
-            ...CoreNodeFields
-            category: property(name:"dash4:category"){ refNode { ...CoreNodeFields } }
+            ...SimpleCoreNodeFields
+            category: property(name:"dash4:category"){ refNode { ...SimpleCoreNodeFields } }
             jExpUserPropsToSync: property(name:"seu:jExpProperty"){ value }
-            personalizedAds: property(name:"dash4:personalizedAds"){ refNode { ...CoreNodeFields } }
+            personalizedAds: property(name:"dash4:personalizedAds"){ refNode { ...SimpleCoreNodeFields } }
             userTheme: property(name:"dash4:webappTheme"){ value }
             ...MocksProperty
-            mocks: property(name:"dash4:mocks"){ refNode { ...CoreNodeFields ...MocksProperty} }
+            mocks: property(name:"dash4:mocks"){ refNode { ...SimpleCoreNodeFields ...MocksProperty} }
             btnEditPreference: property(language:$language, name:"dash4:btnEditPreference"){ value }
         }
     }
 }
-${CORE_NODE_FIELDS}
+${SIMPLE_CORE_NODE_FIELDS}
 ${MOCKS_PROPERTY}`;
