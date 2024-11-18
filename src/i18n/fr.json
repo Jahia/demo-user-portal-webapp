@@ -11,5 +11,10 @@
         "jExp": {
             "connexion":"Problème de connexion à jExperience"
         }
+    },
+    "layout": {
+        "PortalA" : "Portail A",
+        "PortalB" : "Portail B",
+        "PortalC" : "Portail C"
     }
 }

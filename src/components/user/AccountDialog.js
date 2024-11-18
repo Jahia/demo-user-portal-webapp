@@ -12,15 +12,21 @@ import { useQuery} from "@apollo/client";
 import {getUserContext} from "../../data/context";
 import {CxsCtx} from "../../unomi/cxs";
 import {queryJcontentUserCategoryPreferences} from "../../graphql-app";
+import * as layouts from '../layouts'
+import {useTranslation} from "react-i18next";
 
-export const SimpleDialog = ({onClose, open, portalData, ...props}) => {
+export const SimpleDialog = ({onClose, open, portalData,layout, ...props}) => {
+    const {t} = useTranslation();
     const nodepath = portalData?.category?.refNode?.path;
     const jExpUserPropsToSync = portalData?.jExpUserPropsToSync?.value;
     const cxs = useContext(CxsCtx);
     const {workspace} = useContext(JahiaCtx);
     const {state, dispatch} = useContext(StoreCtx);
     const {userData, locale} = state;
+
     const [jExpUserPropsValues, setJExpUserPropsValues] = React.useState([])
+    const [selectedLayout, setSelectedLayout] = React.useState(layout)
+
     const profileProperties = React.useMemo(() => userData?.profileProperties, [userData]);
 
     React.useEffect(() => {
@@ -67,6 +73,14 @@ export const SimpleDialog = ({onClose, open, portalData, ...props}) => {
     const handleSavePreferences = (event) => {
         const form = event.target.form;
         const checked = Array.from(form.querySelectorAll('input[name="jcontentUserCategoryPreferences"]:checked'));
+
+        dispatch({
+            type: "PORTAL_LAYOUT_UPDATE",
+            payload: {
+                workspace,
+                layout: selectedLayout
+            }
+        });
 
         if (window.wem && cxs) {
             const syncUserPreferencesEvent = window.wem.buildEvent('updateUserPortalData',
@@ -126,15 +140,14 @@ export const SimpleDialog = ({onClose, open, portalData, ...props}) => {
                             <Select
                                 labelId="userPortalLayout"
                                 id="userPortalLayoutSelector"
-                                value={layout}
-                                onChange={handleChange}
-                                label="Age"
+                                value={selectedLayout}
+                                onChange={(e) => setSelectedLayout(e.target.value)}
+                                label="Layout"
                             >
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
+                                {Object.keys(layouts).map(layout => <MenuItem value={layout}>{t(`layout.${layout}`)}</MenuItem>)}
                             </Select>
                         </FormControl>
+                        <Divider sx={{margin:"1.5rem 0"}}/>
                         <FormGroup>
                             {jcontentUserCategoryPreferences.map(jcontentCategory =>
                                 <FormControlLabel
@@ -175,5 +188,6 @@ export const SimpleDialog = ({onClose, open, portalData, ...props}) => {
 SimpleDialog.propTypes = {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
-    portalData: PropTypes.object.isRequired
+    portalData: PropTypes.object.isRequired,
+    layout: PropTypes.string
 };

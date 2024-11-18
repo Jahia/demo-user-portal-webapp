@@ -14,5 +14,10 @@
         "nodeType": {
             "notSupported": "node type is not supported"
         }
+    },
+    "layout": {
+        "PortalA" : "Portal A",
+        "PortalB" : "Portal B",
+        "PortalC" : "Portal C"
     }
 }

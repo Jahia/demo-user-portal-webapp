@@ -109,6 +109,7 @@ const render = async (target,context) =>{
         context.currentUserId = currentUserId;
         context.userPreferences= userPreferences;
         context.portalData = portalData;
+        context.client = client;
 
         const userTheme = portalData?.userTheme?.value || {};
 

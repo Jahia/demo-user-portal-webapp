@@ -64,10 +64,17 @@ export const MultiChart = ({customMultiChartData,...props}) => {
     };
 
     return (
-        <Card {...props}>
+        <Card
+            sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%'
+        }}
+              {...props}
+        >
             <CardHeader title={contents.title} />
             <Divider />
-            <CardContent>
+            <CardContent sx={{ flexGrow: 1 }}>
                 <Box
                     sx={{
                         height: 300,

@@ -10,7 +10,7 @@ import {StoreCtx} from "../../context";
 
 export const AccountProfile = ({portalData,...props}) => {
     const { state } = useContext(StoreCtx);
-    const {userData} = state;
+    const {userData,userPreferences} = state;
 
     const [open, setOpen] = React.useState(false);
 
@@ -57,12 +57,19 @@ export const AccountProfile = ({portalData,...props}) => {
 
     return(
         <>
-            <Card {...props}>
-                <CardContent>
+            <Card
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100%'
+                }}
+                {...props}
+            >
+                <CardContent sx={{ flexGrow: 1 }}>
                     <Box
                         sx={{
-                            alignItems: 'center',
                             display: 'flex',
+                            alignItems: 'center',
                             flexDirection: 'column'
                         }}
                     >
@@ -101,6 +108,7 @@ export const AccountProfile = ({portalData,...props}) => {
                 </CardActions>
             </Card>
             <SimpleDialog
+                layout={userPreferences.layout}
                 portalData={portalData}
                 open={open}
                 onClose={handleClose}

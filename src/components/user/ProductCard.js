@@ -18,7 +18,7 @@ export const ProductCard = ({ product, ...rest }) => {
             }}
             {...rest}
         >
-            <CardContent>
+            <CardContent sx={{ flexGrow: 1 }}>
                 <Box
                     sx={{
                         display: 'flex',
@@ -52,9 +52,8 @@ export const ProductCard = ({ product, ...rest }) => {
                     {product.description}
                 </Typography>
             </CardContent>
-            <Box sx={{ flexGrow: 1 }} />
             <Divider />
-            <Box sx={{ p: 2 }}>
+            <Box sx={{ p: 1 }}>
                 <Grid
                     container
                     spacing={2}
@@ -93,7 +92,7 @@ export const ProductCard = ({ product, ...rest }) => {
                             variant="outlined"
                             startIcon={<AutorenewIcon/>}
                         >
-                            Renew my contract
+                            Renew
                         </Button>
                         {/*<AutorenewIcon color="action" />*/}
                         {/*<DownloadIcon color="action" />*/}

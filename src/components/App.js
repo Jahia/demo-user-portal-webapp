@@ -15,9 +15,10 @@ const PortalLayoutRoot = styled('div')(({theme}) => ({
 
 const App = () => {
     const cxs = useContext(CxsCtx);
-    const {dispatch} = useContext(StoreCtx);
+    const {state, dispatch} = useContext(StoreCtx);
 
-    const Cmp = Layouts["PortalA"];
+    const preferences = state.userPreferences
+    const Cmp = Layouts[preferences.layout];
 
     React.useEffect(() => {
         if (!cxs && (!process.env.NODE_ENV || process.env.NODE_ENV === 'development')) {

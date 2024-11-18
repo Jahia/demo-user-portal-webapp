@@ -43,12 +43,17 @@ export const Ads = ({adsId,jExpUserPropsToSync,...props}) => {
     if (!data || loading)
         return(
             <Card
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100%'
+                }}
                 {...props}
             >
                 <CardMedia sx={{ height: 240, backgroundColor: "#EEE"}}
                     component="div"
                 />
-                <CardContent>
+                <CardContent sx={{ flexGrow: 1 }}>
                     <Typography variant="h5" color="#CCC">
                         <span>Your ads here</span>
                     </Typography>

@@ -1,26 +1,26 @@
-import { Doughnut } from 'react-chartjs-2';
-import { Box, Card, CardContent, CardHeader, Divider, Typography, useTheme } from '@mui/material';
+import {Doughnut} from 'react-chartjs-2';
+import {Box, Card, CardContent, CardHeader, Divider, Typography, useTheme} from '@mui/material';
 import {chartData as mocksChartData} from "../../__mocks__/chart";
 import * as Muicon from "@mui/icons-material";
 
-export const Chart = ({customChartData,...props}) => {
+export const Chart = ({customChartData, ...props}) => {
     const theme = useTheme();
 
     let chartData = mocksChartData;
 
-    if(typeof customChartData === 'string'){
-        try{
+    if (typeof customChartData === 'string') {
+        try {
             chartData = JSON.parse(customChartData);
-        }catch(e){
-            console.error("chart property => \n"+customChartData+"\n => is not a json object : ",e);
+        } catch (e) {
+            console.error("chart property => \n" + customChartData + "\n => is not a json object : ", e);
         }
     }
 
-    const {contents,data} = chartData;
+    const {contents, data} = chartData;
     const options = {
         animation: false,
         cutoutPercentage: 80,
-        layout: { padding: 0 },
+        layout: {padding: 0},
         legend: {
             display: false
         },
@@ -40,10 +40,17 @@ export const Chart = ({customChartData,...props}) => {
     };
 
     return (
-        <Card {...props}>
-            <CardHeader title={contents.title} />
-            <Divider />
-            <CardContent>
+        <Card
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%'
+            }}
+            {...props}
+        >
+            <CardHeader title={contents.title}/>
+            <Divider/>
+            <CardContent sx={{flexGrow: 1}}>
                 <Box
                     sx={{
                         height: 300,
@@ -63,14 +70,14 @@ export const Chart = ({customChartData,...props}) => {
                     }}
                 >
                     {contents.data.map(({
-                                      color,
-                                      icon,
-                                      title,
-                                      value,
-                                      variant
-                                  }) => {
+                                            color,
+                                            icon,
+                                            title,
+                                            value,
+                                            variant
+                                        }) => {
                         const Icon = Muicon[icon];
-                        return(
+                        return (
                             <Box
                                 key={title}
                                 sx={{
@@ -78,7 +85,7 @@ export const Chart = ({customChartData,...props}) => {
                                     textAlign: 'center'
                                 }}
                             >
-                                <Icon color="action" />
+                                <Icon color="action"/>
                                 <Typography
                                     color="textPrimary"
                                     variant="body1"
@@ -86,7 +93,7 @@ export const Chart = ({customChartData,...props}) => {
                                     {title}
                                 </Typography>
                                 <Typography
-                                    style={{ color }}
+                                    style={{color}}
                                     variant={variant || "h4"}
                                 >
                                     {value}

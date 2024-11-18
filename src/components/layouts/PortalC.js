@@ -12,14 +12,13 @@ import {MultiChart} from "../misc/MultiChart";
 import {JahiaCtx, StoreCtx} from "../../context";
 import {products as mocksProducts} from "../../__mocks__";
 
-export const PortalA = () => {
+export const PortalC = () => {
     const {workspace} = useContext(JahiaCtx);
     const {state, dispatch} = useContext(StoreCtx);
-    const {portalData,userPreferences} = state;
-    const [blockItems, setBlockItems] = useState(userPreferences?.blocks['PortalA'] ||
-        ["VisitLast","VisitNumber","VisitFirst"]
+    const {portalData, userPreferences} = state;
+    const [blockItems, setBlockItems] = useState(userPreferences?.blocks['PortalC'] ||
+        ["VisitLast", "VisitNumber", "VisitFirst"]
     );
-
 
 
     let products = mocksProducts;
@@ -48,7 +47,7 @@ export const PortalA = () => {
                 payload: {
                     workspace,
                     blocks: {
-                        "PortalA":newItems
+                        "PortalA2": newItems
                     }
                 }
             });
@@ -73,7 +72,7 @@ export const PortalA = () => {
         >
             <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
                 <Grid container spacing={3}>
-                    {blockItems.map((blockName,index) => (
+                    {blockItems.map((blockName, index) => (
                         <Grid item xs={12} md={4} key={`${blockName}-${index}`}>
                             <DndItem id={index} itemType={ItemTypes.VISIT} moveContent={moveContent}>
                                 {getCmp(blockName)}
@@ -83,68 +82,41 @@ export const PortalA = () => {
 
                     <Grid item xs={12}>
                         <Grid container spacing={3}>
-
                             <Grid item xs={12} sm={4} md={3}>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12}>
-                                        <AccountProfile portalData={portalData}/>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Chart customChartData={customChartData}/>
-                                    </Grid>
-                                </Grid>
+                                <AccountProfile portalData={portalData}/>
                             </Grid>
-
                             <Grid item xs={12} sm={8} md={9}>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12}>
-                                        {show === "leads" &&
-                                            <Leads customLeadsData={customLeadsData}/>
-                                        }
-                                        {show === "orders" &&
-                                            <Orders customOrdersData={customOrdersData}/>
-                                        }
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Box>
-                                            <Grid
-                                                container
-                                                spacing={3}
-                                            >
-                                                <Grid
-                                                    item
-                                                    key={products[0].id}
-                                                    md={6}
-                                                    xs={12}
-                                                >
-                                                    <ProductCard product={products[0]}/>
-                                                </Grid>
-
-
-                                                <Grid
-                                                    item
-                                                    key={portalData?.personalizedAds?.uuid}
-                                                    md={6}
-                                                    xs={12}
-                                                >
-                                                    <Ads adsId={portalData?.personalizedAds?.refNode?.uuid}
-                                                         jExpUserPropsToSync={portalData?.jExpUserPropsToSync?.value}/>
-                                                </Grid>
-                                            </Grid>
-                                        </Box>
-                                    </Grid>
-                                </Grid>
+                                {show === "leads" &&
+                                    <Leads customLeadsData={customLeadsData}/>
+                                }
+                                {show === "orders" &&
+                                    <Orders customOrdersData={customOrdersData}/>
+                                }
                             </Grid>
                         </Grid>
                     </Grid>
-
                     <Grid item xs={12}>
                         <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                                <MultiChart customMultiChartData={customMultiChartData}/>
+                            <Grid item xs={6}>
+                                <ProductCard product={products[0]}/>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Ads adsId={portalData?.personalizedAds?.refNode?.uuid}
+                                     jExpUserPropsToSync={portalData?.jExpUserPropsToSync?.value}/>
                             </Grid>
                         </Grid>
                     </Grid>
+                    <Grid item xs={12}>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12} sm={6} md={9}>
+                                <MultiChart customMultiChartData={customMultiChartData}/>
+                            </Grid>
+                            <Grid item xs={12} sm={6} md={3}>
+                                <Chart customChartData={customChartData}/>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
                 </Grid>
             </Container>
         </Box>
