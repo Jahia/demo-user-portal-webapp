@@ -8,9 +8,9 @@ import {StoreCtx} from "../../context";
 
 // const devHost = !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? process.env.REACT_APP_DEV_HOST : ""
 
-export const AccountProfile = ({portalData,...props}) => {
+export const AccountProfile = (props) => {
     const { state } = useContext(StoreCtx);
-    const {userData,userPreferences} = state;
+    const {portalData : { node : portalData }, userData, userPreferences} = state;
 
     const [open, setOpen] = React.useState(false);
 
@@ -19,9 +19,6 @@ export const AccountProfile = ({portalData,...props}) => {
     const lastName = user?.lastName || "-";
     const email = user?.email || "-";
     const avatar = user?.profilePictureUrl;
-
-    // const theme = useTheme();
-    // const imgURL = `${devHost}/modules/drive-motor-user-portal/images/profile.jpg`;
 
     const handleClickOpen = () => {
         setOpen(true);

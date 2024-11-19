@@ -15,25 +15,12 @@ import {
     Tooltip, Typography
 } from '@mui/material';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import {pastLeads} from "../../__mocks__";
 import {StoreCtx} from "../../context";
 
 
-export const Leads = ({customLeadsData, ...props}) => {
+export const Leads = (props) => {
     const {state} = useContext(StoreCtx);
-    const {userData} = state;
-    let mocksLeads = pastLeads;
-    if (typeof customLeadsData === 'string') {
-        try {
-            const customLeadsDataJson = JSON.parse(customLeadsData);
-            if (customLeadsDataJson && Array.isArray(customLeadsDataJson))
-                mocksLeads = customLeadsDataJson;
-        } catch (e) {
-            console.error("leads property => \n" + customLeadsData + "\n => is not a json object : ", e);
-        }
-    }
-    ;
-
+    const {userData, portalData : {leads : mocksLeads} }= state;
 
     const currentLead = [];
     if (userData && userData.profileProperties?.sfdc__leadID) {

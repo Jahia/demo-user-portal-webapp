@@ -36,7 +36,7 @@ export const DndItem = ({ id, itemType, moveContent, children }) => {
 };
 
 DndItem.propTypes = {
-    id: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
     itemType: PropTypes.string.isRequired,
     moveContent: PropTypes.func.isRequired,
     children: PropTypes.element

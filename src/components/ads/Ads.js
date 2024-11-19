@@ -9,11 +9,11 @@ import {Card, CardActionArea, CardMedia, CardContent, Typography} from '@mui/mat
 import {Media} from "../media";
 import {getTypes, resolveLinkToURL} from 'misc/utils'
 
-export const Ads = ({adsId,jExpUserPropsToSync,...props}) => {
+export const Ads = (props) => {
     const cxs = useContext(CxsCtx);
     const {workspace, locale, host, isPreview, isEdit} = useContext(JahiaCtx);
-    const { state } = useContext(StoreCtx);
-    const {userData} = state;
+    const {state} = useContext(StoreCtx);
+    const {userData, portalData: {ads: { id : adsId,jExpUserPropsToSync }}} = state;
     const jExpUserPropsValues = React.useMemo(()=>userData?.profileProperties?.[jExpUserPropsToSync],[userData,jExpUserPropsToSync]);
 
     const [loadVariant, {data,loading,error,refetch}] = useLazyQuery(queryPersonalizedAdsVariant);
@@ -89,12 +89,6 @@ export const Ads = ({adsId,jExpUserPropsToSync,...props}) => {
                            // height="250"
                     />
                 }
-                {/*<CardMedia*/}
-                {/*    component="img"*/}
-                {/*    height="140"*/}
-                {/*    image="/static/images/cards/contemplative-reptile.jpg"*/}
-                {/*    alt="green iguana"*/}
-                {/*/>*/}
                 <CardContent>
                     <Typography component="div"
                         children={<EmbeddedPathInHtmlResolver htmlAsString={teaser?.value || ''} />}/>

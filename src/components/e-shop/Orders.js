@@ -1,4 +1,4 @@
-import React/*, {useContext}*/ from "react";
+import React, {useContext} from "react";
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {SeverityPill} from "../severity-pill";
 import {
@@ -15,52 +15,14 @@ import {
     Tooltip, Typography
 } from '@mui/material';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import {pastOrders} from "../../__mocks__";
-// import {StoreCtx} from "../../context";
+import {StoreCtx} from "../../context";
 
 
-export const Orders = ({customOrdersData, ...props}) => {
-    // const { state } = useContext(StoreCtx);
-    // const {userData} = state;
-    let mocksOrders = pastOrders;
-    if (typeof customOrdersData === 'string') {
-        try {
-            const customOrdersDataJson = JSON.parse(customOrdersData);
-            if (customOrdersDataJson && Array.isArray(customOrdersDataJson))
-                mocksOrders = customOrdersDataJson;
-        } catch (e) {
-            console.error("leads property => \n" + customOrdersData + "\n => is not a json object : ", e);
-        }
-    }
-    ;
+export const Orders = (props) => {
+    const {state} = useContext(StoreCtx);
+    const {portalData: {orders: mocksOrders}} = state;
 
-    // const currentOrder = [];
-    // if(userData && userData.profileProperties?.sfdc__leadID){
-    //     const {profileProperties : user} = userData;
-    //     const leadID = user?.sfdc__leadID || "-";
-    //     const leadSource = user?.sfdc__leadSource || "-";
-    //     const leadStatus = user?.sfdc__leadStatus || "-";
-    //     //sfdc__leadQuality,
-    //     const assignedToEmail = user?.sfdc__assignedToEmail || "-";
-    //     const assignedToPhone = user?.sfdc__assignedToPhone || "-";
-    //     const leadAssignedTo = user?.sfdc__leadAssignedTo || "Not yet assigned";
-    //     //sfdc__leadComments,
-    //     //sfdc__leadPreferences,
-    //     currentOrder.push(
-    //         {
-    //             id:leadID,
-    //             src:leadSource,
-    //             status:leadStatus,
-    //             contact:{
-    //                 fullname : leadAssignedTo,
-    //                 email : assignedToEmail,
-    //                 phone : assignedToPhone
-    //             }
-    //         }
-    //     )
-    // }
-
-    const orders = [/*...currentOrder,*/...mocksOrders]
+    const orders = [...mocksOrders]
     return (
         <Card
             sx={{

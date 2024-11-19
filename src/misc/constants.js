@@ -3,3 +3,9 @@ export const ItemTypes = {
     MD: 'medium',
     LG: 'large'
 }
+
+
+export const PortalDataLabels = {
+    LEADS : "Leads",
+    ORDERS : "Orders"
+}

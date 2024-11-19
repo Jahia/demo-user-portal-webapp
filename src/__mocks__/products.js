@@ -14,13 +14,5 @@ export const products = [
         description: "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
         icon: "Handshake",
         title: "Green Label",
-    },
-    // {
-    //     id: uuid(),
-    //     createdAt: "03/04/2019",
-    //     description: "Slack is a cloud-based set of team collaboration tools and services, founded by Stewart Butterfield.",
-    //     media: "/static/images/products/product_3.png",
-    //     title: "Slack",
-    //     totalDownloads: "857"
-    // }
+    }
 ]

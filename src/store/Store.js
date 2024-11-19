@@ -1,15 +1,53 @@
 import React from "react";
 import {StoreCtxProvider} from "../context";
 import {mutationUserPreference} from "../graphql-app";
+import {PortalDataLabels} from "../misc";
+import * as Mocks from "../__mocks__";
 
 const DEFAULT_PORTAL = "PortalA"
 
+const getObject = ({src, fallback, testArray = false}) => {
+    let ret = fallback;
+    if (typeof src === 'string') {
+        try {
+            const _object = JSON.parse(src);
+            switch (true){
+                case testArray && _object && Array.isArray(_object):
+                    ret = _object;
+                    break;
+                default :
+                    ret = _object
+            }
+        } catch (e) {
+            console.error("property => \n" + src + "\n => is not a json object : ", e);
+        }
+    }
+    return ret;
+}
+
 const init = context => {
     const {locale,currentUserId,portalData,userPreferences,client} = context
+    const portalLeads = portalData?.leads?.value || portalData?.mocks?.refNode?.leads?.value;
+    const portalOrders = portalData?.orders?.value || portalData?.mocks?.refNode?.orders?.value;
+    const pData = {
+        node : portalData,
+        products : getObject({src : portalData?.products?.value || portalData?.mocks?.refNode?.products?.value, fallback: Mocks.products, testArray:true}),
+        chart : getObject({src : portalData?.chart?.value || portalData?.mocks?.refNode?.chart?.value, fallback: Mocks.chartData}),
+        leads : getObject({src : portalLeads, fallback: Mocks.pastLeads, testArray:true}),
+        orders: getObject({src : portalOrders, fallback: Mocks.pastOrders, testArray:true}),
+        multiChart : getObject({src : portalData?.salesChart?.value || portalData?.mocks?.refNode?.salesChart?.value, fallback: Mocks.multiChartData}),
+        ads : {
+            id :portalData?.personalizedAds?.refNode?.uuid,
+            jExpUserPropsToSync : portalData?.jExpUserPropsToSync?.value
+        }
+    }
+    const leadsOrOrderCmpName = portalLeads ? PortalDataLabels.LEADS : portalOrders ? PortalDataLabels.ORDERS : PortalDataLabels.LEADS;
+
     return {
         locale,
         currentUserId,
-        portalData,
+        portalData : pData,
+        leadsOrOrderCmpName,
         userPreferences: (userPreferences !== null && "layout" in userPreferences) ? userPreferences : {layout:DEFAULT_PORTAL,blocks:{}},
         client,
         userData:{}

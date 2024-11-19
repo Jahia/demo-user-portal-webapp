@@ -1,6 +1,5 @@
 import { Chart } from 'react-chartjs-2';
 import { Box, Card, CardContent, CardHeader, Divider, useTheme } from '@mui/material';
-import {multiChartData as mocksChartData} from "../../__mocks__/multiChart";
 import {
     Chart as ChartJS,
     LinearScale,
@@ -13,6 +12,8 @@ import {
     LineController,
     BarController,
 } from 'chart.js';
+import {useContext} from "react";
+import {StoreCtx} from "../../context";
 
 ChartJS.register(
     LinearScale,
@@ -27,18 +28,10 @@ ChartJS.register(
 );
 
 
-export const MultiChart = ({customMultiChartData,...props}) => {
+export const MultiChart = (props) => {
     const theme = useTheme();
-
-    let chartData = mocksChartData;
-
-    if(typeof customMultiChartData === 'string'){
-        try{
-            chartData = JSON.parse(customMultiChartData);
-        }catch(e){
-            console.error("chart property => \n"+customMultiChartData+"\n => is not a json object : ",e);
-        }
-    };
+    const {state} = useContext(StoreCtx);
+    const {portalData : {multiChart : chartData} }= state;
 
     const {contents,data} = chartData;
     const options = {

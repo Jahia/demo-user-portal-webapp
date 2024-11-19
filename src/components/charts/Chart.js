@@ -1,20 +1,13 @@
 import {Doughnut} from 'react-chartjs-2';
 import {Box, Card, CardContent, CardHeader, Divider, Typography, useTheme} from '@mui/material';
-import {chartData as mocksChartData} from "../../__mocks__/chart";
 import * as Muicon from "@mui/icons-material";
+import {useContext} from "react";
+import {StoreCtx} from "../../context";
 
-export const Chart = ({customChartData, ...props}) => {
+export const Chart = (props) => {
     const theme = useTheme();
-
-    let chartData = mocksChartData;
-
-    if (typeof customChartData === 'string') {
-        try {
-            chartData = JSON.parse(customChartData);
-        } catch (e) {
-            console.error("chart property => \n" + customChartData + "\n => is not a json object : ", e);
-        }
-    }
+    const {state} = useContext(StoreCtx);
+    const {portalData : {chart : chartData} }= state;
 
     const {contents, data} = chartData;
     const options = {

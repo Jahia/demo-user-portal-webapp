@@ -2,41 +2,17 @@ import React, {useContext, useState} from "react";
 import {Box, Container, Grid, Stack} from "@mui/material";
 import {DndItem} from "../dndItem";
 import {ItemTypes} from "../../misc";
-import {AccountProfile, ProductCard} from "../user";
-import * as Widget from "../user"
-import {Chart,MultiChart} from "../charts";
-import {Leads} from "../sfdc";
-import {Orders} from "../e-shop";
-import {Ads} from "../ads";
+import {ProductCard} from "../user";
+import * as Widget from "../widget"
 import {JahiaCtx, StoreCtx} from "../../context";
-import {products as mocksProducts} from "../../__mocks__";
 
 export const PortalB = () => {
     const {workspace} = useContext(JahiaCtx);
     const {state, dispatch} = useContext(StoreCtx);
-    const {portalData,userPreferences} = state;
+    const {portalData: {products},leadsOrOrderCmpName, userPreferences} = state;
     const [blockItems, setBlockItems] = useState(userPreferences?.blocks['PortalB'] ||
-        ["AccountProfile","VisitLast","VisitNumber","VisitFirst"]
+        ["AccountProfile","VisitLast","VisitNumber","VisitFirst",leadsOrOrderCmpName,"Chart","Ads","MultiChart"]
     );
-
-
-
-    let products = mocksProducts;
-    const customProducts = portalData?.products?.value || portalData?.mocks?.refNode?.products?.value;
-    if (typeof customProducts === 'string') {
-        try {
-            products = JSON.parse(customProducts);
-        } catch (e) {
-            console.error("products property => \n" + customProducts + "\n => is not a json object : ", e);
-        }
-    }
-
-    const customChartData = portalData?.chart?.value || portalData?.mocks?.refNode?.chart?.value;
-    const customLeadsData = portalData?.leads?.value || portalData?.mocks?.refNode?.leads?.value;
-    const customOrdersData = portalData?.orders?.value || portalData?.mocks?.refNode?.orders?.value;
-    const customMultiChartData = portalData?.salesChart?.value || portalData?.mocks?.refNode?.salesChart?.value;
-
-    const show = customLeadsData ? "leads" : customOrdersData ? "orders" : "leads";
 
     const moveContent = (fromId, toId) => {
         setBlockItems((prevItems) => {
@@ -75,10 +51,9 @@ export const PortalB = () => {
                     <Grid item xs={12}>
                         <Grid container spacing={3}>
                             <Grid item xs={12} md={4}>
-                                <AccountProfile portalData={portalData}/>
-                                {/*<DndItem id={0} itemType={ItemTypes.MD} moveContent={moveContent}>*/}
-                                {/*    {getCmp(blockName)}*/}
-                                {/*</DndItem>*/}
+                                <DndItem id={0} itemType={ItemTypes.MD} moveContent={moveContent}>
+                                    {getCmp(blockItems[0])}
+                                </DndItem>
                             </Grid>
                             <Grid item xs={12} md={4}>
                                 <ProductCard product={products[0]}/>
@@ -98,26 +73,28 @@ export const PortalB = () => {
                     <Grid item xs={12}>
                         <Grid container spacing={3}>
                             <Grid item xs={12} md={8}>
-                                {show === "leads" &&
-                                    <Leads customLeadsData={customLeadsData}/>
-                                }
-                                {show === "orders" &&
-                                    <Orders customOrdersData={customOrdersData}/>
-                                }
+                                <DndItem id={4} itemType={ItemTypes.LG} moveContent={moveContent}>
+                                    {getCmp(blockItems[4])}
+                                </DndItem>
                             </Grid>
                             <Grid item xs={12} md={4}>
-                                <Chart customChartData={customChartData}/>
+                                <DndItem id={5} itemType={ItemTypes.MD} moveContent={moveContent}>
+                                    {getCmp(blockItems[5])}
+                                </DndItem>
                             </Grid>
                         </Grid>
                     </Grid>
                     <Grid item xs={12}>
                         <Grid container spacing={3}>
                             <Grid item xs={12} md={4}>
-                                <Ads adsId={portalData?.personalizedAds?.refNode?.uuid}
-                                     jExpUserPropsToSync={portalData?.jExpUserPropsToSync?.value}/>
+                                <DndItem id={6} itemType={ItemTypes.MD} moveContent={moveContent}>
+                                    {getCmp(blockItems[6])}
+                                </DndItem>
                             </Grid>
                             <Grid item xs={12} md={8}>
-                                <MultiChart customMultiChartData={customMultiChartData}/>
+                                <DndItem id={7} itemType={ItemTypes.LG} moveContent={moveContent}>
+                                    {getCmp(blockItems[7])}
+                                </DndItem>
                             </Grid>
                         </Grid>
                     </Grid>
