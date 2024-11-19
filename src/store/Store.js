@@ -10,7 +10,7 @@ const init = context => {
         locale,
         currentUserId,
         portalData,
-        userPreferences: !!userPreferences || {layout:DEFAULT_PORTAL,blocks:{}},
+        userPreferences: (userPreferences !== null && "layout" in userPreferences) ? userPreferences : {layout:DEFAULT_PORTAL,blocks:{}},
         client,
         userData:{}
     }
@@ -27,19 +27,19 @@ const reducer = (state, action) => {
         }
         case "PORTAL_LAYOUT_UPDATE":{
             const {layout,workspace} = payload;
-            //call GraphQL
+
             const preferences =  {
                 ...state.userPreferences,
                 layout
             }
 
             if(state.currentUserId)
-                state.client.query({
-                    query: mutationUserPreference,
+                state.client.mutate({
+                    mutation: mutationUserPreference,
                     variables: {
                         workspace,
                         userNodeId: state.currentUserId,
-                        preferences
+                        preferences: JSON.stringify(preferences)
                     }
                 })
 
@@ -50,22 +50,21 @@ const reducer = (state, action) => {
         }
         case "PORTAL_LAYOUT_BLOCS_UPDATE":{
             const {blocks,workspace} = payload;
-            //call GraphQL
             const preferences =  {
                 ...state.userPreferences,
                 blocks : {
                     ...state.userPreferences.blocks,
-                    blocks
+                    ...blocks
                 }
             }
 
             if(state.currentUserId)
-                state.client.query({
-                    query: mutationUserPreference,
+                state.client.mutate({
+                    mutation: mutationUserPreference,
                     variables: {
                         workspace,
                         userNodeId: state.currentUserId,
-                        preferences
+                        preferences: JSON.stringify(preferences)
                     }
                 })
 

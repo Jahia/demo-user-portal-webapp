@@ -30,11 +30,12 @@ const fetchData = async ({client,workspace, language,id}) => {
             client.query({ query: queryUserPortal,  variables: {workspace, language,id}}),
 
         ]);
-        const currentUserId = null//userData?.data?.currentUser?.node.uuid;
+         const currentUserId = null;
+        // const currentUserId = userData?.data?.currentUser?.node.uuid;
         let userPreferencesData,userPreferences = null;
 
         if(currentUserId)
-            [userPreferencesData] = await client.query({
+            userPreferencesData = await client.query({
                 query: queryUserPreference,
                 variables: {workspace, userNodeId:currentUserId}
             })

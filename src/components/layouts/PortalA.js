@@ -4,11 +4,11 @@ import {DndItem} from "../dndItem";
 import {ItemTypes} from "../../misc";
 import {AccountProfile, ProductCard} from "../user";
 import * as Visit from "../user"
-import {Chart} from "../misc";
+import {Chart} from "../charts";
 import {Leads} from "../sfdc";
 import {Orders} from "../e-shop";
 import {Ads} from "../ads";
-import {MultiChart} from "../misc/MultiChart";
+import {MultiChart} from "../charts/MultiChart";
 import {JahiaCtx, StoreCtx} from "../../context";
 import {products as mocksProducts} from "../../__mocks__";
 

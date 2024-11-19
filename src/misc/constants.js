@@ -1,4 +1,5 @@
 export const ItemTypes = {
     VISIT: 'visit',
-    CONTRACT: 'contract'
+    MD: 'medium',
+    LG: 'large'
 }

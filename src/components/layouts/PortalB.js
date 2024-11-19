@@ -3,12 +3,11 @@ import {Box, Container, Grid, Stack} from "@mui/material";
 import {DndItem} from "../dndItem";
 import {ItemTypes} from "../../misc";
 import {AccountProfile, ProductCard} from "../user";
-import * as Visit from "../user"
-import {Chart} from "../misc";
+import * as Widget from "../user"
+import {Chart,MultiChart} from "../charts";
 import {Leads} from "../sfdc";
 import {Orders} from "../e-shop";
 import {Ads} from "../ads";
-import {MultiChart} from "../misc/MultiChart";
 import {JahiaCtx, StoreCtx} from "../../context";
 import {products as mocksProducts} from "../../__mocks__";
 
@@ -17,7 +16,7 @@ export const PortalB = () => {
     const {state, dispatch} = useContext(StoreCtx);
     const {portalData,userPreferences} = state;
     const [blockItems, setBlockItems] = useState(userPreferences?.blocks['PortalB'] ||
-        ["VisitLast","VisitNumber","VisitFirst"]
+        ["AccountProfile","VisitLast","VisitNumber","VisitFirst"]
     );
 
 
@@ -57,7 +56,7 @@ export const PortalB = () => {
     };
 
     const getCmp = (item) => {
-        const Cmp = Visit[item]
+        const Cmp = Widget[item]
         return <Cmp/>
     }
 
@@ -77,6 +76,9 @@ export const PortalB = () => {
                         <Grid container spacing={3}>
                             <Grid item xs={12} md={4}>
                                 <AccountProfile portalData={portalData}/>
+                                {/*<DndItem id={0} itemType={ItemTypes.MD} moveContent={moveContent}>*/}
+                                {/*    {getCmp(blockName)}*/}
+                                {/*</DndItem>*/}
                             </Grid>
                             <Grid item xs={12} md={4}>
                                 <ProductCard product={products[0]}/>
