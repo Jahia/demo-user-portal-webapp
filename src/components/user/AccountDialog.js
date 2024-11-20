@@ -144,7 +144,7 @@ export const SimpleDialog = ({onClose, open, portalData,layout, ...props}) => {
                                 onChange={(e) => setSelectedLayout(e.target.value)}
                                 label="Layout"
                             >
-                                {Object.keys(layouts).map(layout => <MenuItem value={layout}>{t(`layout.${layout}`)}</MenuItem>)}
+                                {Object.keys(layouts).map(layout => <MenuItem key={layout} value={layout}>{t(`layout.${layout}`)}</MenuItem>)}
                             </Select>
                         </FormControl>
                         <Divider sx={{margin:"1.5rem 0"}}/>

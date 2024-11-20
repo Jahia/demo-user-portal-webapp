@@ -88,11 +88,17 @@ const reducer = (state, action) => {
         }
         case "PORTAL_LAYOUT_BLOCS_UPDATE":{
             const {blocks,workspace} = payload;
+
             const preferences =  {
                 ...state.userPreferences,
                 blocks : {
                     ...state.userPreferences.blocks,
-                    ...blocks
+                    ...Object.keys(blocks).reduce((block,key) =>
+                        block[key]={
+                            ...state.userPreferences.blocks[key],
+                            ...blocks[key]
+                        }
+                    ,{})
                 }
             }
 

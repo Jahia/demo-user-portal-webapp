@@ -1,18 +1,16 @@
 import { Avatar, Card, CardContent, Grid, Typography } from '@mui/material';
-import ScheduleIcon from '@mui/icons-material/Schedule';
-import Moment from "react-moment";
+import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
 import React, {useContext} from "react";
-import {StoreCtx} from "../../context";
+import {StoreCtx} from "../../../../context";
 
-export const VisitLast = (props) => {
+export const VisitNumber = (props) => {
     const { state } = useContext(StoreCtx);
     const {userData} = state;
-    const lastVisit = userData?.profileProperties?.lastVisit || "-";
+    const nbOfVisits = userData?.profileProperties?.nbOfVisits || "-";
 
     return(
-
         <Card
-            sx={{ height: '100%', backgroundColor: 'transparent' }}
+            sx={{ height: '100%'}}
             {...props}
         >
             <CardContent>
@@ -27,26 +25,24 @@ export const VisitLast = (props) => {
                             gutterBottom
                             variant="overline"
                         >
-                            Last visit
+                            Number of visit
                         </Typography>
                         <Typography
                             color="textPrimary"
                             variant="h4"
                         >
-                            {lastVisit!=="-" &&
-                                <Moment fromNow date={lastVisit}/>
-                            }
+                            {nbOfVisits}
                         </Typography>
                     </Grid>
                     <Grid item>
                         <Avatar
                             sx={{
-                                backgroundColor: 'success.main',
+                                backgroundColor: 'warning.main',
                                 height: 56,
                                 width: 56
                             }}
                         >
-                            <ScheduleIcon />
+                            <AccessibilityNewIcon />
                         </Avatar>
                     </Grid>
                 </Grid>

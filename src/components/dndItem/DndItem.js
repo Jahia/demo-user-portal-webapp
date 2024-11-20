@@ -1,8 +1,51 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import PropTypes from 'prop-types'
 import { useDrag, useDrop } from 'react-dnd';
+import {styled} from "@mui/material";
+import {JahiaCtx, StoreCtx} from "../../context";
 
-export const DndItem = ({ id, itemType, moveContent, children }) => {
+
+const DndDiv = styled("div")(({ theme, isOver, isDragging }) => ({
+    position: "relative",
+    height: "100%",
+    opacity: isDragging ? 0.5 : 1,
+    "&::after": {
+        content: '""',
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: isOver && !isDragging ? '#d3ffd3' : 'transparent',
+        opacity: isOver ? 0.5 : 0,
+        pointerEvents: "none", // Allows interactions with parent content
+    },
+}));
+
+const moveContent = ({fromId, toId,setBlockItems,dispatch,workspace,portal,blocks}) => {
+    setBlockItems((prevItems) => {
+        const newItems = [...prevItems];
+        [newItems[fromId], newItems[toId]] = [newItems[toId], newItems[fromId]];
+        dispatch({
+            type: "PORTAL_LAYOUT_BLOCS_UPDATE",
+            payload: {
+                workspace,
+                blocks: {
+                    [portal]: {
+                        [blocks]:newItems
+                    }
+                }
+            }
+        });
+        return newItems;
+    });
+};
+
+export const DndItem = ({ id, itemType, moveContentProps, children }) => {
+    const {workspace} = useContext(JahiaCtx);
+    const {dispatch} = useContext(StoreCtx);
+    const {portal,blocks,setBlockItems} = moveContentProps
+
     const [{ isDragging }, drag] = useDrag(() => ({
         type: itemType,
         item: { id },
@@ -13,31 +56,36 @@ export const DndItem = ({ id, itemType, moveContent, children }) => {
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: itemType,
-        drop: (draggedItem) => moveContent(draggedItem.id, id),
+        drop: (draggedItem) => moveContent({
+            fromId: draggedItem.id,
+            toId:id,
+            setBlockItems,
+            dispatch,
+            workspace,
+            portal,
+            blocks
+        }),
         collect: (monitor) => ({
-            isOver: !!monitor.isOver(),
+            isOver: !!monitor.isOver()
         }),
     }));
 
+
+
     return (
-        <div
+        <DndDiv
             ref={(node) => drag(drop(node))}
-            style={{
-                // padding: '20px',
-                backgroundColor: isOver && !isDragging ? '#d3ffd3' : '#fff',
-                opacity: isDragging ? 0.5 : 1,
-                // cursor: 'move',
-                // textAlign: 'center',
-            }}
+            isOver={isOver}
+            isDragging={isDragging}
         >
             {children}
-        </div>
+        </DndDiv>
     );
 };
 
 DndItem.propTypes = {
     id: PropTypes.number.isRequired,
     itemType: PropTypes.string.isRequired,
-    moveContent: PropTypes.func.isRequired,
+    moveContentProps: PropTypes.object.isRequired,
     children: PropTypes.element
 };

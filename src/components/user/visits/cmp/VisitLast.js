@@ -1,16 +1,18 @@
 import { Avatar, Card, CardContent, Grid, Typography } from '@mui/material';
-import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
+import ScheduleIcon from '@mui/icons-material/Schedule';
+import Moment from "react-moment";
 import React, {useContext} from "react";
-import {StoreCtx} from "../../context";
+import {StoreCtx} from "../../../../context";
 
-export const VisitNumber = (props) => {
+export const VisitLast = (props) => {
     const { state } = useContext(StoreCtx);
     const {userData} = state;
-    const nbOfVisits = userData?.profileProperties?.nbOfVisits || "-";
+    const lastVisit = userData?.profileProperties?.lastVisit || "-";
 
     return(
+
         <Card
-            sx={{ height: '100%', backgroundColor: 'transparent' }}
+            sx={{ height: '100%'}}
             {...props}
         >
             <CardContent>
@@ -25,24 +27,26 @@ export const VisitNumber = (props) => {
                             gutterBottom
                             variant="overline"
                         >
-                            Number of visit
+                            Last visit
                         </Typography>
                         <Typography
                             color="textPrimary"
                             variant="h4"
                         >
-                            {nbOfVisits}
+                            {lastVisit!=="-" &&
+                                <Moment fromNow date={lastVisit}/>
+                            }
                         </Typography>
                     </Grid>
                     <Grid item>
                         <Avatar
                             sx={{
-                                backgroundColor: 'warning.main',
+                                backgroundColor: 'success.main',
                                 height: 56,
                                 width: 56
                             }}
                         >
-                            <AccessibilityNewIcon />
+                            <ScheduleIcon />
                         </Avatar>
                     </Grid>
                 </Grid>

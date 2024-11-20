@@ -1,35 +1,23 @@
 import React, {useContext, useState} from "react";
-import {Box, Container, Grid, Stack} from "@mui/material";
+import {Box, Container, Grid} from "@mui/material";
 import {DndItem} from "../dndItem";
 import {ItemTypes} from "../../misc";
 import {ProductCard} from "../user";
 import * as Widget from "../widget"
-import {JahiaCtx, StoreCtx} from "../../context";
+import {StoreCtx} from "../../context";
 
 export const PortalB = () => {
-    const {workspace} = useContext(JahiaCtx);
-    const {state, dispatch} = useContext(StoreCtx);
+    const {state} = useContext(StoreCtx);
     const {portalData: {products},leadsOrOrderCmpName, userPreferences} = state;
-    const [blockItems, setBlockItems] = useState(userPreferences?.blocks['PortalB'] ||
-        ["AccountProfile","VisitLast","VisitNumber","VisitFirst",leadsOrOrderCmpName,"Chart","Ads","MultiChart"]
+    const [blockItems, setBlockItems] = useState(userPreferences?.blocks?.PortalB?.main ||
+        ["AccountProfile","VisitsStack",leadsOrOrderCmpName,"Chart","Ads","MultiChart"]
     );
 
-    const moveContent = (fromId, toId) => {
-        setBlockItems((prevItems) => {
-            const newItems = [...prevItems];
-            [newItems[fromId], newItems[toId]] = [newItems[toId], newItems[fromId]];
-            dispatch({
-                type: "PORTAL_LAYOUT_BLOCS_UPDATE",
-                payload: {
-                    workspace,
-                    blocks: {
-                        "PortalB":newItems
-                    }
-                }
-            });
-            return newItems;
-        });
-    };
+    const moveContentProps = {
+        portal:"PortalB",
+        blocks:"main",
+        setBlockItems
+    }
 
     const getCmp = (item) => {
         const Cmp = Widget[item]
@@ -51,7 +39,7 @@ export const PortalB = () => {
                     <Grid item xs={12}>
                         <Grid container spacing={3}>
                             <Grid item xs={12} md={4}>
-                                <DndItem id={0} itemType={ItemTypes.MD} moveContent={moveContent}>
+                                <DndItem id={0} itemType={ItemTypes.MD} moveContentProps={moveContentProps}>
                                     {getCmp(blockItems[0])}
                                 </DndItem>
                             </Grid>
@@ -59,13 +47,9 @@ export const PortalB = () => {
                                 <ProductCard product={products[0]}/>
                             </Grid>
                             <Grid item xs={12} md={4}>
-                                <Stack spacing={2}>
-                                {blockItems.map((blockName,index) => (
-                                    <DndItem id={index} itemType={ItemTypes.VISIT} moveContent={moveContent}>
-                                        {getCmp(blockName)}
-                                    </DndItem>
-                                ))}
-                                </Stack>
+                                <DndItem id={1} itemType={ItemTypes.MD} moveContentProps={moveContentProps}>
+                                    {getCmp(blockItems[1])}
+                                </DndItem>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -73,13 +57,13 @@ export const PortalB = () => {
                     <Grid item xs={12}>
                         <Grid container spacing={3}>
                             <Grid item xs={12} md={8}>
-                                <DndItem id={4} itemType={ItemTypes.LG} moveContent={moveContent}>
-                                    {getCmp(blockItems[4])}
+                                <DndItem id={2} itemType={ItemTypes.LG} moveContentProps={moveContentProps}>
+                                    {getCmp(blockItems[2])}
                                 </DndItem>
                             </Grid>
                             <Grid item xs={12} md={4}>
-                                <DndItem id={5} itemType={ItemTypes.MD} moveContent={moveContent}>
-                                    {getCmp(blockItems[5])}
+                                <DndItem id={3} itemType={ItemTypes.MD} moveContentProps={moveContentProps}>
+                                    {getCmp(blockItems[3])}
                                 </DndItem>
                             </Grid>
                         </Grid>
@@ -87,13 +71,13 @@ export const PortalB = () => {
                     <Grid item xs={12}>
                         <Grid container spacing={3}>
                             <Grid item xs={12} md={4}>
-                                <DndItem id={6} itemType={ItemTypes.MD} moveContent={moveContent}>
-                                    {getCmp(blockItems[6])}
+                                <DndItem id={4} itemType={ItemTypes.MD} moveContentProps={moveContentProps}>
+                                    {getCmp(blockItems[4])}
                                 </DndItem>
                             </Grid>
                             <Grid item xs={12} md={8}>
-                                <DndItem id={7} itemType={ItemTypes.LG} moveContent={moveContent}>
-                                    {getCmp(blockItems[7])}
+                                <DndItem id={5} itemType={ItemTypes.LG} moveContentProps={moveContentProps}>
+                                    {getCmp(blockItems[5])}
                                 </DndItem>
                             </Grid>
                         </Grid>

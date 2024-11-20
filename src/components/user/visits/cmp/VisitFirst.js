@@ -2,7 +2,7 @@ import { Avatar, Card, CardContent, Grid, Typography } from '@mui/material';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import Moment from "react-moment";
 import React, {useContext} from "react";
-import {StoreCtx} from "../../context";
+import {StoreCtx} from "../../../../context";
 
 export const VisitFirst = (props) => {
     const { state } = useContext(StoreCtx);
@@ -12,7 +12,7 @@ export const VisitFirst = (props) => {
     return(
 
         <Card
-            sx={{ height: '100%', backgroundColor: 'transparent' }}
+            sx={{ height: '100%'}}
             {...props}
         >
             <CardContent>

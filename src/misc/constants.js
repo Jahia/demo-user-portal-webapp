@@ -1,7 +1,8 @@
 export const ItemTypes = {
     VISIT: 'visit',
     MD: 'medium',
-    LG: 'large'
+    LG: 'large',
+    NONE: 'none'
 }
 
 
