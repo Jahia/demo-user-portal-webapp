@@ -3,10 +3,9 @@ export const ItemTypes = {
     MD: 'medium',
     LG: 'large',
     NONE: 'none'
-}
-
+};
 
 export const PortalDataLabels = {
-    LEADS : "Leads",
-    ORDERS : "Orders"
-}
+    LEADS: 'Leads',
+    ORDERS: 'Orders'
+};

@@ -1,28 +1,28 @@
-import { Avatar, Card, CardContent, Grid, Typography } from '@mui/material';
+import {Avatar, Card, CardContent, Grid, Typography} from '@mui/material';
 import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
-import React, {useContext} from "react";
-import {StoreCtx} from "../../../../context";
+import React, {useContext} from 'react';
+import {StoreCtx} from '../../../../context';
 
-export const VisitNumber = (props) => {
-    const { state } = useContext(StoreCtx);
+export const VisitNumber = props => {
+    const {state} = useContext(StoreCtx);
     const {userData} = state;
-    const nbOfVisits = userData?.profileProperties?.nbOfVisits || "-";
+    const nbOfVisits = userData?.profileProperties?.nbOfVisits || '-';
 
-    return(
+    return (
         <Card
-            sx={{ height: '100%'}}
+            sx={{height: '100%'}}
             {...props}
         >
             <CardContent>
                 <Grid
                     container
                     spacing={3}
-                    sx={{ justifyContent: 'space-between' }}
+                    sx={{justifyContent: 'space-between'}}
                 >
                     <Grid item>
                         <Typography
-                            color="textSecondary"
                             gutterBottom
+                            color="textSecondary"
                             variant="overline"
                         >
                             Number of visit
@@ -42,11 +42,11 @@ export const VisitNumber = (props) => {
                                 width: 56
                             }}
                         >
-                            <AccessibilityNewIcon />
+                            <AccessibilityNewIcon/>
                         </Avatar>
                     </Grid>
                 </Grid>
             </CardContent>
         </Card>
     );
-}
+};

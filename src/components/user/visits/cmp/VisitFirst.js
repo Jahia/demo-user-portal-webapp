@@ -1,30 +1,30 @@
-import { Avatar, Card, CardContent, Grid, Typography } from '@mui/material';
+import {Avatar, Card, CardContent, Grid, Typography} from '@mui/material';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
-import Moment from "react-moment";
-import React, {useContext} from "react";
-import {StoreCtx} from "../../../../context";
+import Moment from 'react-moment';
+import React, {useContext} from 'react';
+import {StoreCtx} from '../../../../context';
 
-export const VisitFirst = (props) => {
-    const { state } = useContext(StoreCtx);
+export const VisitFirst = props => {
+    const {state} = useContext(StoreCtx);
     const {userData} = state;
-    const firstVisit = userData?.profileProperties?.firstVisit || "-";
+    const firstVisit = userData?.profileProperties?.firstVisit || '-';
 
-    return(
+    return (
 
         <Card
-            sx={{ height: '100%'}}
+            sx={{height: '100%'}}
             {...props}
         >
             <CardContent>
                 <Grid
                     container
                     spacing={3}
-                    sx={{ justifyContent: 'space-between' }}
+                    sx={{justifyContent: 'space-between'}}
                 >
                     <Grid item>
                         <Typography
-                            color="textSecondary"
                             gutterBottom
+                            color="textSecondary"
                             variant="overline"
                         >
                             First visit
@@ -33,9 +33,8 @@ export const VisitFirst = (props) => {
                             color="textPrimary"
                             variant="h4"
                         >
-                            {firstVisit!=="-" &&
-                                <Moment format="ll" date={firstVisit}/>
-                            }
+                            {firstVisit !== '-' &&
+                                <Moment format="ll" date={firstVisit}/>}
                         </Typography>
                     </Grid>
                     <Grid item>
@@ -46,11 +45,11 @@ export const VisitFirst = (props) => {
                                 width: 56
                             }}
                         >
-                            <PermContactCalendarIcon />
+                            <PermContactCalendarIcon/>
                         </Avatar>
                     </Grid>
                 </Grid>
             </CardContent>
         </Card>
     );
-}
+};

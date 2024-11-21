@@ -1,30 +1,30 @@
-import { Avatar, Card, CardContent, Grid, Typography } from '@mui/material';
+import {Avatar, Card, CardContent, Grid, Typography} from '@mui/material';
 import ScheduleIcon from '@mui/icons-material/Schedule';
-import Moment from "react-moment";
-import React, {useContext} from "react";
-import {StoreCtx} from "../../../../context";
+import Moment from 'react-moment';
+import React, {useContext} from 'react';
+import {StoreCtx} from '../../../../context';
 
-export const VisitLast = (props) => {
-    const { state } = useContext(StoreCtx);
+export const VisitLast = props => {
+    const {state} = useContext(StoreCtx);
     const {userData} = state;
-    const lastVisit = userData?.profileProperties?.lastVisit || "-";
+    const lastVisit = userData?.profileProperties?.lastVisit || '-';
 
-    return(
+    return (
 
         <Card
-            sx={{ height: '100%'}}
+            sx={{height: '100%'}}
             {...props}
         >
             <CardContent>
                 <Grid
                     container
                     spacing={3}
-                    sx={{ justifyContent: 'space-between' }}
+                    sx={{justifyContent: 'space-between'}}
                 >
                     <Grid item>
                         <Typography
-                            color="textSecondary"
                             gutterBottom
+                            color="textSecondary"
                             variant="overline"
                         >
                             Last visit
@@ -33,9 +33,8 @@ export const VisitLast = (props) => {
                             color="textPrimary"
                             variant="h4"
                         >
-                            {lastVisit!=="-" &&
-                                <Moment fromNow date={lastVisit}/>
-                            }
+                            {lastVisit !== '-' &&
+                                <Moment fromNow date={lastVisit}/>}
                         </Typography>
                     </Grid>
                     <Grid item>
@@ -46,11 +45,11 @@ export const VisitLast = (props) => {
                                 width: 56
                             }}
                         >
-                            <ScheduleIcon />
+                            <ScheduleIcon/>
                         </Avatar>
                     </Grid>
                 </Grid>
             </CardContent>
         </Card>
     );
-}
+};

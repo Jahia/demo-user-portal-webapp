@@ -1,5 +1,6 @@
-import { Chart } from 'react-chartjs-2';
-import { Box, Card, CardContent, CardHeader, Divider, useTheme } from '@mui/material';
+import React from 'react';
+import {Chart} from 'react-chartjs-2';
+import {Box, Card, CardContent, CardHeader, Divider, useTheme} from '@mui/material';
 import {
     Chart as ChartJS,
     LinearScale,
@@ -10,10 +11,10 @@ import {
     Legend,
     Tooltip,
     LineController,
-    BarController,
+    BarController
 } from 'chart.js';
-import {useContext} from "react";
-import {StoreCtx} from "../../context";
+import {useContext} from 'react';
+import {StoreCtx} from '../../context';
 
 ChartJS.register(
     LinearScale,
@@ -27,17 +28,16 @@ ChartJS.register(
     BarController
 );
 
-
-export const MultiChart = (props) => {
+export const MultiChart = props => {
     const theme = useTheme();
     const {state} = useContext(StoreCtx);
-    const {portalData : {multiChart : chartData} }= state;
+    const {portalData: {multiChart: chartData}} = state;
 
-    const {contents,data} = chartData;
+    const {contents, data} = chartData;
     const options = {
         animation: true,
         cutoutPercentage: 80,
-        layout: { padding: 0 },
+        layout: {padding: 0},
         legend: {
             display: false
         },
@@ -63,11 +63,11 @@ export const MultiChart = (props) => {
             flexDirection: 'column',
             height: '100%'
         }}
-              {...props}
+            {...props}
         >
-            <CardHeader title={contents.title} />
-            <Divider />
-            <CardContent sx={{ flexGrow: 1 }}>
+            <CardHeader title={contents.title}/>
+            <Divider/>
+            <CardContent sx={{flexGrow: 1}}>
                 <Box
                     sx={{
                         height: 300,

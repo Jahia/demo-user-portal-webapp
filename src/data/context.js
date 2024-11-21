@@ -1,24 +1,24 @@
 const headers = {
     'Content-Type': 'application/json'
-}
+};
 
-export const getUserContext = (cxs,dispatch) => {
-    // console.log("[getUserContext] cxs :",cxs);
+export const getUserContext = (cxs, dispatch) => {
+    // Console.log("[getUserContext] cxs :",cxs);
     const contextServerPublicUrl = window.digitalData.contextServerPublicUrl || window.digitalData.wemInitConfig.contextServerUrl;
     const body = {
-        requiredProfileProperties: ["*"],
-        requiredSessionProperties: ["*"],
+        requiredProfileProperties: ['*'],
+        requiredSessionProperties: ['*'],
         requireSegments: true,
         requireScores: false,
-        sessionId:cxs.sessionId,
+        sessionId: cxs.sessionId,
         source: {
             itemId: window.digitalData.page.pageInfo.pageID,
-            itemType: "page",
+            itemType: 'page',
             scope: window.digitalData.scope
-        },
-    }
+        }
+    };
 
-    fetch(`${contextServerPublicUrl}/context.json`,{
+    fetch(`${contextServerPublicUrl}/context.json`, {
         method: 'post',
         headers,
         body: JSON.stringify(body)
@@ -29,20 +29,20 @@ export const getUserContext = (cxs,dispatch) => {
 
         return response.json();
     }).then(data => {
-            dispatch({
-                type:"USER_DATA_READY",
-                payload:{
-                    userData: data
-                }
-            });
-            // setUserData(response.data);
+        dispatch({
+            type: 'USER_DATA_READY',
+            payload: {
+                userData: data
+            }
+        });
+        // SetUserData(response.data);
     }).catch(error => {
-        console.log("Error in the call to retrieve user profiles data: ");
+        console.log('Error in the call to retrieve user profiles data: ');
         console.log(error);
     });
-}
+};
 
-// export const getUserPropsInfo = (propsName,callback) => {
+// Export const getUserPropsInfo = (propsName,callback) => {
 //     const contextServerPublicUrl = window.digitalData.contextServerPublicUrl || window.digitalData.wemInitConfig.contextServerUrl;
 //     // let response = await axios({
 //     //     method: 'get',

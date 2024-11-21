@@ -2,14 +2,14 @@ import PropTypes from 'prop-types';
 import {Avatar, Box, Button, Card, CardContent, Divider, Grid, Typography} from '@mui/material';
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
-import React from "react";
-import Moment from "react-moment";
-import * as Muicon from "@mui/icons-material";
+import React from 'react';
+import Moment from 'react-moment';
+import * as Muicon from '@mui/icons-material';
 
-export const ProductCard = ({ product, ...rest }) => {
-    // const {icon:Icon }= product;
+export const ProductCard = ({product, ...rest}) => {
+    // Const {icon:Icon }= product;
     const Icon = Muicon[product.icon];
-    return(
+    return (
         <Card
             sx={{
                 display: 'flex',
@@ -18,7 +18,7 @@ export const ProductCard = ({ product, ...rest }) => {
             }}
             {...rest}
         >
-            <CardContent sx={{ flexGrow: 1 }}>
+            <CardContent sx={{flexGrow: 1}}>
                 <Box
                     sx={{
                         display: 'flex',
@@ -37,9 +37,9 @@ export const ProductCard = ({ product, ...rest }) => {
                     </Avatar>
                 </Box>
                 <Typography
+                    gutterBottom
                     align="center"
                     color="textPrimary"
-                    gutterBottom
                     variant="h5"
                 >
                     {product.title}
@@ -52,12 +52,12 @@ export const ProductCard = ({ product, ...rest }) => {
                     {product.description}
                 </Typography>
             </CardContent>
-            <Divider />
-            <Box sx={{ p: 1 }}>
+            <Divider/>
+            <Box sx={{p: 1}}>
                 <Grid
                     container
                     spacing={2}
-                    sx={{ justifyContent: 'space-between' }}
+                    sx={{justifyContent: 'space-between'}}
                 >
                     <Grid
                         item
@@ -70,7 +70,7 @@ export const ProductCard = ({ product, ...rest }) => {
                         <Typography
                             color="textSecondary"
                             display="inline"
-                            sx={{ pl: 1 }}
+                            sx={{pl: 1}}
                             variant="body2"
                         >
                             Expires <Moment fromNow date={product.expiredAt}/>
@@ -84,34 +84,34 @@ export const ProductCard = ({ product, ...rest }) => {
                         }}
                     >
                         <Button
-                            // color="primary"
+                            // Color="primary"
                             sx={{
-                                pl: 1 ,
-                                color:'primary.dark'
+                                pl: 1,
+                                color: 'primary.dark'
                             }}
                             variant="outlined"
                             startIcon={<AutorenewIcon/>}
                         >
                             Renew
                         </Button>
-                        {/*<AutorenewIcon color="action" />*/}
-                        {/*<DownloadIcon color="action" />*/}
-                        {/*<Typography*/}
-                        {/*    color="textSecondary"*/}
-                        {/*    display="inline"*/}
-                        {/*    sx={{ pl: 1 }}*/}
-                        {/*    variant="body2"*/}
-                        {/*>*/}
-                        {/*    {product.totalDownloads}*/}
-                        {/*    {' '}*/}
-                        {/*    Downloads*/}
-                        {/*</Typography>*/}
+                        {/* <AutorenewIcon color="action" /> */}
+                        {/* <DownloadIcon color="action" /> */}
+                        {/* <Typography */}
+                        {/*    color="textSecondary" */}
+                        {/*    display="inline" */}
+                        {/*    sx={{ pl: 1 }} */}
+                        {/*    variant="body2" */}
+                        {/* > */}
+                        {/*    {product.totalDownloads} */}
+                        {/*    {' '} */}
+                        {/*    Downloads */}
+                        {/* </Typography> */}
                     </Grid>
                 </Grid>
             </Box>
         </Card>
     );
-}
+};
 
 ProductCard.propTypes = {
     product: PropTypes.object.isRequired

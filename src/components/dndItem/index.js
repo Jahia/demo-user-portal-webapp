@@ -1,1 +1,1 @@
-export * from './DndItem'
+export * from './DndItem';

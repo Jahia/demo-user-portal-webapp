@@ -1,6 +1,6 @@
-import React, {useContext} from "react";
+import React, {useContext} from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import {SeverityPill} from "../severity-pill";
+import {SeverityPill} from '../severity-pill';
 import {
     Box,
     Button,
@@ -15,25 +15,24 @@ import {
     Tooltip, Typography
 } from '@mui/material';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import {StoreCtx} from "../../context";
+import {StoreCtx} from '../../context';
 
-
-export const Leads = (props) => {
+export const Leads = props => {
     const {state} = useContext(StoreCtx);
-    const {userData, portalData : {leads : mocksLeads} }= state;
+    const {userData, portalData: {leads: mocksLeads}} = state;
 
     const currentLead = [];
     if (userData && userData.profileProperties?.sfdc__leadID) {
         const {profileProperties: user} = userData;
-        const leadID = user?.sfdc__leadID || "-";
-        const leadSource = user?.sfdc__leadSource || "-";
-        const leadStatus = user?.sfdc__leadStatus || "-";
-        //sfdc__leadQuality,
-        const assignedToEmail = user?.sfdc__assignedToEmail || "-";
-        const assignedToPhone = user?.sfdc__assignedToPhone || "-";
-        const leadAssignedTo = user?.sfdc__leadAssignedTo || "Not yet assigned";
-        //sfdc__leadComments,
-        //sfdc__leadPreferences,
+        const leadID = user?.sfdc__leadID || '-';
+        const leadSource = user?.sfdc__leadSource || '-';
+        const leadStatus = user?.sfdc__leadStatus || '-';
+        // Sfdc__leadQuality,
+        const assignedToEmail = user?.sfdc__assignedToEmail || '-';
+        const assignedToPhone = user?.sfdc__assignedToPhone || '-';
+        const leadAssignedTo = user?.sfdc__leadAssignedTo || 'Not yet assigned';
+        // Sfdc__leadComments,
+        // sfdc__leadPreferences,
         currentLead.push(
             {
                 id: leadID,
@@ -45,10 +44,10 @@ export const Leads = (props) => {
                     phone: assignedToPhone
                 }
             }
-        )
+        );
     }
 
-    const leads = [...currentLead, ...mocksLeads]
+    const leads = [...currentLead, ...mocksLeads];
     return (
         <Card
             sx={{
@@ -56,7 +55,8 @@ export const Leads = (props) => {
                 flexDirection: 'column',
                 height: '100%'
             }}
-            {...props}>
+            {...props}
+        >
             <CardHeader title="My leads"/>
             <Box sx={{flexGrow: 1}}>
                 <PerfectScrollbar>
@@ -89,10 +89,10 @@ export const Leads = (props) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {leads.map((lead) => (
+                                {leads.map(lead => (
                                     <TableRow
-                                        hover
                                         key={lead.id}
+                                        hover
                                     >
                                         <TableCell>
                                             {lead.id}
@@ -102,17 +102,17 @@ export const Leads = (props) => {
                                         </TableCell>
                                         <TableCell>
                                             <SeverityPill
-                                                color={(lead.status === 'Closed' && 'success')
-                                                    || (lead.status === 'Contacted' && 'warning')
-                                                    || 'error'}
+                                                color={(lead.status === 'Closed' && 'success') ||
+                                                    (lead.status === 'Contacted' && 'warning') ||
+                                                    'error'}
                                             >
                                                 {lead.status}
                                             </SeverityPill>
                                         </TableCell>
                                         <TableCell>
                                             <Typography
-                                                color="textPrimary"
                                                 gutterBottom
+                                                color="textPrimary"
                                                 variant="h6"
                                             >
                                                 {lead.contact.fullname}
@@ -154,5 +154,5 @@ export const Leads = (props) => {
                 </Button>
             </Box>
         </Card>
-    )
-}
+    );
+};

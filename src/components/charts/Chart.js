@@ -1,13 +1,14 @@
+import React from 'react';
 import {Doughnut} from 'react-chartjs-2';
 import {Box, Card, CardContent, CardHeader, Divider, Typography, useTheme} from '@mui/material';
-import * as Muicon from "@mui/icons-material";
-import {useContext} from "react";
-import {StoreCtx} from "../../context";
+import * as Muicon from '@mui/icons-material';
+import {useContext} from 'react';
+import {StoreCtx} from '../../context';
 
-export const Chart = (props) => {
+export const Chart = props => {
     const theme = useTheme();
     const {state} = useContext(StoreCtx);
-    const {portalData : {chart : chartData} }= state;
+    const {portalData: {chart: chartData}} = state;
 
     const {contents, data} = chartData;
     const options = {
@@ -87,13 +88,13 @@ export const Chart = (props) => {
                                 </Typography>
                                 <Typography
                                     style={{color}}
-                                    variant={variant || "h4"}
+                                    variant={variant || 'h4'}
                                 >
                                     {value}
                                     %
                                 </Typography>
                             </Box>
-                        )
+                        );
                     })}
                 </Box>
             </CardContent>

@@ -15,6 +15,7 @@
     "layout": {
         "PortalA" : "Portail A",
         "PortalB" : "Portail B",
-        "PortalC" : "Portail C"
+        "PortalC" : "Portail C",
+        "resetLayout": "Organisation par défaut"
     }
 }

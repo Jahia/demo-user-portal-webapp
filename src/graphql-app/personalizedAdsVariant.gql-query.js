@@ -1,5 +1,5 @@
-import {gql} from "@apollo/client";
-import {CORE_NODE_FIELDS, LINKTO_PROPERTY} from "./fragments"
+import {gql} from '@apollo/client';
+import {CORE_NODE_FIELDS, LINKTO_PROPERTY} from './fragments';
 
 export const queryPersonalizedAdsVariant = gql`
     ${CORE_NODE_FIELDS}
@@ -21,4 +21,4 @@ export const queryPersonalizedAdsVariant = gql`
                 }
             }
         }
-    }`
+    }`;

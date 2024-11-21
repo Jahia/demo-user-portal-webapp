@@ -1,6 +1,5 @@
-import {gql} from "@apollo/client";
-import {SIMPLE_CORE_NODE_FIELDS} from "./fragments"
-
+import {gql} from '@apollo/client';
+import {SIMPLE_CORE_NODE_FIELDS} from './fragments';
 
 export const mutationUserPreference = gql`mutation setUserPreference ($workspace: Workspace!, $userNodeId: String!,$preferences:String!) {
     jcr(workspace:$workspace){
@@ -10,7 +9,7 @@ export const mutationUserPreference = gql`mutation setUserPreference ($workspace
             }
         }
     }
-}`
+}`;
 
 export const queryUserPreference = gql`query getUserPreference ($workspace: Workspace!, $userNodeId: String!){
     jcr(workspace: $workspace) {
@@ -21,7 +20,7 @@ export const queryUserPreference = gql`query getUserPreference ($workspace: Work
         }
     }
 }
-${SIMPLE_CORE_NODE_FIELDS}`
+${SIMPLE_CORE_NODE_FIELDS}`;
 
 export const queryCurrentUserId = gql`query getCurrentUserId{
     currentUser{
@@ -30,4 +29,4 @@ export const queryCurrentUserId = gql`query getCurrentUserId{
         }
     }
 }
-${SIMPLE_CORE_NODE_FIELDS}`
+${SIMPLE_CORE_NODE_FIELDS}`;

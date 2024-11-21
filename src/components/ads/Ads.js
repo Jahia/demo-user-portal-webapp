@@ -1,47 +1,49 @@
-import React, {useContext} from "react";
-import PropTypes from "prop-types";
-import {useLazyQuery} from "@apollo/client";
-import {queryPersonalizedAdsVariant} from "../../graphql-app";
-import {CxsCtx} from "../../unomi/cxs";
-import {JahiaCtx, StoreCtx} from "../../context";
-import {EmbeddedPathInHtmlResolver} from "../jahia";
+import React, {useContext} from 'react';
+import PropTypes from 'prop-types';
+import {useLazyQuery} from '@apollo/client';
+import {queryPersonalizedAdsVariant} from '../../graphql-app';
+import {JahiaCtx, StoreCtx, CxsCtx} from '../../context';
+import {EmbeddedPathInHtmlResolver} from '../jahia';
 import {Card, CardActionArea, CardMedia, CardContent, Typography} from '@mui/material';
-import {Media} from "../media";
-import {getTypes, resolveLinkToURL} from 'misc/utils'
+import {Media} from '../media';
+import {getTypes, resolveLinkToURL} from 'misc/utils';
 
-export const Ads = (props) => {
+export const Ads = props => {
     const cxs = useContext(CxsCtx);
     const {workspace, locale, host, isPreview, isEdit} = useContext(JahiaCtx);
     const {state} = useContext(StoreCtx);
-    const {userData, portalData: {ads: { id : adsId,jExpUserPropsToSync }}} = state;
-    const jExpUserPropsValues = React.useMemo(()=>userData?.profileProperties?.[jExpUserPropsToSync],[userData,jExpUserPropsToSync]);
+    const {userData, portalData: {ads: {id: adsId, jExpUserPropsToSync}}} = state;
+    const jExpUserPropsValues = React.useMemo(() => userData?.profileProperties?.[jExpUserPropsToSync], [userData, jExpUserPropsToSync]);
 
-    const [loadVariant, {data,loading,error,refetch}] = useLazyQuery(queryPersonalizedAdsVariant);
+    const [loadVariant, {data, loading, error, refetch}] = useLazyQuery(queryPersonalizedAdsVariant);
 
     React.useEffect(() => {
         if (adsId && cxs) {
-            console.log("do the call")
+            console.log('do the call');
             loadVariant({
                 variables: {
                     workspace,
-                    id:adsId,
+                    id: adsId,
                     language: locale,
                     profileId: cxs.profileId,
-                    sessionId: cxs.sessionId,
+                    sessionId: cxs.sessionId
                 }
-            })
+            });
         }
-    },[loadVariant,workspace,locale, adsId,cxs])
+    }, [loadVariant, workspace, locale, adsId, cxs]);
 
     React.useEffect(() => {
         if (data) {
-            refetch().then(()=>console.log("refetch done with jExpUserPropsValues : ",jExpUserPropsValues));
+            refetch().then(() => console.log('refetch done with jExpUserPropsValues : ', jExpUserPropsValues));
         }
-    },[data, jExpUserPropsValues, refetch])
+    }, [data, jExpUserPropsValues, refetch]);
 
-    if (error) return <p>Error :(</p>;
-    if (!data || loading)
-        return(
+    if (error) {
+        return <p>Error :(</p>;
+    }
+
+    if (!data || loading) {
+        return (
             <Card
                 sx={{
                     display: 'flex',
@@ -50,10 +52,10 @@ export const Ads = (props) => {
                 }}
                 {...props}
             >
-                <CardMedia sx={{ height: 240, backgroundColor: "#EEE"}}
-                    component="div"
+                <CardMedia sx={{height: 240, backgroundColor: '#EEE'}}
+                           component="div"
                 />
-                <CardContent sx={{ flexGrow: 1 }}>
+                <CardContent sx={{flexGrow: 1}}>
                     <Typography variant="h5" color="#CCC">
                         <span>Your ads here</span>
                     </Typography>
@@ -63,20 +65,21 @@ export const Ads = (props) => {
                 </CardContent>
             </Card>
         );
+    }
 
-    const variant = data?.jcr?.nodeById?.jExperience?.resolve?.variant
-    const {image,teaser,linkTarget} = variant;
+    const variant = data?.jcr?.nodeById?.jExperience?.resolve?.variant;
+    const {image, teaser, linkTarget} = variant;
     const href = resolveLinkToURL({
         host,
         isEdit,
         isPreview,
         locale,
-        jcrProps:variant
+        jcrProps: variant
     });
 
-    return(
+    return (
         <Card
-            // sx={{ height: '100%' }}
+            // Sx={{ height: '100%' }}
             {...props}
         >
             <CardActionArea href={href || '#'} target={linkTarget.value}>
@@ -86,17 +89,19 @@ export const Ads = (props) => {
                            path={image.refNode.path}
                            alt="background image"
                            component={CardMedia}
-                           // height="250"
-                    />
-                }
+                           // Height="250"
+                    />}
                 <CardContent>
-                    <Typography component="div"
-                        children={<EmbeddedPathInHtmlResolver htmlAsString={teaser?.value || ''} />}/>
+                    {/* <Typography children={<EmbeddedPathInHtmlResolver htmlAsString={teaser?.value || ''}/>} */}
+                    {/*            component="div"/> */}
+                    <Typography component="div">
+                        <EmbeddedPathInHtmlResolver htmlAsString={teaser?.value || ''}/>
+                    </Typography>
                 </CardContent>
             </CardActionArea>
         </Card>
-    )
-}
+    );
+};
 
 Ads.propTypes = {
     adsId: PropTypes.string,

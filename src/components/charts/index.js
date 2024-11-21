@@ -1,2 +1,2 @@
-export * from "./Chart"
-export * from "./MultiChart"
+export * from './Chart';
+export * from './MultiChart';

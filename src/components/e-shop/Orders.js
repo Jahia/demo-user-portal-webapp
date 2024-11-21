@@ -1,6 +1,6 @@
-import React, {useContext} from "react";
+import React, {useContext} from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import {SeverityPill} from "../severity-pill";
+import {SeverityPill} from '../severity-pill';
 import {
     Box,
     Button,
@@ -15,14 +15,13 @@ import {
     Tooltip, Typography
 } from '@mui/material';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import {StoreCtx} from "../../context";
+import {StoreCtx} from '../../context';
 
-
-export const Orders = (props) => {
+export const Orders = props => {
     const {state} = useContext(StoreCtx);
     const {portalData: {orders: mocksOrders}} = state;
 
-    const orders = [...mocksOrders]
+    const orders = [...mocksOrders];
     return (
         <Card
             sx={{
@@ -79,10 +78,10 @@ export const Orders = (props) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {orders.map((order) => (
+                                {orders.map(order => (
                                     <TableRow
-                                        hover
                                         key={order.id}
+                                        hover
                                     >
                                         <TableCell>
                                             {order.id}
@@ -92,9 +91,9 @@ export const Orders = (props) => {
                                         </TableCell>
                                         <TableCell>
                                             <SeverityPill
-                                                color={(order.status === 'Closed' && 'success')
-                                                    || (order.status === 'In progress' && 'warning')
-                                                    || 'error'}
+                                                color={(order.status === 'Closed' && 'success') ||
+                                                    (order.status === 'In progress' && 'warning') ||
+                                                    'error'}
                                             >
                                                 {order.status}
                                             </SeverityPill>
@@ -107,8 +106,8 @@ export const Orders = (props) => {
                                         </TableCell>
                                         <TableCell>
                                             <Typography
-                                                color="textPrimary"
                                                 gutterBottom
+                                                color="textPrimary"
                                                 variant="h6"
                                             >
                                                 {order.contact.fullname}
@@ -150,5 +149,5 @@ export const Orders = (props) => {
                 </Button>
             </Box>
         </Card>
-    )
-}
+    );
+};

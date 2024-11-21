@@ -1,5 +1,5 @@
-import {gql} from "@apollo/client";
-import {MOCKS_PROPERTY, CORE_NODE_FIELDS, SIMPLE_CORE_NODE_FIELDS} from "./fragments"
+import {gql} from '@apollo/client';
+import {MOCKS_PROPERTY, CORE_NODE_FIELDS, SIMPLE_CORE_NODE_FIELDS} from './fragments';
 
 export const queryUserPortal = gql`query($workspace: Workspace!, $id: String!,$language:String!){
     jcr(workspace: $workspace) {
