@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {StoreCtx} from '../../../context';
 import {DndItem} from '../../dndItem';
 import {ItemTypes} from '../../../misc';
@@ -7,8 +7,19 @@ import {Grid} from '@mui/material';
 
 export const VisitsGridRow = () => {
     const {state} = useContext(StoreCtx);
-    const {userPreferences: {blocks, layout}} = state;
-    const [blockItems, setBlockItems] = useState(blocks[layout]?.visits || ['VisitLast', 'VisitNumber', 'VisitFirst']);
+    const {userPreferences: {blocks, layout}, isReset} = state;
+    const defaultBlocks = useMemo(
+        () => ['VisitLast', 'VisitNumber', 'VisitFirst'],
+        []
+    );
+    const [blockItems, setBlockItems] = useState(blocks[layout]?.visits || defaultBlocks);
+
+    useEffect(() => {
+        if (isReset) {
+            setBlockItems([...defaultBlocks]);
+            // IsReset is toggle a Portal level
+        }
+    }, [defaultBlocks, isReset, setBlockItems]);
 
     const moveContentProps = {
         portal: layout,

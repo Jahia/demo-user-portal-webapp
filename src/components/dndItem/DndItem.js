@@ -53,7 +53,7 @@ export const DndItem = ({id, itemType, moveContentProps, children}) => {
         collect: monitor => ({
             isDragging: Boolean(monitor.isDragging())
         })
-    }));
+    }), [id, itemType]);
 
     const [{isOver}, drop] = useDrop(() => ({
         accept: itemType,
@@ -69,7 +69,7 @@ export const DndItem = ({id, itemType, moveContentProps, children}) => {
         collect: monitor => ({
             isOver: Boolean(monitor.isOver())
         })
-    }));
+    }), [id, itemType]);
 
     return (
         <DndDiv
@@ -83,7 +83,7 @@ export const DndItem = ({id, itemType, moveContentProps, children}) => {
 };
 
 DndItem.propTypes = {
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     itemType: PropTypes.string.isRequired,
     moveContentProps: PropTypes.object.isRequired,
     children: PropTypes.element

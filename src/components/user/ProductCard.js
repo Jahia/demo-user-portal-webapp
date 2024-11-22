@@ -2,13 +2,17 @@ import PropTypes from 'prop-types';
 import {Avatar, Box, Button, Card, CardContent, Divider, Grid, Typography} from '@mui/material';
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
-import React from 'react';
+import React, {useContext} from 'react';
 import Moment from 'react-moment';
 import * as Muicon from '@mui/icons-material';
+import {StoreCtx} from '../../context';
 
 export const ProductCard = ({product, ...rest}) => {
-    // Const {icon:Icon }= product;
-    const Icon = Muicon[product.icon];
+    const {state} = useContext(StoreCtx);
+    const {portalData: {products}} = state;
+    const _product = product || products[0];
+
+    const Icon = Muicon[_product.icon];
     return (
         <Card
             sx={{
@@ -42,14 +46,14 @@ export const ProductCard = ({product, ...rest}) => {
                     color="textPrimary"
                     variant="h5"
                 >
-                    {product.title}
+                    {_product.title}
                 </Typography>
                 <Typography
                     align="center"
                     color="textPrimary"
                     variant="body1"
                 >
-                    {product.description}
+                    {_product.description}
                 </Typography>
             </CardContent>
             <Divider/>
@@ -73,7 +77,7 @@ export const ProductCard = ({product, ...rest}) => {
                             sx={{pl: 1}}
                             variant="body2"
                         >
-                            Expires <Moment fromNow date={product.expiredAt}/>
+                            Expires <Moment fromNow date={_product.expiredAt}/>
                         </Typography>
                     </Grid>
                     <Grid
@@ -114,5 +118,5 @@ export const ProductCard = ({product, ...rest}) => {
 };
 
 ProductCard.propTypes = {
-    product: PropTypes.object.isRequired
+    product: PropTypes.object
 };

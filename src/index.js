@@ -62,9 +62,6 @@ const fetchData = async ({client, workspace, language, id, isJcrUserEnabled}) =>
 };
 
 export const cndTypes = {
-    WIDEN: 'wdenmix:widenAsset',
-    WIDEN_IMAGE: 'wdennt:image',
-    WIDEN_VIDEO: 'wdennt:video',
     CLOUDINARY: 'cloudymix:cloudyAsset',
     CLOUDINARY_IMAGE: 'cloudynt:image',
     CLOUDINARY_VIDEO: 'cloudynt:video',
@@ -72,8 +69,21 @@ export const cndTypes = {
     IMAGE: 'jmix:image'
     // CONTENT_PERSO: ["", ""],
 };
+const DEFAULT_PORTAL = 'PortalB';
+
 const render = async (target, context) => {
-    const {workspace, locale, host, isPreview, isEdit, scope, portalId, contextServerUrl, gqlEndpoint, isJcrUserEnabled} = Object.assign({
+    const {
+        workspace,
+        locale,
+        host,
+        isPreview,
+        isEdit,
+        scope,
+        portalId,
+        contextServerUrl,
+        gqlEndpoint,
+        isJcrUserEnabled
+    } = Object.assign({
         workspace: 'LIVE',
         locale: 'en',
         scope: 'mySite',
@@ -112,6 +122,7 @@ const render = async (target, context) => {
             />
         );
     } else {
+        context.portalDefaultLayout = context.portalDefaultLayout || DEFAULT_PORTAL;
         context.currentUserId = currentUserId;
         context.userPreferences = userPreferences;
         context.portalData = portalData;

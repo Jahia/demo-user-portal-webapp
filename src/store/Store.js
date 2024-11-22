@@ -5,8 +5,6 @@ import {PortalDataLabels} from '../misc';
 import * as Mocks from '../__mocks__';
 import PropTypes from 'prop-types';
 
-const DEFAULT_PORTAL = 'PortalA';
-
 const getObject = ({src, fallback, testArray = false}) => {
     let ret = fallback;
     if (typeof src === 'string') {
@@ -28,7 +26,7 @@ const getObject = ({src, fallback, testArray = false}) => {
 };
 
 const init = context => {
-    const {locale, currentUserId, portalData, userPreferences, client} = context;
+    const {locale, currentUserId, portalData, userPreferences, client, portalDefaultLayout} = context;
     const portalLeads = portalData?.leads?.value || portalData?.mocks?.refNode?.leads?.value;
     const portalOrders = portalData?.orders?.value || portalData?.mocks?.refNode?.orders?.value;
     const pData = {
@@ -50,9 +48,10 @@ const init = context => {
         currentUserId,
         portalData: pData,
         leadsOrOrderCmpName,
-        userPreferences: (userPreferences !== null && 'layout' in userPreferences) ? userPreferences : {layout: DEFAULT_PORTAL, blocks: {}},
+        userPreferences: (userPreferences !== null && 'layout' in userPreferences) ? userPreferences : {layout: portalDefaultLayout, blocks: {}},
         client,
-        userData: {}
+        userData: {},
+        isReset: false
     };
 };
 
@@ -64,6 +63,14 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 userData
+            };
+        }
+
+        case 'TOGGLE_IS_RESET': {
+            const {isReset} = payload;
+            return {
+                ...state,
+                isReset
             };
         }
 
@@ -103,7 +110,8 @@ const reducer = (state, action) => {
 
             return {
                 ...state,
-                userPreferences: {...preferences}
+                userPreferences: {...preferences},
+                isReset
             };
         }
 

@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {StoreCtx} from '../../../context';
 import {DndItem} from '../../dndItem';
 import {ItemTypes} from '../../../misc';
@@ -7,11 +7,21 @@ import {Stack} from '@mui/material';
 
 export const VisitsStack = () => {
     const {state} = useContext(StoreCtx);
-    const {userPreferences: {blocks, layout}} = state;
+    const {userPreferences: {blocks, layout}, isReset} = state;
 
-    const [blockItems, setBlockItems] = useState(blocks[layout]?.visits ||
-        ['VisitLast', 'VisitNumber', 'VisitFirst']
+    const defaultBlocks = useMemo(
+        () => ['VisitLast', 'VisitNumber', 'VisitFirst'],
+        []
     );
+
+    const [blockItems, setBlockItems] = useState(blocks[layout]?.visits || defaultBlocks);
+
+    useEffect(() => {
+        if (isReset) {
+            setBlockItems([...defaultBlocks]);
+            // IsReset is toggle a Portal level
+        }
+    }, [defaultBlocks, isReset, setBlockItems]);
 
     const moveContentProps = {
         portal: layout,
@@ -26,8 +36,8 @@ export const VisitsStack = () => {
     return (
 
         <Stack spacing={2} style={{height: '100%'}}>
-            {blockItems.map((blockName, index) => (
-                <DndItem key={blockName} id={index} itemType={ItemTypes.VISIT} moveContentProps={moveContentProps}>
+            {blockItems.map(blockName => (
+                <DndItem key={blockName} id={blockName} itemType={ItemTypes.VISIT} moveContentProps={moveContentProps}>
                     {getCmp(blockName)}
                 </DndItem>
             ))}
