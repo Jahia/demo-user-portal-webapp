@@ -16,6 +16,53 @@
         "PortalA" : "Portail A",
         "PortalB" : "Portail B",
         "PortalC" : "Portail C",
+        "PortalD" : "Portal D (blocks personnalisés)",
         "resetLayout": "Organisation par défaut"
+    },
+    "ProductCard": {
+        "expires": "Expire",
+        "renew": "Renouveler"
+    },
+    "visits": {
+        "firstVisit": "Première Visite",
+        "lastVisit": "Dernière Visite",
+        "numberOfVisit": "Nombre de Visites"
+    },
+    "sfdc": {
+        "title": "Mes Opportunités",
+        "leadId": "ID",
+        "leadSource": "Libillé",
+        "leadStatus": "Statut",
+        "yourContact": "Votre Contact",
+        "contact": {
+            "email": "email : ",
+            "phone": "téléphone : "
+        },
+        "viewAll": "Voir tout"
+    },
+    "shop": {
+        "title": "Mes Commandes",
+        "orderId": "ID",
+        "orderSource": "Libellé",
+        "orderStatus": "Statut",
+        "orderTotal": "Total",
+        "currency": "Dev.",
+        "orderFor": "Commandé Pour",
+        "contact": {
+            "email": "email : ",
+            "phone": "téléphone : "
+        },
+        "viewAll": "Voir tout"
+    },
+    "ads": {
+        "title": "Vos annonces ici"
+    },
+    "contract": {
+        "title": "Mes Contrats",
+        "contractId": "ID",
+        "contractDesc": "Libellé",
+        "contractCost": "Coût",
+        "contractExpired": "Expire le ",
+        "viewAll": "Voir tout"
     }
 }

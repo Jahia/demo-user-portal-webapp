@@ -7,8 +7,10 @@ import {EmbeddedPathInHtmlResolver} from '../jahia';
 import {Card, CardActionArea, CardMedia, CardContent, Typography} from '@mui/material';
 import {Media} from '../media';
 import {getTypes, resolveLinkToURL} from 'misc/utils';
+import {useTranslation} from 'react-i18next';
 
 export const Ads = props => {
+    const {t} = useTranslation();
     const cxs = useContext(CxsCtx);
     const {workspace, locale, host, isPreview, isEdit} = useContext(JahiaCtx);
     const {state} = useContext(StoreCtx);
@@ -57,7 +59,7 @@ export const Ads = props => {
                 />
                 <CardContent sx={{flexGrow: 1}}>
                     <Typography variant="h5" color="#CCC">
-                        <span>Your ads here</span>
+                        <span> {t('ads.title')}</span>
                     </Typography>
                     <Typography className="w-75" variant="body2" color="#CCC">
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias iste ipsa excepturi nostrum sequi molestias?

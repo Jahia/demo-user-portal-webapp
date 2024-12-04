@@ -1,5 +1,5 @@
 import {gql} from '@apollo/client';
-import {MOCKS_PROPERTY, CORE_NODE_FIELDS, SIMPLE_CORE_NODE_FIELDS} from './fragments';
+import {MOCKS_PROPERTY, CORE_NODE_FIELDS, SIMPLE_CORE_NODE_FIELDS,BLOCK_PROPERTIES} from './fragments';
 
 export const queryUserPortal = gql`query($workspace: Workspace!, $id: String!,$language:String!){
     jcr(workspace: $workspace) {
@@ -13,9 +13,11 @@ export const queryUserPortal = gql`query($workspace: Workspace!, $id: String!,$l
             ...MocksProperty
             mocks: property(name:"dash4:mocks"){ refNode { ...SimpleCoreNodeFields ...MocksProperty} }
             btnEditPreference: property(language:$language, name:"dash4:btnEditPreference"){ value }
+            ...BlockProperties
         }
     }
 }
 ${SIMPLE_CORE_NODE_FIELDS}
 ${CORE_NODE_FIELDS}
-${MOCKS_PROPERTY}`;
+${MOCKS_PROPERTY}
+${BLOCK_PROPERTIES}`;

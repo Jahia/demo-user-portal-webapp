@@ -3,8 +3,10 @@ import ScheduleIcon from '@mui/icons-material/Schedule';
 import Moment from 'react-moment';
 import React, {useContext} from 'react';
 import {StoreCtx} from '../../../../context';
+import {useTranslation} from 'react-i18next';
 
 export const VisitLast = props => {
+    const {t} = useTranslation();
     const {state} = useContext(StoreCtx);
     const {userData} = state;
     const lastVisit = userData?.profileProperties?.lastVisit || '-';
@@ -27,7 +29,7 @@ export const VisitLast = props => {
                             color="textSecondary"
                             variant="overline"
                         >
-                            Last visit
+                            {t('visits.lastVisit')}
                         </Typography>
                         <Typography
                             color="textPrimary"

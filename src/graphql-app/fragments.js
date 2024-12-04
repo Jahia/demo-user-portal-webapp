@@ -24,6 +24,7 @@ export const MOCKS_PROPERTY = gql`
         chart: property(name:"dash4:chart"){ value }
         leads: property(name:"dash4:leads"){ value }
         orders: property(name:"dash4:orders"){ value }
+        contracts: property(name:"dash4:contracts"){ value }
         salesChart: property(name:"dash4:salesChart"){ value }
     }`;
 
@@ -41,3 +42,14 @@ export const LINKTO_PROPERTY = gql`
         utm_content: property(name:"seu:utmContent"){ value }
 
     }`;
+
+export const BLOCK_PROPERTIES = gql`
+    fragment BlockProperties on JCRNode {
+        multichart: property(name:"dash4:multichart"){ value }
+        label01Text: property(name:"dash4:label01"){ value }
+        label01Value: property(name:"dash4:label01Value"){ value }
+        label02Text: property(name:"dash4:label02"){ value }
+        label02Value: property(name:"dash4:label02Value"){ value }
+        label03Text: property(name:"dash4:label03"){ value }
+        label03Value: property(name:"dash4:label03Value"){ value }
+    }`

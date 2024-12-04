@@ -16,8 +16,10 @@ import {
 } from '@mui/material';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import {StoreCtx} from '../../context';
+import {useTranslation} from 'react-i18next';
 
 export const Orders = props => {
+    const {t} = useTranslation();
     const {state} = useContext(StoreCtx);
     const {portalData: {orders: mocksOrders}} = state;
 
@@ -31,7 +33,7 @@ export const Orders = props => {
             }}
             {...props}
         >
-            <CardHeader title="My Orders"/>
+            <CardHeader title={t('shop.title')}/>
             <Box sx={{flexGrow: 1}}>
                 <PerfectScrollbar>
                     <Box sx={{minWidth: 500}}>
@@ -39,10 +41,10 @@ export const Orders = props => {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>
-                                        Order ID
+                                        {t('shop.orderId')}
                                     </TableCell>
                                     <TableCell>
-                                        Order Source
+                                        {t('shop.orderSource')}
                                     </TableCell>
                                     <TableCell sortDirection="desc">
                                         <Tooltip
@@ -53,7 +55,7 @@ export const Orders = props => {
                                                 active
                                                 direction="desc"
                                             >
-                                                Status
+                                                {t('shop.orderStatus')}
                                             </TableSortLabel>
                                         </Tooltip>
                                     </TableCell>
@@ -65,15 +67,15 @@ export const Orders = props => {
                                             <TableSortLabel
                                                 direction="desc"
                                             >
-                                                Total
+                                                {t('shop.orderTotal')}
                                             </TableSortLabel>
                                         </Tooltip>
                                     </TableCell>
                                     <TableCell>
-                                        Cur.
+                                        {t('shop.currency')}
                                     </TableCell>
                                     <TableCell>
-                                        Ordered for
+                                        {t('shop.orderFor')}
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
@@ -116,13 +118,13 @@ export const Orders = props => {
                                                 color="textSecondary"
                                                 variant="body2"
                                             >
-                                                email: {order.contact.email}
+                                                {t('shop.contact.email')}  {order.contact.email}
                                             </Typography>
                                             <Typography
                                                 color="textSecondary"
                                                 variant="body2"
                                             >
-                                                phone: {order.contact.phone}
+                                                {t('shop.contact.phone')} {order.contact.phone}
                                             </Typography>
                                         </TableCell>
                                     </TableRow>
@@ -145,7 +147,7 @@ export const Orders = props => {
                     size="small"
                     variant="text"
                 >
-                    View all
+                    {t('shop.viewAll')}
                 </Button>
             </Box>
         </Card>

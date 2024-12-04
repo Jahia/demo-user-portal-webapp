@@ -35,6 +35,7 @@ export const PortalC = () => {
         blocks: 'main',
         setBlockItems
     };
+
     const getCmp = item => {
         const Cmp = Widget[item];
         return <Cmp/>;

@@ -2,8 +2,10 @@ import {Avatar, Card, CardContent, Grid, Typography} from '@mui/material';
 import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
 import React, {useContext} from 'react';
 import {StoreCtx} from '../../../../context';
+import {useTranslation} from 'react-i18next';
 
 export const VisitNumber = props => {
+    const {t} = useTranslation();
     const {state} = useContext(StoreCtx);
     const {userData} = state;
     const nbOfVisits = userData?.profileProperties?.nbOfVisits || '-';
@@ -25,7 +27,7 @@ export const VisitNumber = props => {
                             color="textSecondary"
                             variant="overline"
                         >
-                            Number of visit
+                            {t('visits.numberOfVisit')}
                         </Typography>
                         <Typography
                             color="textPrimary"

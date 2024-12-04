@@ -19,6 +19,54 @@
         "PortalA" : "Portal A",
         "PortalB" : "Portal B",
         "PortalC" : "Portal C",
-        "resetLayout": "Reset to default order"
+        "PortalD" : "Portal D (custom blocks)",
+        "resetLayout": "Reset to default order",
+        "save": "Save preferences"
+    },
+    "ProductCard": {
+        "expires": "Expires",
+        "renew": "Renew"
+    },
+    "visits": {
+        "firstVisit": "First Visit",
+        "lastVisit": "Last visit",
+        "numberOfVisit": "Number of visit"
+    },
+    "sfdc": {
+        "title": "My Leads",
+        "leadId": "Lead ID",
+        "leadSource": "Lead Source",
+        "leadStatus": "Lead Status",
+        "yourContact": "Your Contact",
+        "contact" : {
+            "email": "email: ",
+            "phone": "phone: "
+        },
+        "viewAll": "View all"
+    },
+    "shop": {
+        "title": "My Orders",
+        "orderId": "Order ID",
+        "orderSource": "Order Source",
+        "orderStatus": "Status",
+        "orderTotal": "Total",
+        "currency" : "Cur.",
+        "orderFor": "Ordered For",
+        "contact" : {
+            "email": "email: ",
+            "phone": "phone: "
+        },
+        "viewAll": "View all"
+    },
+    "ads": {
+        "title": "Your ads here"
+    },
+    "contract": {
+        "title": "My Contracts",
+        "contractId": "Contract ID",
+        "contractDesc": "Contract Desc.",
+        "contractCost": "Cost",
+        "contractExpired": "Expires on",
+        "viewAll": "View All"
     }
 }

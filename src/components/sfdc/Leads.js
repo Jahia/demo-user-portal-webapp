@@ -16,8 +16,10 @@ import {
 } from '@mui/material';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import {StoreCtx} from '../../context';
+import {useTranslation} from 'react-i18next';
 
 export const Leads = props => {
+    const {t} = useTranslation();
     const {state} = useContext(StoreCtx);
     const {userData, portalData: {leads: mocksLeads}} = state;
 
@@ -57,7 +59,7 @@ export const Leads = props => {
             }}
             {...props}
         >
-            <CardHeader title="My leads"/>
+            <CardHeader title={t('sfdc.title')}/>
             <Box sx={{flexGrow: 1}}>
                 <PerfectScrollbar>
                     <Box sx={{minWidth: 500}}>
@@ -65,10 +67,10 @@ export const Leads = props => {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>
-                                        Lead ID
+                                        {t('sfdc.leadId')}
                                     </TableCell>
                                     <TableCell>
-                                        Lead Source
+                                        {t('sfdc.leadSource')}
                                     </TableCell>
                                     <TableCell sortDirection="desc">
                                         <Tooltip
@@ -79,12 +81,12 @@ export const Leads = props => {
                                                 active
                                                 direction="desc"
                                             >
-                                                Lead Status
+                                                {t('sfdc.leadStatus')}
                                             </TableSortLabel>
                                         </Tooltip>
                                     </TableCell>
                                     <TableCell>
-                                        Your contact
+                                        {t('sfdc.yourContact')}
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
@@ -121,13 +123,13 @@ export const Leads = props => {
                                                 color="textSecondary"
                                                 variant="body2"
                                             >
-                                                email: {lead.contact.email}
+                                                {t('sfdc.contact.email')} {lead.contact.email}
                                             </Typography>
                                             <Typography
                                                 color="textSecondary"
                                                 variant="body2"
                                             >
-                                                phone: {lead.contact.phone}
+                                                {t('sfdc.contact.phone')} {lead.contact.phone}
                                             </Typography>
                                         </TableCell>
                                     </TableRow>
@@ -150,7 +152,7 @@ export const Leads = props => {
                     size="small"
                     variant="text"
                 >
-                    View all
+                    {t('sfdc.viewAll')}
                 </Button>
             </Box>
         </Card>

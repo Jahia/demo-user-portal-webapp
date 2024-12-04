@@ -3,8 +3,10 @@ import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import Moment from 'react-moment';
 import React, {useContext} from 'react';
 import {StoreCtx} from '../../../../context';
+import {useTranslation} from 'react-i18next';
 
 export const VisitFirst = props => {
+    const {t} = useTranslation();
     const {state} = useContext(StoreCtx);
     const {userData} = state;
     const firstVisit = userData?.profileProperties?.firstVisit || '-';
@@ -27,7 +29,7 @@ export const VisitFirst = props => {
                             color="textSecondary"
                             variant="overline"
                         >
-                            First visit
+                            {t('visits.firstVisit')}
                         </Typography>
                         <Typography
                             color="textPrimary"

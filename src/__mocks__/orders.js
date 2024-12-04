@@ -1,18 +1,18 @@
 export const pastOrders = [
     {
-        id: '00A7Y000009UIsSKLP',
-        src: 'WebShop',
-        status: 'Closed',
-        total: 379.59,
-        currency: {
-            label: 'euro',
-            code: 'eur',
-            symbol: '€'
+        "id": '00A7Y000009UIsSKLP',
+        "src": 'WebShop',
+        "status": 'Closed',
+        "total": 379.59,
+        "currency": {
+            "label": 'euro',
+            "code": 'eur',
+            "symbol": '€'
         },
-        contact: {
-            fullname: 'John Backer',
-            email: 'jbacker@drive.com',
-            phone: '797-577-7666'
+        "contact": {
+            "fullname": 'John Backer',
+            "email": 'jbacker@drive.com',
+            "phone": '797-577-7666'
         }
     },
     {

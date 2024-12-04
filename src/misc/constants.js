@@ -7,5 +7,6 @@ export const ItemTypes = {
 
 export const PortalDataLabels = {
     LEADS: 'Leads',
-    ORDERS: 'Orders'
+    ORDERS: 'Orders',
+    CONTRACTS: 'Contracts'
 };

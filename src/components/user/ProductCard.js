@@ -6,8 +6,10 @@ import React, {useContext} from 'react';
 import Moment from 'react-moment';
 import * as Muicon from '@mui/icons-material';
 import {StoreCtx} from '../../context';
+import {useTranslation} from 'react-i18next';
 
 export const ProductCard = ({product, ...rest}) => {
+    const {t} = useTranslation();
     const {state} = useContext(StoreCtx);
     const {portalData: {products}} = state;
     const _product = product || products[0];
@@ -77,7 +79,7 @@ export const ProductCard = ({product, ...rest}) => {
                             sx={{pl: 1}}
                             variant="body2"
                         >
-                            Expires <Moment fromNow date={_product.expiredAt}/>
+                            {t('ProductCard.expires')} <Moment fromNow date={_product.expiredAt}/>
                         </Typography>
                     </Grid>
                     <Grid
@@ -96,7 +98,7 @@ export const ProductCard = ({product, ...rest}) => {
                             variant="outlined"
                             startIcon={<AutorenewIcon/>}
                         >
-                            Renew
+                            {t('ProductCard.renew')}
                         </Button>
                         {/* <AutorenewIcon color="action" /> */}
                         {/* <DownloadIcon color="action" /> */}

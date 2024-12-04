@@ -189,7 +189,7 @@ export const SimpleDialog = ({onClose, isOpen, portalData, layout, ...props}) =>
                             variant="contained"
                             onClick={handleSavePreferences}
                         >
-                            Save preferences
+                            {t('layout.save')}
                         </Button>
                     </Box>
                 </Card>

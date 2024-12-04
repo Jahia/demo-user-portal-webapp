@@ -29,19 +29,22 @@ const init = context => {
     const {locale, currentUserId, portalData, userPreferences, client, portalDefaultLayout} = context;
     const portalLeads = portalData?.leads?.value || portalData?.mocks?.refNode?.leads?.value;
     const portalOrders = portalData?.orders?.value || portalData?.mocks?.refNode?.orders?.value;
+    const portalContracts = portalData?.contracts?.value || portalData?.mocks?.refNode?.contracts?.value;
+
     const pData = {
         node: portalData,
         products: getObject({src: portalData?.products?.value || portalData?.mocks?.refNode?.products?.value, fallback: Mocks.products, testArray: true}),
         chart: getObject({src: portalData?.chart?.value || portalData?.mocks?.refNode?.chart?.value, fallback: Mocks.chartData}),
         leads: getObject({src: portalLeads, fallback: Mocks.pastLeads, testArray: true}),
         orders: getObject({src: portalOrders, fallback: Mocks.pastOrders, testArray: true}),
+        contracts: getObject({src: portalContracts, fallback: Mocks.pastContracts, testArray: true}),
         multiChart: getObject({src: portalData?.salesChart?.value || portalData?.mocks?.refNode?.salesChart?.value, fallback: Mocks.multiChartData}),
         ads: {
             id: portalData?.personalizedAds?.refNode?.uuid,
             jExpUserPropsToSync: portalData?.jExpUserPropsToSync?.value
         }
     };
-    const leadsOrOrderCmpName = portalLeads ? PortalDataLabels.LEADS : portalOrders ? PortalDataLabels.ORDERS : PortalDataLabels.LEADS;
+    const leadsOrOrderCmpName = portalLeads ? PortalDataLabels.LEADS : portalOrders ? PortalDataLabels.ORDERS : portalContracts ? PortalDataLabels.CONTRACTS : PortalDataLabels.LEADS;
 
     return {
         locale,
