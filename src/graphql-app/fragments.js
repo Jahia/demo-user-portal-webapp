@@ -1,11 +1,17 @@
 import {gql} from '@apollo/client';
 
-export const CORE_NODE_FIELDS = gql`
-    fragment CoreNodeFields on JCRNode {
+export const SIMPLE_CORE_NODE_FIELDS = gql`
+    fragment SimpleCoreNodeFields on JCRNode {
         workspace
         uuid
         path
         name
+    }`;
+
+export const CORE_NODE_FIELDS = gql`
+    ${SIMPLE_CORE_NODE_FIELDS}
+    fragment CoreNodeFields on JCRNode {
+       ...SimpleCoreNodeFields
         primaryNodeType {
             name
             supertypes{name}
@@ -22,11 +28,11 @@ export const MOCKS_PROPERTY = gql`
     }`;
 
 export const LINKTO_PROPERTY = gql`
-    ${CORE_NODE_FIELDS}
+    ${SIMPLE_CORE_NODE_FIELDS}
     fragment LinkToProperty on JCRNode {
         linkType: property(name:"seu:linkType"){ value }
         linkTarget: property(name:"seu:linkTarget"){ value }
-        internalLink: property(name:"seu:internalLink"){ refNode { ...CoreNodeFields} }
+        internalLink: property(name:"seu:internalLink"){ refNode { ...SimpleCoreNodeFields} }
         externalLink: property(name:"seu:externalLink"){ value }
         utm_source: property(name:"seu:utmSource"){ value }
         utm_medium: property(name:"seu:utmMedium"){ value }

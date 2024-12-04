@@ -1,13 +1,12 @@
-import {useTracker as unomiTracker} from "apache-unomi-tracker";
+import {useTracker as unomiTracker} from 'apache-unomi-tracker';
 
 export const syncTracker = () => {
-    //needed for isCrawler
-    window.Buffer = window.Buffer || require("buffer").Buffer;
+    // Needed for isCrawler
+    window.Buffer = window.Buffer || require('buffer').Buffer;
 
     const wem = {
         ...unomiTracker(),
         init: function () {
-
             const {
                 contextServerUrl,
                 trackerSessionIdCookieName = 'wem-session-id'
@@ -15,7 +14,7 @@ export const syncTracker = () => {
 
             wem.contextServerUrl = contextServerUrl;
 
-            if (wem.getCookie(trackerSessionIdCookieName) == null) {
+            if (wem.getCookie(trackerSessionIdCookieName) === null) {
                 wem.setCookie(trackerSessionIdCookieName, wem.generateGuid());
             }
 
@@ -25,7 +24,7 @@ export const syncTracker = () => {
                 window.cxs = wem.getLoadedContext();
             }, 'Unomi tracker context loaded', 5);
 
-            //Load page view event
+            // Load page view event
             const pageViewEvent = wem.buildEvent(
                 'view',
                 wem.buildTargetPage(),
@@ -36,7 +35,7 @@ export const syncTracker = () => {
             wem.startTracker();
             wem.loadContext();
         }
-    }
+    };
     wem.init();
     return wem;
 };

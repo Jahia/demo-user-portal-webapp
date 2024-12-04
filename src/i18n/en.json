@@ -1,0 +1,24 @@
+{
+    "error" : {
+        "default" : {
+            "title": "Error",
+            "msg" : "An error occurred"
+        },
+        "validation" : {
+            "title": "Validation errors",
+            "msg" : "An error occurred when validating"
+        },
+        "jExp": {
+            "connexion": "Internal jExperience connection issue"
+        },
+        "nodeType": {
+            "notSupported": "node type is not supported"
+        }
+    },
+    "layout": {
+        "PortalA" : "Portal A",
+        "PortalB" : "Portal B",
+        "PortalC" : "Portal C",
+        "resetLayout": "Reset to default order"
+    }
+}

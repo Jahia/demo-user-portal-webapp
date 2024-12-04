@@ -1,40 +1,31 @@
-import React, {useContext} from "react";
-// import Moment from 'react-moment';
-// import { useTheme } from '@mui/material/styles';
+import React, {useContext} from 'react';
 import {Card, CardActions, CardContent, Typography, Button, Box, Avatar, Divider} from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
-import {SimpleDialog} from "./AccountDialog";
-import {StoreCtx} from "../../context";
+import {SimpleDialog} from './AccountDialog';
+import {StoreCtx} from '../../context';
 
-// const devHost = !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? process.env.REACT_APP_DEV_HOST : ""
+// Const devHost = !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? process.env.REACT_APP_DEV_HOST : ""
 
-export const AccountProfile = ({portalData,...props}) => {
-    const { state } = useContext(StoreCtx);
-    const {userData} = state;
+export const AccountProfile = props => {
+    const {state} = useContext(StoreCtx);
+    const {portalData: {node: portalData}, userData, userPreferences} = state;
 
     const [open, setOpen] = React.useState(false);
 
     const user = userData?.profileProperties;
-    const firstName = user?.firstName || "-";
-    const lastName = user?.lastName || "-";
-    const email = user?.email || "-";
+    const firstName = user?.firstName || '-';
+    const lastName = user?.lastName || '-';
+    const email = user?.email || '-';
     const avatar = user?.profilePictureUrl;
 
-    // const theme = useTheme();
-    // const imgURL = `${devHost}/modules/drive-motor-user-portal/images/profile.jpg`;
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = (value) => {
-        setOpen(false);
-        // setSelectedValue(value);
+    const handleDialogIsOpen = isOpen => {
+        setOpen(isOpen);
     };
 
     const getAvatar = () => {
-        if(avatar)
-            return <Avatar
+        if (avatar) {
+            return (
+                <Avatar
                 src={avatar}
                 sx={{
                     height: 64,
@@ -42,6 +33,9 @@ export const AccountProfile = ({portalData,...props}) => {
                     width: 64
                 }}
             />
+            );
+        }
+
         return (
             <Avatar
                 sx={{
@@ -50,26 +44,33 @@ export const AccountProfile = ({portalData,...props}) => {
                     width: 64
                 }}
             >
-               <PersonIcon fontSize="large"/>
+                <PersonIcon fontSize="large"/>
             </Avatar>
-        )
-    }
+        );
+    };
 
-    return(
+    return (
         <>
-            <Card {...props}>
-                <CardContent>
+            <Card
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100%'
+                }}
+                {...props}
+            >
+                <CardContent sx={{flexGrow: 1}}>
                     <Box
                         sx={{
-                            alignItems: 'center',
                             display: 'flex',
+                            alignItems: 'center',
                             flexDirection: 'column'
                         }}
                     >
                         {getAvatar()}
                         <Typography
-                            color="textPrimary"
                             gutterBottom
+                            color="textPrimary"
                             variant="h5"
                         >
                             {firstName} {lastName}
@@ -80,31 +81,32 @@ export const AccountProfile = ({portalData,...props}) => {
                         >
                             {email}
                         </Typography>
-                        {/*<Typography*/}
-                        {/*    color="textSecondary"*/}
-                        {/*    variant="body2"*/}
-                        {/*>*/}
-                        {/*    {user.timezone}*/}
-                        {/*</Typography>*/}
+                        {/* <Typography */}
+                        {/*    color="textSecondary" */}
+                        {/*    variant="body2" */}
+                        {/* > */}
+                        {/*    {user.timezone} */}
+                        {/* </Typography> */}
                     </Box>
                 </CardContent>
-                <Divider />
+                <Divider/>
                 <CardActions>
                     <Button
-                        color="primary"
                         fullWidth
+                        color="primary"
                         variant="text"
-                        onClick={handleClickOpen}
+                        onClick={() => handleDialogIsOpen(true)}
                     >
                         {portalData?.btnEditPreference?.value}
                     </Button>
                 </CardActions>
             </Card>
             <SimpleDialog
+                layout={userPreferences.layout}
                 portalData={portalData}
-                open={open}
-                onClose={handleClose}
+                isOpen={open}
+                onClose={() => handleDialogIsOpen(false)}
             />
         </>
     );
-}
+};

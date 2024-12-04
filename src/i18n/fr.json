@@ -1,0 +1,21 @@
+{
+    "error" : {
+        "default" : {
+            "title": "Erreur",
+            "msg" : "Une erreur est survenue"
+        },
+        "validation" : {
+            "title": "Erreurs de validation",
+            "msg" : "Une erreur est survenue lors de la validation des paramètres"
+        },
+        "jExp": {
+            "connexion":"Problème de connexion à jExperience"
+        }
+    },
+    "layout": {
+        "PortalA" : "Portail A",
+        "PortalB" : "Portail B",
+        "PortalC" : "Portail C",
+        "resetLayout": "Organisation par défaut"
+    }
+}

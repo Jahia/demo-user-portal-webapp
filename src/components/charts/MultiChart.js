@@ -1,6 +1,6 @@
-import { Chart } from 'react-chartjs-2';
-import { Box, Card, CardContent, CardHeader, Divider, useTheme } from '@mui/material';
-import {multiChartData as mocksChartData} from "../../__mocks__/multiChart";
+import React from 'react';
+import {Chart} from 'react-chartjs-2';
+import {Box, Card, CardContent, CardHeader, Divider, useTheme} from '@mui/material';
 import {
     Chart as ChartJS,
     LinearScale,
@@ -11,8 +11,10 @@ import {
     Legend,
     Tooltip,
     LineController,
-    BarController,
+    BarController
 } from 'chart.js';
+import {useContext} from 'react';
+import {StoreCtx} from '../../context';
 
 ChartJS.register(
     LinearScale,
@@ -26,25 +28,16 @@ ChartJS.register(
     BarController
 );
 
-
-export const MultiChart = ({customMultiChartData,...props}) => {
+export const MultiChart = props => {
     const theme = useTheme();
+    const {state} = useContext(StoreCtx);
+    const {portalData: {multiChart: chartData}} = state;
 
-    let chartData = mocksChartData;
-
-    if(typeof customMultiChartData === 'string'){
-        try{
-            chartData = JSON.parse(customMultiChartData);
-        }catch(e){
-            console.error("chart property => \n"+customMultiChartData+"\n => is not a json object : ",e);
-        }
-    };
-
-    const {contents,data} = chartData;
+    const {contents, data} = chartData;
     const options = {
         animation: true,
         cutoutPercentage: 80,
-        layout: { padding: 0 },
+        layout: {padding: 0},
         legend: {
             display: false
         },
@@ -64,10 +57,17 @@ export const MultiChart = ({customMultiChartData,...props}) => {
     };
 
     return (
-        <Card {...props}>
-            <CardHeader title={contents.title} />
-            <Divider />
-            <CardContent>
+        <Card
+            sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%'
+        }}
+            {...props}
+        >
+            <CardHeader title={contents.title}/>
+            <Divider/>
+            <CardContent sx={{flexGrow: 1}}>
                 <Box
                     sx={{
                         height: 300,

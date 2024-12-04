@@ -1,17 +1,14 @@
 import React, {useRef} from 'react';
-import PropTypes from "prop-types";
-// import {JahiaCtx} from "context";
-import ReactPlayer from "react-player";
-// import {syncVideoStatus} from "unomi/trackerWem";
+import PropTypes from 'prop-types';
+import ReactPlayer from 'react-player';
 
-export const VideoPlayer = (props)=>{
-
-    const {videoURL/*,ownerID,videoId*/} = props;
-    // const { quizId,quizPath,quizType, isPreview } = React.useContext(JahiaCtx);
+export const VideoPlayer = props => {
+    const {videoURL/* ,ownerID,videoId */} = props;
+    // Const { quizId,quizPath,quizType, isPreview } = React.useContext(JahiaCtx);
 
     const player = useRef(null);
 
-    // const handleVideoStatus = ({status}) => {
+    // Const handleVideoStatus = ({status}) => {
     //     if(!isPreview)
     //         syncVideoStatus({
     //             quiz:{
@@ -34,9 +31,9 @@ export const VideoPlayer = (props)=>{
     //     player.current.seekTo(4.2,"seconds");
     // }
     const onStartHandler = () => {
-        // player.current.seekTo(4.2,"seconds");
-    }
-    // const onPlayHandler = () => handleVideoStatus({status:"started"});
+        // Player.current.seekTo(4.2,"seconds");
+    };
+    // Const onPlayHandler = () => handleVideoStatus({status:"started"});
     // const onEndedHandler = () => handleVideoStatus({status:"end"});
     // const onPauseHandler = () => handleVideoStatus({status:"pause"});
 
@@ -44,14 +41,14 @@ export const VideoPlayer = (props)=>{
         <div className>
             <ReactPlayer
                 ref={player}
-                className='react-player'
-                url={videoURL}
                 controls
-                width='100%'
-                // height='100%'
+                className="react-player"
+                url={videoURL}
+                width="100%"
+                // Height='100%'
                 // onReady={onReadyHandler}
                 onStart={onStartHandler}
-                // onProgress={(object)=> console.log("onProgress : ",object)}
+                // OnProgress={(object)=> console.log("onProgress : ",object)}
                 // onPlay={onPlayHandler}
                 // onSeek={(seconds)=> console.log("onSeek : ",seconds)}
                 // onDuration={(seconds)=> console.log("onDuration :",seconds)}
@@ -59,10 +56,10 @@ export const VideoPlayer = (props)=>{
                 // onEnded={onEndedHandler}
             />
         </div>
-    )
-}
+    );
+};
 
-VideoPlayer.propTypes={
-    videoURL:PropTypes.string.isRequired,
-    ownerID:PropTypes.string.isRequired
-}
+VideoPlayer.propTypes = {
+    videoURL: PropTypes.string.isRequired
+    // OwnerID: PropTypes.string.isRequired
+};
