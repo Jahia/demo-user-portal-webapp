@@ -17,7 +17,9 @@
         "PortalB" : "Portail B",
         "PortalC" : "Portail C",
         "PortalD" : "Portail D (blocks personnalisés)",
-        "resetLayout": "Organisation par défaut"
+        "resetLayout": "Organisation par défaut",
+        "save": "Sauvegarder"
+
     },
     "ProductCard": {
         "expires": "Expire",
@@ -64,5 +66,10 @@
         "contractCost": "Coût",
         "contractExpired": "Expire le ",
         "viewAll": "Voir tout"
+    },
+    "accountDialog": {
+        "title": "Préférences",
+        "subHeader": "Modifier vos préférences",
+        "layout": "Mise en forme"
     }
 }

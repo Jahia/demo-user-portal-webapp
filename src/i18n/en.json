@@ -68,5 +68,10 @@
         "contractCost": "Cost",
         "contractExpired": "Expires on",
         "viewAll": "View All"
+    },
+    "accountDialog": {
+        "title": "Preferences",
+        "subHeader": "Edit your preferences",
+        "layout": "Layout"
     }
 }

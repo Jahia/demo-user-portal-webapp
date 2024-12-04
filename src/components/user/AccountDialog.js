@@ -135,18 +135,18 @@ export const SimpleDialog = ({onClose, isOpen, portalData, layout, ...props}) =>
             >
                 <Card>
                     <CardHeader
-                        subheader="Edit your preferences"
-                        title="Preferences"
+                        subheader={t('accountDialog.subHeader')}
+                        title={t('accountDialog.title')}
                     />
                     <Divider/>
                     <CardContent>
                         <FormControl variant="standard" sx={{m: 1, minWidth: 120}}>
-                            <InputLabel id="userPortalLayout">Layout</InputLabel>
+                            <InputLabel id="userPortalLayout">{t('accountDialog.layout')}</InputLabel>
                             <Select
                                 labelId="userPortalLayout"
                                 id="userPortalLayoutSelector"
                                 value={selectedLayout}
-                                label="Layout"
+                                label={t('accountDialog.layout')}
                                 onChange={e => setSelectedLayout(e.target.value)}
                             >
                                 {Object.keys(layouts).map(layout => <MenuItem key={layout} value={layout}>{t(`layout.${layout}`)}</MenuItem>)}
