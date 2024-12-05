@@ -20,6 +20,8 @@
         "PortalB" : "Portal B",
         "PortalC" : "Portal C",
         "PortalD" : "Portal D (custom blocks)",
+        "PortalE" : "Portal E (custom blocks)",
+        "PortalF" : "Portal F (custom blocks)",
         "resetLayout": "Reset to default order",
         "save": "Save preferences"
     },
