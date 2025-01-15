@@ -73,7 +73,10 @@ export const SimpleDialog = ({onClose, isOpen, portalData, layout, ...props}) =>
         );
     }
 
-    const jcontentUserCategoryPreferences = data?.jcr?.nodeByPath?.children?.nodes?.map(item => item.displayName) || [];
+    const jcontentUserCategoryPreferences = data?.jcr?.nodeByPath?.children?.nodes?.map(item => ({
+        label: item.displayName,
+        value: item.name
+    })) || [];
 
     const handleSavePreferences = event => {
         const form = event.target.form;
@@ -100,7 +103,7 @@ export const SimpleDialog = ({onClose, isOpen, portalData, layout, ...props}) =>
             };
 
             window.wem.collectEvent(syncUserPreferencesEvent, function (/* xhr */) {
-                console.log('UserPreferences sync event done');
+                // Console.log('UserPreferences sync event done');
                 getUserContext(cxs, dispatch);
                 onClose();
             }, function (xhr) {
@@ -161,14 +164,14 @@ export const SimpleDialog = ({onClose, isOpen, portalData, layout, ...props}) =>
                         </FormGroup>
                         <Divider sx={{margin: '1.5rem 0'}}/>
                         <FormGroup>
-                            {jcontentUserCategoryPreferences.map(jcontentCategory => (
+                            {jcontentUserCategoryPreferences.map(({value, label}) => (
                                 <FormControlLabel
-                                    key={jcontentCategory}
-                                    value={jcontentCategory}
-                                    control={<Checkbox value={jcontentCategory.toLowerCase()}
+                                    key={value}
+                                    value={value}
+                                    control={<Checkbox value={value.toLowerCase()}
                                                        name="jcontentUserCategoryPreferences"/>}
-                                    label={jcontentCategory}
-                                    checked={jExpUserPropsValues.includes(jcontentCategory.toLowerCase())}
+                                    label={label}
+                                    checked={jExpUserPropsValues.includes(value.toLowerCase())}
                                     onChange={handleChange}
                                 />
                               )
